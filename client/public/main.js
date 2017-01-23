@@ -42479,10 +42479,56 @@ exports.ViewService = ViewService;
     require('angular');
     require('angular-ui-router');
 
+    require('./app.routes');
+    require('./components/index/index.component');
+
     angular
         .module('globeCode', [
-            'ui.router'
+            'ui.router',
+            'app.routes',
+            'app.index'
         ]);
 
 })();
-},{"angular":16,"angular-ui-router":4}]},{},[73]);
+},{"./app.routes":74,"./components/index/index.component":75,"angular":16,"angular-ui-router":4}],74:[function(require,module,exports){
+(function () {
+    'use strict';
+
+    angular
+        .module('app.routes', [])
+
+        .config(function($stateProvider, $locationProvider, $urlRouterProvider) {
+
+            $urlRouterProvider.otherwise("/");
+
+            $stateProvider
+                .state('index', {
+                    name: 'index',
+                    url: '/',
+                    component: 'index', 
+                });
+            
+            $locationProvider.html5Mode(true);
+
+        });
+
+}());
+},{}],75:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
+        .module('app.index', [])
+        .component('index', {
+            controller: indexController,
+            templateUrl: 'app/components/index/index.template.html' 
+        });
+
+
+        function indexController() {
+            console.log('index component');
+        }
+
+})();
+},{}]},{},[73]);
