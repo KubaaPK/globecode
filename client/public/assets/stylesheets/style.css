@@ -3,7 +3,7 @@
   .nav {
     width: 100%;
     background-color: #FFFFFF;
-    border-bottom: 2px solid #DDDDDD; }
+    border-bottom: 1px solid #DDDDDD; }
     .nav__list {
       list-style-type: none;
       margin: 0;
@@ -18,9 +18,14 @@
           margin: 0 .5%; }
         .nav__list__element__link {
           text-decoration: none;
+          text-transform: uppercase;
           font-family: "Overpass", sans-serif;
-          font-size: 0.95rem;
-          color: rgba(0, 0, 0, 0.7); } }
+          font-size: 0.9rem;
+          color: rgba(0, 0, 0, 0.7);
+          transition: .3s; }
+          .nav__list__element__link:hover {
+            color: #000000;
+            transition: .3s; } }
 
 @media only screen and (max-width: 100em) {
   .footer {
@@ -31,7 +36,7 @@
     padding: 2.5% 0;
     width: 80%;
     margin: 0 auto;
-    border-top: 2px solid #DDDDDD;
+    border-top: 1px solid #DDDDDD;
     display: flex; }
     .footer__text {
       width: 50%; }
@@ -60,11 +65,71 @@
           font-size: 0.85rem;
           text-decoration: none; } }
 
+@media only screen and (max-width: 100em) {
+  .loginregisterForm {
+    position: relative;
+    top: 5vh;
+    display: block;
+    width: 300px;
+    background-color: #FFFFFF;
+    margin: 0 auto;
+    padding-bottom: 3%;
+    -webkit-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
+    -moz-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
+    box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15); }
+    .loginregisterForm__title {
+      padding: 6vh 2.5%;
+      display: block;
+      background-color: #FCFCFC;
+      text-align: center;
+      border-bottom: 1px solid #DDDDDD;
+      font-size: 1.5rem;
+      font-family: "Overpass", sans-serif; }
+    .loginregisterForm label {
+      margin-left: 5%;
+      font-family: "Overpass", sans-serif;
+      font-size: .9rem; }
+    .loginregisterForm input {
+      box-sizing: border-box;
+      width: 90%;
+      height: 35px;
+      margin: 2vh auto;
+      display: block;
+      padding: 0 2%;
+      border-radius: 3px;
+      border: 1px solid #DDDDDD;
+      background-color: #FFFFFF;
+      font-family: "Overpass", sans-serif;
+      font-size: .9rem; }
+    .loginregisterForm button {
+      position: relative;
+      top: 4vh;
+      width: 90%;
+      height: 45px;
+      margin: 0 auto;
+      display: block;
+      background-color: #2ECC6E;
+      border-radius: 3px;
+      border: 1px solid #DDDDDD;
+      color: #FFFFFF;
+      font-size: 1rem;
+      font-family: "Overpass", sans-serif;
+      transition: .3s; }
+      .loginregisterForm button:hover {
+        background-color: #29b763;
+        cursor: pointer;
+        transition: .3s; } }
+
 body {
   font-size: 62.5%;
-  background-color: #F4F4F4; }
+  background-color: #F8F9FA; }
 
 @media only screen and (max-width: 100em) {
   .index {
     height: 100%;
-    background-color: #F4F4F4; } }
+    background-color: #F8F9FA; } }
+
+@media only screen and (max-width: 100em) {
+  .register {
+    height: 100%;
+    background-color: #F8F9FA; } }

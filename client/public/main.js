@@ -42489,17 +42489,19 @@ exports.ViewService = ViewService;
     //pages
     require('./pages/index/index.component');
     require('./pages/register/register.component');
+    require('./pages/login/login.component');
 
     angular
         .module('globeCode', [
             'ui.router',
             'app.routes',
             'page.index',
-            'page.register'
+            'page.register',
+            'page.login'
         ]);
 
 })();
-},{"./app.routes":74,"./components/foot.component":75,"./components/nav.component":76,"./pages/index/index.component":77,"./pages/register/register.component":78,"angular":16,"angular-ui-router":4}],74:[function(require,module,exports){
+},{"./app.routes":74,"./components/foot.component":75,"./components/nav.component":76,"./pages/index/index.component":77,"./pages/login/login.component":78,"./pages/register/register.component":79,"angular":16,"angular-ui-router":4}],74:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -42520,6 +42522,11 @@ exports.ViewService = ViewService;
                     name        : 'register',
                     url         : '/register',
                     component   : 'register'
+                })
+                .state('login', {
+                    name        : 'login',
+                    url         : '/login',
+                    component   : 'login'
                 });
             
             $locationProvider.html5Mode(true);
@@ -42573,7 +42580,25 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
-        .module('page.register', ['comp.nav'])
+        .module('page.login', ['comp.nav', 'comp.foot'])
+        .component('login', {
+            controller: loginController,
+            templateUrl: 'app/pages/login/login.template.html' 
+        });
+
+
+        function loginController() {
+            console.log('login component');
+        }
+
+})();
+},{}],79:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
+        .module('page.register', ['comp.nav', 'comp.foot'])
         .component('register', {
             controller: registerController,
             templateUrl: 'app/pages/register/register.template.html' 

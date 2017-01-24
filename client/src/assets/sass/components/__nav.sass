@@ -2,7 +2,7 @@
     .nav
         width: 100%
         background-color: #FFFFFF
-        border-bottom: 2px solid $gray
+        border-bottom: 1px solid $gray
         &__list
             list-style-type: none
             margin: 0
@@ -18,9 +18,16 @@
                     margin: 0 .5%
             
                 &__link
-                    text-decoration: none
+                    text: 
+                        decoration: none
+                        transform: uppercase
                     font:
                         family: $overpass
-                        size: 0.95rem
+                        size: 0.9rem
                     color: rgba(#000000, .7)
+                    transition: .3s
+                
+                    &:hover
+                        color: #000000
+                        transition: .3s
                 

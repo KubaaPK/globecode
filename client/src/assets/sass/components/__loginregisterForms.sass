@@ -1,0 +1,62 @@
+@media only screen and (max-width : 100em)
+  
+    .loginregisterForm
+        position: relative
+        top: 5vh
+        display: block
+        width: 300px
+        background-color: #FFFFFF
+        margin: 0 auto
+        padding-bottom: 3%
+        -webkit-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.15)
+        -moz-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.15)
+        box-shadow: 0px 0px 3px 1px rgba(158,158,158,.15)
+
+        &__title
+            padding: 6vh 2.5%
+            display: block
+            background-color: #FCFCFC
+            text-align: center
+            border-bottom: 1px solid $gray
+            font:
+                size: 1.5rem
+                family: $overpass
+
+        label
+            margin-left: 5%
+            font:
+                family: $overpass
+                size: .9rem
+        input
+            box-sizing: border-box
+            width: 90%
+            height: 35px
+            margin: 2vh auto
+            display: block
+            padding: 0 2%
+            border-radius: 3px
+            border: 1px solid $gray
+            background-color: #FFFFFF
+            font:
+                family: $overpass
+                size: .9rem
+
+        button
+            position: relative
+            top: 4vh
+            width: 90%
+            height: 45px
+            margin: 0 auto
+            display: block
+            background-color: $green
+            border-radius: 3px
+            border: 1px solid $gray
+            color: #FFFFFF
+            font:
+                size: 1rem
+                family: $overpass
+            transition: .3s
+            &:hover
+                background-color: darken($green, 5%)
+                cursor: pointer
+                transition: .3s

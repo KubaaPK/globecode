@@ -1,14 +1,13 @@
 @import "./components/__utils"
 @import "./components/__nav"
 @import "./components/__footer"
+@import "./components/__loginregisterForms"
 
 body
     font-size: 62.5%
     background-color: $lightgray
 
 
-@media only screen and (max-width : 100em)
-    .index
-        height: 100%
-        background-color: $lightgray
-     
+@import "./pages/__index"
+@import "./pages/__login"
+@import "./pages/__register"

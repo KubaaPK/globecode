@@ -14,13 +14,15 @@
     //pages
     require('./pages/index/index.component');
     require('./pages/register/register.component');
+    require('./pages/login/login.component');
 
     angular
         .module('globeCode', [
             'ui.router',
             'app.routes',
             'page.index',
-            'page.register'
+            'page.register',
+            'page.login'
         ]);
 
 })();

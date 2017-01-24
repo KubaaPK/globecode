@@ -18,6 +18,11 @@
                     name        : 'register',
                     url         : '/register',
                     component   : 'register'
+                })
+                .state('login', {
+                    name        : 'login',
+                    url         : '/login',
+                    component   : 'login'
                 });
             
             $locationProvider.html5Mode(true);
