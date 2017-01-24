@@ -1,8 +1,10 @@
 const express = require('express');
 const bcrypt  = require('bcrypt-nodejs');
+const jwt     = require('jsonwebtoken');
+const router  = express.Router();
+
 const User    = require('../models/User'); 
 
-const router = express.Router();
 
 
 
@@ -30,5 +32,43 @@ router.post('/new', (req, res, next) => {
     });
 });
 
+
+router.post('/authenticate', (req, res, next) => {
+  
+  const loginData = {
+    email     : req.body.email,
+    password  : req.body.password
+  }
+
+
+  User.findOne({email: loginData.email}, (err, user) => {
+    if(err) {
+      console.log(err);
+    }
+
+    if(!user) {
+      res.json({message: "Błędny adres email lub hasło."});
+    } else {
+      console.log(user);
+      bcrypt.compare(loginData.password, user.password, (err, auth) => {
+        if(err) {
+          console.log(err);
+        } else {
+          if(auth) {
+            const TOKEN = jwt.sign(user, "asdasALSDJaklsjdlajlkj312lk3jLASKDJ", {
+              expiresIn: 60*60*24
+            });
+            res.json({
+              success: true,
+              token: TOKEN
+            });
+          }
+        }
+      })
+    }
+
+  });
+
+});
 
 module.exports = router;
