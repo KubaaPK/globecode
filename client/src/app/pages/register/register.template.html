@@ -1,13 +1,13 @@
 <main class="register">
     <nav-bar></nav-bar>
     
-    <form class="loginregisterForm">
+    <form class="loginregisterForm" ng-submit="$ctrl.submitRegistration()">
         <h2 class="loginregisterForm__title">Rejestracja</h2>
         <label for="register_emial">Adres email:</label>
-        <input type="email" id="register_emial">
+        <input type="email" id="register_emial" ng-model="$ctrl.registerEmail">
         
         <label for="register_password">Hasło:</label>
-        <input type="password" id="register_password">
+        <input type="password" id="register_password" ng-model="$ctrl.registerPassword">
         <button type="submit">Zarejestruj</button>
     </form>
 

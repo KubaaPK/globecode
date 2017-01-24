@@ -10,8 +10,27 @@
         });
 
 
-        function registerController() {
-            console.log('register component');
+        function registerController($http) {
+            var vm = this;
+
+            vm.submitRegistration = function () {
+                
+                var data = {
+                    email       : vm.registerEmail,
+                    password    : vm.registerPassword
+                }
+
+                $http.post('http://localhost:8080/api/users/new', data)
+                    .then(function(res) {
+                        console.log(res);
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    })
+
+            }
+
+
         }
 
 })();
