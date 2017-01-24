@@ -1,0 +1,26 @@
+@media only screen and (max-width : 100em)
+    .nav
+        width: 100%
+        background-color: #FFFFFF
+        border-bottom: 2px solid $gray
+        &__list
+            list-style-type: none
+            margin: 0
+            padding: 2vh 10%
+            text-align: right
+            &__element
+                padding-left: 0
+                display: inline-block
+                &:first-child
+                    float: left
+
+                &:nth-child(n+2)
+                    margin: 0 .5%
+            
+                &__link
+                    text-decoration: none
+                    font:
+                        family: $overpass
+                        size: 0.95rem
+                    color: rgba(#000000, .7)
+                

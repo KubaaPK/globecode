@@ -1,0 +1,47 @@
+@media only screen and (max-width : 100em)
+    .footer
+        position: absolute
+        bottom: 0
+        left: 0
+        right: 0
+        padding: 2.5% 0
+        width: 80%
+        margin: 0 auto
+        
+        border-top: 2px solid $gray 
+        display: flex
+
+        &__text
+            width: 50%
+            &__title
+                font:
+                    family: $overpass
+                    size: 1.1rem
+                    weight: 700
+                color: rgba(#000000, 0.7)
+                
+            &__subtitle
+                font:
+                    family: $overpass
+                    size: 0.85rem
+                    weight: 400
+                letter-spacing: .05rem
+                color: rgba(#000000, 0.7)
+
+        &__nav
+            list-style-type: none
+            width: 50%
+            text-align: right
+            margin-top: 2%
+
+            &__element
+                display: inline-block
+                margin: 0 1%
+                &__link
+                    color: rgba(#000000, 0.7)
+                    font:
+                        family: $overpass
+                        size: 0.85rem
+                    text-decoration: none
+                    
+            

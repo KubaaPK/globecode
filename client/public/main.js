@@ -42479,18 +42479,27 @@ exports.ViewService = ViewService;
     require('angular');
     require('angular-ui-router');
 
+    // routes
     require('./app.routes');
-    require('./components/index/index.component');
+
+    // reusable components
+    require('./components/nav.component');
+    require('./components/foot.component');
+
+    //pages
+    require('./pages/index/index.component');
+    require('./pages/register/register.component');
 
     angular
         .module('globeCode', [
             'ui.router',
             'app.routes',
-            'app.index'
+            'page.index',
+            'page.register'
         ]);
 
 })();
-},{"./app.routes":74,"./components/index/index.component":75,"angular":16,"angular-ui-router":4}],74:[function(require,module,exports){
+},{"./app.routes":74,"./components/foot.component":75,"./components/nav.component":76,"./pages/index/index.component":77,"./pages/register/register.component":78,"angular":16,"angular-ui-router":4}],74:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -42503,9 +42512,14 @@ exports.ViewService = ViewService;
 
             $stateProvider
                 .state('index', {
-                    name: 'index',
-                    url: '/',
-                    component: 'index', 
+                    name        : 'index',
+                    url         : '/',
+                    component   : 'index', 
+                })
+                .state('register', {
+                    name        : 'register',
+                    url         : '/register',
+                    component   : 'register'
                 });
             
             $locationProvider.html5Mode(true);
@@ -42519,15 +42533,55 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
-        .module('app.index', [])
+        .module('comp.foot', [])
+        .component('footBar', {
+            templateUrl: 'app/components/foot.template.html' 
+        });
+})();
+},{}],76:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
+        .module('comp.nav', [])
+        .component('navBar', {
+            templateUrl: 'app/components/nav.template.html' 
+        });
+})();
+},{}],77:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
+        .module('page.index', ['comp.nav', 'comp.foot'])
         .component('index', {
-            controller: indexController,
-            templateUrl: 'app/components/index/index.template.html' 
+            templateUrl: 'app/pages/index/index.template.html',
+            controller: indexController
         });
 
 
         function indexController() {
-            console.log('index component');
+            console.log(2+2);
+        }
+
+})();
+},{}],78:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
+        .module('page.register', ['comp.nav'])
+        .component('register', {
+            controller: registerController,
+            templateUrl: 'app/pages/register/register.template.html' 
+        });
+
+
+        function registerController() {
+            console.log('register component');
         }
 
 })();
