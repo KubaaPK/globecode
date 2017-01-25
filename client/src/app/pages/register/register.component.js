@@ -32,6 +32,7 @@
                             tokenFactory.saveTokenToLocalStorage(res.data.token);
                             userFactory.saveUserDataToLocalStorage(res.data.user);
                             $state.go('authenticated');
+                            
                         }
                     })
                     .catch(function(err) {
