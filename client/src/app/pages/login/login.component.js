@@ -10,7 +10,7 @@
         });
 
 
-        function loginController($http, tokenFactory) {
+        function loginController($http, $state, tokenFactory) {
             var vm = this;            
 
             
@@ -23,9 +23,8 @@
 
                 $http.post('http://localhost:8080/api/users/authenticate', data)
                     .then(function(res) {
-                        console.log(res);
                         tokenFactory.saveTokenToLocalStorage(res.data.token);
-                        console.log(tokenFactory.checkIfTokenExpires());
+                        $state.go('authenticated');
                     })
                     .catch(function(err) {
                         console.log(err);

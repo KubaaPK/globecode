@@ -55,7 +55,13 @@ router.post('/new', (req, res, next) => {
             res.json({message: "Nie udało się zalożyc konta."});
           }
         } else {
-          res.json({message: "Konto zostało założone pomyślnie."});
+          const TOKEN = jwt.sign(newUser, "asdasALSDJaklsjdlajlkj312lk3jLASKDJ", {
+              expiresIn: 60*60*24
+            });
+            res.json({
+              success: true,
+              token: TOKEN
+            });
         }
       })
 

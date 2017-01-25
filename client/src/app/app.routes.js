@@ -23,8 +23,13 @@
                     name        : 'login',
                     url         : '/login',
                     component   : 'login'
+                })
+                .state('authenticated', {
+                    name        : 'authenticated',
+                    url         : '/authenticated',
+                    component   : 'authenticated' 
                 });
-            
+
             $locationProvider.html5Mode(true);
 
         });

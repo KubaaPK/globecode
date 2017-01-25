@@ -3,15 +3,21 @@
     'use strict';
 
     angular
-        .module('page.index', ['comp.nav', 'comp.foot'])
+        .module('page.index', ['comp.nav', 'comp.foot', 'factory.token'])
         .component('index', {
             templateUrl: 'app/pages/index/index.template.html',
             controller: indexController
         });
 
 
-        function indexController() {
-            console.log(2+2);
+        function indexController($state, tokenFactory) {
+            var vm = this;
+
+             vm.$onInit = function() {
+                if(!tokenFactory.checkIfTokenExpires()) {
+                    $state.go('authenticated');
+                } 
+            }
         }
 
 })();

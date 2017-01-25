@@ -17,7 +17,12 @@
                 },
                 //if token expires returns true, if not returns false
                 checkIfTokenExpires: function() {
-                    return jwtHelper.isTokenExpired(this.loadTokenFromLocalStorage());
+                    if(this.loadTokenFromLocalStorage()) {
+                        return jwtHelper.isTokenExpired(this.loadTokenFromLocalStorage())
+                    } else {
+                        return true;
+                    }
+                     
                 }
 
             }

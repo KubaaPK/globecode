@@ -42891,6 +42891,7 @@ exports.ViewService = ViewService;
     require('./pages/index/index.component');
     require('./pages/register/register.component');
     require('./pages/login/login.component');
+    require('./pages/authenticated/authenticated.component');
 
     //factories
     require('./services/tokenService');
@@ -42902,11 +42903,12 @@ exports.ViewService = ViewService;
             'app.routes',
             'page.index',
             'page.register',
-            'page.login'
+            'page.login',
+            'page.authenticated'
         ]);
 
 })();
-},{"./app.routes":76,"./components/foot.component":77,"./components/nav.component":78,"./pages/index/index.component":79,"./pages/login/login.component":80,"./pages/register/register.component":81,"./services/tokenService":82,"angular":18,"angular-jwt":2,"angular-ui-router":6}],76:[function(require,module,exports){
+},{"./app.routes":76,"./components/foot.component":77,"./components/nav.component":78,"./pages/authenticated/authenticated.component":79,"./pages/index/index.component":80,"./pages/login/login.component":81,"./pages/register/register.component":82,"./services/tokenService":83,"angular":18,"angular-jwt":2,"angular-ui-router":6}],76:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -42932,8 +42934,13 @@ exports.ViewService = ViewService;
                     name        : 'login',
                     url         : '/login',
                     component   : 'login'
+                })
+                .state('authenticated', {
+                    name        : 'authenticated',
+                    url         : '/authenticated',
+                    component   : 'authenticated' 
                 });
-            
+
             $locationProvider.html5Mode(true);
 
         });
@@ -42967,19 +42974,51 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
-        .module('page.index', ['comp.nav', 'comp.foot'])
+        .module('page.authenticated', ['comp.foot', 'factory.token'])
+        .component('authenticated', {
+            controller: authenticatedController,
+            templateUrl: 'app/pages/authenticated/authenticated.template.html' 
+        });
+
+
+        function authenticatedController($http, $state, tokenFactory) {
+            var vm = this;            
+
+            vm.$onInit = function() {
+                if(tokenFactory.checkIfTokenExpires()) {
+                    $state.go('login');
+                } 
+            }
+
+
+        }
+
+})();
+},{}],80:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
+        .module('page.index', ['comp.nav', 'comp.foot', 'factory.token'])
         .component('index', {
             templateUrl: 'app/pages/index/index.template.html',
             controller: indexController
         });
 
 
-        function indexController() {
-            console.log(2+2);
+        function indexController($state, tokenFactory) {
+            var vm = this;
+
+             vm.$onInit = function() {
+                if(!tokenFactory.checkIfTokenExpires()) {
+                    $state.go('authenticated');
+                } 
+            }
         }
 
 })();
-},{}],80:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -42992,7 +43031,7 @@ exports.ViewService = ViewService;
         });
 
 
-        function loginController($http, tokenFactory) {
+        function loginController($http, $state, tokenFactory) {
             var vm = this;            
 
             
@@ -43005,9 +43044,8 @@ exports.ViewService = ViewService;
 
                 $http.post('http://localhost:8080/api/users/authenticate', data)
                     .then(function(res) {
-                        console.log(res);
                         tokenFactory.saveTokenToLocalStorage(res.data.token);
-                        console.log(tokenFactory.checkIfTokenExpires());
+                        $state.go('authenticated');
                     })
                     .catch(function(err) {
                         console.log(err);
@@ -43017,20 +43055,20 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],81:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 (function(){
 
     'use strict';
 
     angular
-        .module('page.register', ['comp.nav', 'comp.foot'])
+        .module('page.register', ['comp.nav', 'comp.foot', 'factory.token'])
         .component('register', {
             controller: registerController,
             templateUrl: 'app/pages/register/register.template.html' 
         });
 
 
-        function registerController($http) {
+        function registerController($http, $state, tokenFactory) {
             var vm = this;
 
             vm.submitRegistration = function () {
@@ -43042,7 +43080,10 @@ exports.ViewService = ViewService;
 
                 $http.post('http://localhost:8080/api/users/new', data)
                     .then(function(res) {
-                        console.log(res);
+                        if(res.data.token) {
+                            tokenFactory.saveTokenToLocalStorage(res.data.token);
+                            $state.go('authenticated');
+                        }
                     })
                     .catch(function(err) {
                         console.log(err);
@@ -43054,7 +43095,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],82:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -43072,9 +43113,14 @@ exports.ViewService = ViewService;
                 checkTokenExpirationDate: function() {
                     return jwtHelper.getTokenExpirationDate(this.loadTokenFromLocalStorage());
                 },
+                //if token expires returns true, if not returns false
                 checkIfTokenExpires: function() {
-                    
-                    return jwtHelper.isTokenExpired(this.loadTokenFromLocalStorage());
+                    if(this.loadTokenFromLocalStorage()) {
+                        return jwtHelper.isTokenExpired(this.loadTokenFromLocalStorage())
+                    } else {
+                        return true;
+                    }
+                     
                 }
 
             }

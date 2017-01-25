@@ -16,6 +16,7 @@
     require('./pages/index/index.component');
     require('./pages/register/register.component');
     require('./pages/login/login.component');
+    require('./pages/authenticated/authenticated.component');
 
     //factories
     require('./services/tokenService');
@@ -27,7 +28,8 @@
             'app.routes',
             'page.index',
             'page.register',
-            'page.login'
+            'page.login',
+            'page.authenticated'
         ]);
 
 })();
