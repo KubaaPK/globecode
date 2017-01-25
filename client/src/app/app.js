@@ -3,6 +3,7 @@
 
     require('angular');
     require('angular-ui-router');
+    require('angular-jwt');
 
     // routes
     require('./app.routes');
@@ -16,9 +17,13 @@
     require('./pages/register/register.component');
     require('./pages/login/login.component');
 
+    //factories
+    require('./services/tokenService');
+
     angular
         .module('globeCode', [
             'ui.router',
+            'angular-jwt',
             'app.routes',
             'page.index',
             'page.register',

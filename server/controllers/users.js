@@ -7,6 +7,33 @@ const User    = require('../models/User');
 
 
 
+const JWTAuth = ((req, res, next) => {
+
+  const token = req.body.token || req.query.token || req.headers['x-access-token'];
+
+  // decode token
+  if (token) {
+
+    // verifies secret and checks exp
+    jwt.verify(token, "asdasALSDJaklsjdlajlkj312lk3jLASKDJ", (err, decoded) => {      
+      if (err) {
+        return res.json({ success: false, message: 'Failed to authenticate token.' });    
+      } else {
+        req.decoded = decoded;    
+        next();
+      }
+    });
+
+  } else {
+
+    return res.status(403).send({ 
+        success: false, 
+        message: 'No token provided.' 
+    });
+    
+  }
+});
+
 
 
 router.post('/new', (req, res, next) => {
@@ -17,18 +44,21 @@ router.post('/new', (req, res, next) => {
         email     : req.body.email,
         password  : hash
       }      
-      
+    
       let newUser = new User(userData);
 
       newUser.save((err) => {
-        if(err.code === 11000) {
-          res.json({message: "Ten email jest już zajęty."});
-        } else if(err) {
-          res.send({message: "Nie udało się założyc konta."});
+        if(err) {
+          if(err.code === 11000){
+            res.json({message: "Email znajduje się w bazie."});
+          } else {
+            res.json({message: "Nie udało się zalożyc konta."});
+          }
         } else {
-          res.send({message: "Pomyślnie założono konto."});
+          res.json({message: "Konto zostało założone pomyślnie."});
         }
-      });
+      })
+
     });
 });
 
@@ -41,6 +71,7 @@ router.post('/authenticate', (req, res, next) => {
   }
 
 
+
   User.findOne({email: loginData.email}, (err, user) => {
     if(err) {
       console.log(err);
@@ -49,7 +80,7 @@ router.post('/authenticate', (req, res, next) => {
     if(!user) {
       res.json({message: "Błędny adres email lub hasło."});
     } else {
-      console.log(user);
+
       bcrypt.compare(loginData.password, user.password, (err, auth) => {
         if(err) {
           console.log(err);
@@ -62,13 +93,17 @@ router.post('/authenticate', (req, res, next) => {
               success: true,
               token: TOKEN
             });
+          } else {
+            res.json({message: "Błędny adres email lub hasło."});
           }
         }
       })
     }
-
   });
 
 });
+
+
+
 
 module.exports = router;

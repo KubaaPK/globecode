@@ -1,10 +1,410 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function() {
+
+
+// Create all modules and define dependencies to make sure they exist
+// and are loaded in the correct order to satisfy dependency injection
+// before all nested files are concatenated by Grunt
+
+// Modules
+angular.module('angular-jwt',
+    [
+        'angular-jwt.options',
+        'angular-jwt.interceptor',
+        'angular-jwt.jwt',
+        'angular-jwt.authManager'
+    ]);
+
+angular.module('angular-jwt.authManager', [])
+  .provider('authManager', function () {
+
+    this.$get = ["$rootScope", "$injector", "$location", "jwtHelper", "jwtInterceptor", "jwtOptions", function ($rootScope, $injector, $location, jwtHelper, jwtInterceptor, jwtOptions) {
+
+      var config = jwtOptions.getConfig();
+
+      function invokeToken(tokenGetter) {
+        var token = null;
+        if (Array.isArray(tokenGetter)) {
+          token = $injector.invoke(tokenGetter, this, {options: null});
+        } else {
+          token = tokenGetter();
+        }
+        return token;
+      }
+
+      function invokeRedirector(redirector) {
+        if (Array.isArray(redirector) || angular.isFunction(redirector)) {
+          return $injector.invoke(redirector, config, {});
+        } else {
+          throw new Error('unauthenticatedRedirector must be a function');
+        }
+      }
+
+      function isAuthenticated() {
+        var token = invokeToken(config.tokenGetter);
+        if (token) {
+          return !jwtHelper.isTokenExpired(token);
+        }
+      }
+
+      $rootScope.isAuthenticated = false;
+
+      function authenticate() {
+        $rootScope.isAuthenticated = true;
+      }
+
+      function unauthenticate() {
+        $rootScope.isAuthenticated = false;
+      }
+
+      function checkAuthOnRefresh() {
+        $rootScope.$on('$locationChangeStart', function () {
+          var token = invokeToken(config.tokenGetter);
+          if (token) {
+            if (!jwtHelper.isTokenExpired(token)) {
+              authenticate();
+            } else {
+              $rootScope.$broadcast('tokenHasExpired', token);
+            }
+          }
+        });
+      }
+
+      function redirectWhenUnauthenticated() {
+        $rootScope.$on('unauthenticated', function () {
+          invokeRedirector(config.unauthenticatedRedirector);
+          unauthenticate();
+        });
+      }
+
+      function verifyRoute(event, next) {
+        if (!next) {
+          return false;
+        }
+
+        var routeData = (next.$$route) ? next.$$route : next.data;
+
+        if (routeData && routeData.requiresLogin === true) {
+          var token = invokeToken(config.tokenGetter);
+          if (!token || jwtHelper.isTokenExpired(token)) {
+            event.preventDefault();
+            invokeRedirector(config.unauthenticatedRedirector);
+          }
+        }
+      }
+
+      var eventName = ($injector.has('$state')) ? '$stateChangeStart' : '$routeChangeStart';
+      $rootScope.$on(eventName, verifyRoute);
+
+      return {
+        authenticate: authenticate,
+        unauthenticate: unauthenticate,
+        getToken: function(){ return invokeToken(config.tokenGetter); },
+        redirect: function() { return invokeRedirector(config.unauthenticatedRedirector); },
+        checkAuthOnRefresh: checkAuthOnRefresh,
+        redirectWhenUnauthenticated: redirectWhenUnauthenticated,
+        isAuthenticated: isAuthenticated
+      }
+    }]
+  });
+
+angular.module('angular-jwt.interceptor', [])
+  .provider('jwtInterceptor', function() {
+
+    this.urlParam;
+    this.authHeader;
+    this.authPrefix;
+    this.whiteListedDomains;
+    this.tokenGetter;
+
+    var config = this;
+
+    this.$get = ["$q", "$injector", "$rootScope", "urlUtils", "jwtOptions", function($q, $injector, $rootScope, urlUtils, jwtOptions) {
+
+      var options = angular.extend({}, jwtOptions.getConfig(), config);
+
+      function isSafe (url) {
+        if (!urlUtils.isSameOrigin(url) && !options.whiteListedDomains.length) {
+          throw new Error('As of v0.1.0, requests to domains other than the application\'s origin must be white listed. Use jwtOptionsProvider.config({ whiteListedDomains: [<domain>] }); to whitelist.')
+        }
+        var hostname = urlUtils.urlResolve(url).hostname.toLowerCase();
+        for (var i = 0; i < options.whiteListedDomains.length; i++) {
+          var domain = options.whiteListedDomains[i];
+          var regexp = domain instanceof RegExp ? domain : new RegExp(domain, 'i');
+          if (hostname.match(regexp)) {
+            return true;
+          }
+        }
+
+        if (urlUtils.isSameOrigin(url)) {
+          return true;
+        }
+
+        return false;
+      }
+
+      return {
+        request: function (request) {
+          if (request.skipAuthorization || !isSafe(request.url)) {
+            return request;
+          }
+
+          if (options.urlParam) {
+            request.params = request.params || {};
+            // Already has the token in the url itself
+            if (request.params[options.urlParam]) {
+              return request;
+            }
+          } else {
+            request.headers = request.headers || {};
+            // Already has an Authorization header
+            if (request.headers[options.authHeader]) {
+              return request;
+            }
+          }
+
+          var tokenPromise = $q.when($injector.invoke(options.tokenGetter, this, {
+            options: request
+          }));
+
+          return tokenPromise.then(function(token) {
+            if (token) {
+              if (options.urlParam) {
+                request.params[options.urlParam] = token;
+              } else {
+                request.headers[options.authHeader] = options.authPrefix + token;
+              }
+            }
+            return request;
+          });
+        },
+        responseError: function (response) {
+          // handle the case where the user is not authenticated
+          if (response.status === 401) {
+            $rootScope.$broadcast('unauthenticated', response);
+          }
+          return $q.reject(response);
+        }
+      };
+    }]
+  });
+
+ angular.module('angular-jwt.jwt', [])
+  .service('jwtHelper', ["$window", function($window) {
+
+    this.urlBase64Decode = function(str) {
+      var output = str.replace(/-/g, '+').replace(/_/g, '/');
+      switch (output.length % 4) {
+        case 0: { break; }
+        case 2: { output += '=='; break; }
+        case 3: { output += '='; break; }
+        default: {
+          throw 'Illegal base64url string!';
+        }
+      }
+      return $window.decodeURIComponent(escape($window.atob(output))); //polyfill https://github.com/davidchambers/Base64.js
+    };
+
+
+    this.decodeToken = function(token) {
+      var parts = token.split('.');
+
+      if (parts.length !== 3) {
+        throw new Error('JWT must have 3 parts');
+      }
+
+      var decoded = this.urlBase64Decode(parts[1]);
+      if (!decoded) {
+        throw new Error('Cannot decode the token');
+      }
+
+      return angular.fromJson(decoded);
+    };
+
+    this.getTokenExpirationDate = function(token) {
+      var decoded = this.decodeToken(token);
+
+      if(typeof decoded.exp === "undefined") {
+        return null;
+      }
+
+      var d = new Date(0); // The 0 here is the key, which sets the date to the epoch
+      d.setUTCSeconds(decoded.exp);
+
+      return d;
+    };
+
+    this.isTokenExpired = function(token, offsetSeconds) {
+      var d = this.getTokenExpirationDate(token);
+      offsetSeconds = offsetSeconds || 0;
+      if (d === null) {
+        return false;
+      }
+
+      // Token expired?
+      return !(d.valueOf() > (new Date().valueOf() + (offsetSeconds * 1000)));
+    };
+  }]);
+
+angular.module('angular-jwt.options', [])
+  .provider('jwtOptions', function() {
+    var globalConfig = {};
+    this.config = function(value) {
+      globalConfig = value;
+    };
+    this.$get = function() {
+
+      var options = {
+        urlParam: null,
+        authHeader: 'Authorization',
+        authPrefix: 'Bearer ',
+        whiteListedDomains: [],
+        tokenGetter: function() {
+          return null;
+        },
+        loginPath: '/',
+        unauthenticatedRedirectPath: '/',
+        unauthenticatedRedirector: ['$location', function($location) {
+          $location.path(this.unauthenticatedRedirectPath);
+        }]
+      };
+
+      function JwtOptions() {
+        var config = this.config = angular.extend({}, options, globalConfig);
+      }
+
+      JwtOptions.prototype.getConfig = function() {
+        return this.config;
+      };
+
+      return new JwtOptions();
+    }
+  });
+
+ /**
+  * The content from this file was directly lifted from Angular. It is
+  * unfortunately not a public API, so the best we can do is copy it.
+  *
+  * Angular References:
+  *   https://github.com/angular/angular.js/issues/3299
+  *   https://github.com/angular/angular.js/blob/d077966ff1ac18262f4615ff1a533db24d4432a7/src/ng/urlUtils.js
+  */
+
+ angular.module('angular-jwt.interceptor')
+  .service('urlUtils', function () {
+
+    // NOTE:  The usage of window and document instead of $window and $document here is
+    // deliberate.  This service depends on the specific behavior of anchor nodes created by the
+    // browser (resolving and parsing URLs) that is unlikely to be provided by mock objects and
+    // cause us to break tests.  In addition, when the browser resolves a URL for XHR, it
+    // doesn't know about mocked locations and resolves URLs to the real document - which is
+    // exactly the behavior needed here.  There is little value is mocking these out for this
+    // service.
+    var urlParsingNode = document.createElement("a");
+    var originUrl = urlResolve(window.location.href);
+
+    /**
+     *
+     * Implementation Notes for non-IE browsers
+     * ----------------------------------------
+     * Assigning a URL to the href property of an anchor DOM node, even one attached to the DOM,
+     * results both in the normalizing and parsing of the URL.  Normalizing means that a relative
+     * URL will be resolved into an absolute URL in the context of the application document.
+     * Parsing means that the anchor node's host, hostname, protocol, port, pathname and related
+     * properties are all populated to reflect the normalized URL.  This approach has wide
+     * compatibility - Safari 1+, Mozilla 1+, Opera 7+,e etc.  See
+     * http://www.aptana.com/reference/html/api/HTMLAnchorElement.html
+     *
+     * Implementation Notes for IE
+     * ---------------------------
+     * IE <= 10 normalizes the URL when assigned to the anchor node similar to the other
+     * browsers.  However, the parsed components will not be set if the URL assigned did not specify
+     * them.  (e.g. if you assign a.href = "foo", then a.protocol, a.host, etc. will be empty.)  We
+     * work around that by performing the parsing in a 2nd step by taking a previously normalized
+     * URL (e.g. by assigning to a.href) and assigning it a.href again.  This correctly populates the
+     * properties such as protocol, hostname, port, etc.
+     *
+     * References:
+     *   http://developer.mozilla.org/en-US/docs/Web/API/HTMLAnchorElement
+     *   http://www.aptana.com/reference/html/api/HTMLAnchorElement.html
+     *   http://url.spec.whatwg.org/#urlutils
+     *   https://github.com/angular/angular.js/pull/2902
+     *   http://james.padolsey.com/javascript/parsing-urls-with-the-dom/
+     *
+     * @kind function
+     * @param {string} url The URL to be parsed.
+     * @description Normalizes and parses a URL.
+     * @returns {object} Returns the normalized URL as a dictionary.
+     *
+     *   | member name   | Description    |
+     *   |---------------|----------------|
+     *   | href          | A normalized version of the provided URL if it was not an absolute URL |
+     *   | protocol      | The protocol including the trailing colon                              |
+     *   | host          | The host and port (if the port is non-default) of the normalizedUrl    |
+     *   | search        | The search params, minus the question mark                             |
+     *   | hash          | The hash string, minus the hash symbol
+     *   | hostname      | The hostname
+     *   | port          | The port, without ":"
+     *   | pathname      | The pathname, beginning with "/"
+     *
+     */
+    function urlResolve(url) {
+      var href = url;
+
+      // Normalize before parse.  Refer Implementation Notes on why this is
+      // done in two steps on IE.
+      urlParsingNode.setAttribute("href", href);
+      href = urlParsingNode.href;
+      urlParsingNode.setAttribute('href', href);
+
+      // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
+      return {
+        href: urlParsingNode.href,
+        protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
+        host: urlParsingNode.host,
+        search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
+        hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
+        hostname: urlParsingNode.hostname,
+        port: urlParsingNode.port,
+        pathname: (urlParsingNode.pathname.charAt(0) === '/')
+          ? urlParsingNode.pathname
+          : '/' + urlParsingNode.pathname
+      };
+    }
+
+    /**
+     * Parse a request URL and determine whether this is a same-origin request as the application document.
+     *
+     * @param {string|object} requestUrl The url of the request as a string that will be resolved
+     * or a parsed URL object.
+     * @returns {boolean} Whether the request is for the same origin as the application document.
+     */
+    function urlIsSameOrigin(requestUrl) {
+      var parsed = (angular.isString(requestUrl)) ? urlResolve(requestUrl) : requestUrl;
+      return (parsed.protocol === originUrl.protocol &&
+              parsed.host === originUrl.host);
+    }
+
+    return {
+      urlResolve: urlResolve,
+      isSameOrigin: urlIsSameOrigin
+    };
+
+  });
+
+}());
+},{}],2:[function(require,module,exports){
+require('./dist/angular-jwt.js');
+module.exports = 'angular-jwt';
+
+
+},{"./dist/angular-jwt.js":1}],3:[function(require,module,exports){
 "use strict";
 var ng_from_import = require("angular");
 var ng_from_global = angular;
 exports.ng = (ng_from_import && ng_from_import.module) ? ng_from_import : ng_from_global;
 
-},{"angular":16}],2:[function(require,module,exports){
+},{"angular":18}],4:[function(require,module,exports){
 "use strict";
 /**
  * These are the UI-Router angular 1 directives.
@@ -533,7 +933,7 @@ angular_1.ng.module('ui.router.state')
     .directive('uiSrefActiveEq', uiSrefActive)
     .directive('uiState', uiState);
 
-},{"../angular":1,"ui-router-core":33}],3:[function(require,module,exports){
+},{"../angular":3,"ui-router-core":35}],5:[function(require,module,exports){
 "use strict";
 /**
  * @ng1api
@@ -931,7 +1331,7 @@ function registerControllerCallbacks($transitions, controllerInstance, $scope, c
 angular_1.ng.module('ui.router.state').directive('uiView', uiView);
 angular_1.ng.module('ui.router.state').directive('uiView', $ViewDirectiveFill);
 
-},{"../angular":1,"../services":7,"../statebuilders/views":11,"angular":16,"ui-router-core":33}],4:[function(require,module,exports){
+},{"../angular":3,"../services":9,"../statebuilders/views":13,"angular":18,"ui-router-core":35}],6:[function(require,module,exports){
 /**
  * Main entry point for angular 1.x build
  * @module ng1
@@ -954,7 +1354,7 @@ require("./viewScroll");
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = "ui.router";
 
-},{"./directives/stateDirectives":2,"./directives/viewDirective":3,"./injectables":5,"./services":7,"./stateFilters":8,"./stateProvider":9,"./statebuilders/views":11,"./viewScroll":14,"ui-router-core":33}],5:[function(require,module,exports){
+},{"./directives/stateDirectives":4,"./directives/viewDirective":5,"./injectables":7,"./services":9,"./stateFilters":10,"./stateProvider":11,"./statebuilders/views":13,"./viewScroll":16,"ui-router-core":35}],7:[function(require,module,exports){
 /**
  * # Angular 1 injectable services
  *
@@ -1312,7 +1712,7 @@ var $urlMatcherFactory;
  */
 var $urlMatcherFactoryProvider;
 
-},{}],6:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 var ui_router_core_1 = require("ui-router-core");
 /**
@@ -1387,7 +1787,7 @@ var Ng1LocationServices = (function () {
 }());
 exports.Ng1LocationServices = Ng1LocationServices;
 
-},{"ui-router-core":33}],7:[function(require,module,exports){
+},{"ui-router-core":35}],9:[function(require,module,exports){
 "use strict";
 /**
  * # UI-Router for Angular 1
@@ -1502,7 +1902,7 @@ exports.getLocals = function (ctx) {
     return tuples.reduce(ui_router_core_1.applyPairs, {});
 };
 
-},{"./angular":1,"./locationServices":6,"./stateProvider":9,"./statebuilders/onEnterExitRetain":10,"./statebuilders/views":11,"./templateFactory":12,"./urlRouterProvider":13,"ui-router-core":33}],8:[function(require,module,exports){
+},{"./angular":3,"./locationServices":8,"./stateProvider":11,"./statebuilders/onEnterExitRetain":12,"./statebuilders/views":13,"./templateFactory":14,"./urlRouterProvider":15,"ui-router-core":35}],10:[function(require,module,exports){
 /** @module state */ /** for typedoc */
 "use strict";
 var angular_1 = require("./angular");
@@ -1546,7 +1946,7 @@ angular_1.ng.module('ui.router.state')
     .filter('isState', $IsStateFilter)
     .filter('includedByState', $IncludedByStateFilter);
 
-},{"./angular":1}],9:[function(require,module,exports){
+},{"./angular":3}],11:[function(require,module,exports){
 "use strict";
 /** @module ng1 */ /** for typedoc */
 var ui_router_core_1 = require("ui-router-core");
@@ -1693,7 +2093,7 @@ var StateProvider = (function () {
 }());
 exports.StateProvider = StateProvider;
 
-},{"ui-router-core":33}],10:[function(require,module,exports){
+},{"ui-router-core":35}],12:[function(require,module,exports){
 "use strict";
 /** @module ng1 */ /** */
 var ui_router_core_1 = require("ui-router-core");
@@ -1718,7 +2118,7 @@ exports.getStateHookBuilder = function (hookName) {
     };
 };
 
-},{"../services":7,"ui-router-core":33}],11:[function(require,module,exports){
+},{"../services":9,"ui-router-core":35}],13:[function(require,module,exports){
 "use strict";
 var ui_router_core_1 = require("ui-router-core");
 function getNg1ViewConfigFactory() {
@@ -1815,7 +2215,7 @@ var Ng1ViewConfig = (function () {
 }());
 exports.Ng1ViewConfig = Ng1ViewConfig;
 
-},{"ui-router-core":33}],12:[function(require,module,exports){
+},{"ui-router-core":35}],14:[function(require,module,exports){
 "use strict";
 /** @module view */
 /** for typedoc */
@@ -2002,7 +2402,7 @@ var scopeBindings = function (bindingsObj) { return Object.keys(bindingsObj || {
     .filter(function (tuple) { return ui_router_core_1.isDefined(tuple) && ui_router_core_1.isArray(tuple[1]); })
     .map(function (tuple) { return ({ name: tuple[1][2] || tuple[0], type: tuple[1][1] }); }); };
 
-},{"./angular":1,"ui-router-core":33}],13:[function(require,module,exports){
+},{"./angular":3,"ui-router-core":35}],15:[function(require,module,exports){
 "use strict";
 /** @module url */ /** */
 var ui_router_core_1 = require("ui-router-core");
@@ -2206,7 +2606,7 @@ var UrlRouterProvider = (function () {
 }());
 exports.UrlRouterProvider = UrlRouterProvider;
 
-},{"ui-router-core":33}],14:[function(require,module,exports){
+},{"ui-router-core":35}],16:[function(require,module,exports){
 "use strict";
 /** @module ng1 */ /** */
 var angular_1 = require("./angular");
@@ -2229,7 +2629,7 @@ function $ViewScrollProvider() {
 }
 angular_1.ng.module('ui.router.state').provider('$uiViewScroll', $ViewScrollProvider);
 
-},{"./angular":1}],15:[function(require,module,exports){
+},{"./angular":3}],17:[function(require,module,exports){
 /**
  * @license AngularJS v1.6.1
  * (c) 2010-2016 Google, Inc. http://angularjs.org
@@ -35212,11 +35612,11 @@ $provide.value("$locale", {
 })(window);
 
 !window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
-},{}],16:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 require('./angular');
 module.exports = angular;
 
-},{"./angular":15}],17:[function(require,module,exports){
+},{"./angular":17}],19:[function(require,module,exports){
 /**
  * Random utility functions used in the UI-Router code
  *
@@ -35834,7 +36234,7 @@ exports.silentRejection = function (error) {
     return exports.silenceUncaughtInPromise(coreservices_1.services.$q.reject(error));
 };
 
-},{"./coreservices":18,"./hof":20,"./predicates":22}],18:[function(require,module,exports){
+},{"./coreservices":20,"./hof":22,"./predicates":24}],20:[function(require,module,exports){
 "use strict";
 exports.notImplemented = function (fnname) { return function () {
     throw new Error(fnname + "(): No coreservices implementation for UI-Router is loaded.");
@@ -35845,7 +36245,7 @@ var services = {
 };
 exports.services = services;
 
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 "use strict";
 /**
  * @coreapi
@@ -35930,7 +36330,7 @@ var Glob = (function () {
 }());
 exports.Glob = Glob;
 
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /**
  * Higher order functions
  *
@@ -36175,7 +36575,7 @@ function pattern(struct) {
 }
 exports.pattern = pattern;
 
-},{}],21:[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -36190,7 +36590,7 @@ __export(require("./queue"));
 __export(require("./strings"));
 __export(require("./trace"));
 
-},{"./common":17,"./coreservices":18,"./glob":19,"./hof":20,"./predicates":22,"./queue":23,"./strings":24,"./trace":25}],22:[function(require,module,exports){
+},{"./common":19,"./coreservices":20,"./glob":21,"./hof":22,"./predicates":24,"./queue":25,"./strings":26,"./trace":27}],24:[function(require,module,exports){
 "use strict";
 /** Predicates
  *
@@ -36234,7 +36634,7 @@ exports.isInjectable = isInjectable;
  */
 exports.isPromise = hof_1.and(exports.isObject, hof_1.pipe(hof_1.prop('then'), exports.isFunction));
 
-},{"./hof":20}],23:[function(require,module,exports){
+},{"./hof":22}],25:[function(require,module,exports){
 /**
  * @module common
  */ /** for typedoc */
@@ -36280,7 +36680,7 @@ var Queue = (function () {
 }());
 exports.Queue = Queue;
 
-},{}],24:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 /**
  * Functions that manipulate strings
  *
@@ -36432,7 +36832,7 @@ function joinNeighborsR(acc, x) {
 exports.joinNeighborsR = joinNeighborsR;
 ;
 
-},{"../resolve/resolvable":45,"../transition/rejectFactory":60,"../transition/transition":61,"./common":17,"./hof":20,"./predicates":22}],25:[function(require,module,exports){
+},{"../resolve/resolvable":47,"../transition/rejectFactory":62,"../transition/transition":63,"./common":19,"./hof":22,"./predicates":24}],27:[function(require,module,exports){
 "use strict";
 /**
  * UI-Router Transition Tracing
@@ -36679,7 +37079,7 @@ exports.Trace = Trace;
 var trace = new Trace();
 exports.trace = trace;
 
-},{"../common/hof":20,"../common/predicates":22,"./strings":24}],26:[function(require,module,exports){
+},{"../common/hof":22,"../common/predicates":24,"./strings":26}],28:[function(require,module,exports){
 "use strict";
 /**
  * @coreapi
@@ -36717,7 +37117,7 @@ var Globals = (function () {
 }());
 exports.Globals = Globals;
 
-},{"./common/common":17,"./common/queue":23,"./params/stateParams":39}],27:[function(require,module,exports){
+},{"./common/common":19,"./common/queue":25,"./params/stateParams":41}],29:[function(require,module,exports){
 "use strict";
 var coreservices_1 = require("../common/coreservices");
 /**
@@ -36814,7 +37214,7 @@ function lazyLoadState(transition, state) {
 }
 exports.lazyLoadState = lazyLoadState;
 
-},{"../common/coreservices":18}],28:[function(require,module,exports){
+},{"../common/coreservices":20}],30:[function(require,module,exports){
 "use strict";
 /**
  * A factory which creates an onEnter, onExit or onRetain transition hook function
@@ -36870,7 +37270,7 @@ exports.registerOnEnterHook = function (transitionService) {
     return transitionService.onEnter({ entering: function (state) { return !!state.onEnter; } }, onEnterHook);
 };
 
-},{}],29:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 "use strict";
 /** @module hooks */ /** */
 var predicates_1 = require("../common/predicates");
@@ -36907,7 +37307,7 @@ exports.registerRedirectToHook = function (transitionService) {
     return transitionService.onStart({ to: function (state) { return !!state.redirectTo; } }, redirectToHook);
 };
 
-},{"../common/coreservices":18,"../common/predicates":22,"../state/targetState":55}],30:[function(require,module,exports){
+},{"../common/coreservices":20,"../common/predicates":24,"../state/targetState":57}],32:[function(require,module,exports){
 "use strict";
 /** @module hooks */ /** for typedoc */
 var common_1 = require("../common/common");
@@ -36949,7 +37349,7 @@ exports.registerLazyResolveState = function (transitionService) {
     return transitionService.onEnter({ entering: hof_1.val(true) }, lazyResolveState, { priority: 1000 });
 };
 
-},{"../common/common":17,"../common/hof":20,"../resolve/resolveContext":46}],31:[function(require,module,exports){
+},{"../common/common":19,"../common/hof":22,"../resolve/resolveContext":48}],33:[function(require,module,exports){
 "use strict";
 /**
  * A [[TransitionHookFn]] which updates the URL after a successful transition
@@ -36974,7 +37374,7 @@ exports.registerUpdateUrl = function (transitionService) {
     return transitionService.onSuccess({}, updateUrl, { priority: 9999 });
 };
 
-},{}],32:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 "use strict";
 /** @module hooks */ /** for typedoc */
 var common_1 = require("../common/common");
@@ -37021,7 +37421,7 @@ exports.registerActivateViews = function (transitionService) {
     return transitionService.onSuccess({}, activateViews);
 };
 
-},{"../common/common":17,"../common/coreservices":18}],33:[function(require,module,exports){
+},{"../common/common":19,"../common/coreservices":20}],35:[function(require,module,exports){
 /**
  * @coreapi
  * @module common
@@ -37042,7 +37442,7 @@ __export(require("./globals"));
 __export(require("./router"));
 __export(require("./interface"));
 
-},{"./common/index":21,"./globals":26,"./interface":34,"./params/index":35,"./path/index":40,"./resolve/index":43,"./router":47,"./state/index":48,"./transition/index":58,"./url/index":65,"./view/index":71}],34:[function(require,module,exports){
+},{"./common/index":23,"./globals":28,"./interface":36,"./params/index":37,"./path/index":42,"./resolve/index":45,"./router":49,"./state/index":50,"./transition/index":60,"./url/index":67,"./view/index":73}],36:[function(require,module,exports){
 /**
  * Core classes and interfaces
  *
@@ -37062,7 +37462,7 @@ var UIRouterPluginBase = (function () {
 }());
 exports.UIRouterPluginBase = UIRouterPluginBase;
 
-},{}],35:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -37072,7 +37472,7 @@ __export(require("./paramTypes"));
 __export(require("./stateParams"));
 __export(require("./paramType"));
 
-},{"./param":36,"./paramType":37,"./paramTypes":38,"./stateParams":39}],36:[function(require,module,exports){
+},{"./param":38,"./paramType":39,"./paramTypes":40,"./stateParams":41}],38:[function(require,module,exports){
 "use strict";
 /**
  * @internalapi
@@ -37246,7 +37646,7 @@ var Param = (function () {
 }());
 exports.Param = Param;
 
-},{"../common/common":17,"../common/coreservices":18,"../common/hof":20,"../common/predicates":22,"./paramType":37}],37:[function(require,module,exports){
+},{"../common/common":19,"../common/coreservices":20,"../common/hof":22,"../common/predicates":24,"./paramType":39}],39:[function(require,module,exports){
 "use strict";
 /** @module params */ /** for typedoc */
 var common_1 = require("../common/common");
@@ -37384,7 +37784,7 @@ function ArrayType(type, mode) {
     });
 }
 
-},{"../common/common":17,"../common/predicates":22}],38:[function(require,module,exports){
+},{"../common/common":19,"../common/predicates":24}],40:[function(require,module,exports){
 "use strict";
 /**
  * @coreapi
@@ -37539,7 +37939,7 @@ function initDefaultTypes() {
 }
 initDefaultTypes();
 
-},{"../common/common":17,"../common/coreservices":18,"../common/hof":20,"../common/predicates":22,"./paramType":37}],39:[function(require,module,exports){
+},{"../common/common":19,"../common/coreservices":20,"../common/hof":22,"../common/predicates":24,"./paramType":39}],41:[function(require,module,exports){
 "use strict";
 /** @module params */ /** for typedoc */
 var common_1 = require("../common/common");
@@ -37578,7 +37978,7 @@ var StateParams = (function () {
 }());
 exports.StateParams = StateParams;
 
-},{"../common/common":17}],40:[function(require,module,exports){
+},{"../common/common":19}],42:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -37587,7 +37987,7 @@ function __export(m) {
 __export(require("./node"));
 __export(require("./pathFactory"));
 
-},{"./node":41,"./pathFactory":42}],41:[function(require,module,exports){
+},{"./node":43,"./pathFactory":44}],43:[function(require,module,exports){
 "use strict";
 /** @module path */ /** for typedoc */
 var common_1 = require("../common/common");
@@ -37673,7 +38073,7 @@ var PathNode = (function () {
 }());
 exports.PathNode = PathNode;
 
-},{"../common/common":17,"../common/hof":20,"../params/param":36}],42:[function(require,module,exports){
+},{"../common/common":19,"../common/hof":22,"../params/param":38}],44:[function(require,module,exports){
 /** @module path */ /** for typedoc */
 "use strict";
 var common_1 = require("../common/common");
@@ -37807,7 +38207,7 @@ var PathFactory = (function () {
 PathFactory.paramValues = function (path) { return path.reduce(function (acc, node) { return common_1.extend(acc, node.paramValues); }, {}); };
 exports.PathFactory = PathFactory;
 
-},{"../common/common":17,"../common/hof":20,"../path/node":41,"../state/targetState":55}],43:[function(require,module,exports){
+},{"../common/common":19,"../common/hof":22,"../path/node":43,"../state/targetState":57}],45:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -37817,7 +38217,7 @@ __export(require("./interface"));
 __export(require("./resolvable"));
 __export(require("./resolveContext"));
 
-},{"./interface":44,"./resolvable":45,"./resolveContext":46}],44:[function(require,module,exports){
+},{"./interface":46,"./resolvable":47,"./resolveContext":48}],46:[function(require,module,exports){
 "use strict";
 /** @internalapi */
 exports.resolvePolicies = {
@@ -37832,7 +38232,7 @@ exports.resolvePolicies = {
     }
 };
 
-},{}],45:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 "use strict";
 /**
  * @coreapi
@@ -37965,7 +38365,7 @@ Resolvable.fromData = function (token, data) {
 };
 exports.Resolvable = Resolvable;
 
-},{"../common/common":17,"../common/coreservices":18,"../common/predicates":22,"../common/strings":24,"../common/trace":25}],46:[function(require,module,exports){
+},{"../common/common":19,"../common/coreservices":20,"../common/predicates":24,"../common/strings":26,"../common/trace":27}],48:[function(require,module,exports){
 "use strict";
 /** @module resolve */
 /** for typedoc */
@@ -38165,7 +38565,7 @@ var UIInjectorImpl = (function () {
     return UIInjectorImpl;
 }());
 
-},{"../common/common":17,"../common/coreservices":18,"../common/hof":20,"../common/strings":24,"../common/trace":25,"../path/pathFactory":42,"./interface":44,"./resolvable":45}],47:[function(require,module,exports){
+},{"../common/common":19,"../common/coreservices":20,"../common/hof":22,"../common/strings":26,"../common/trace":27,"../path/pathFactory":44,"./interface":46,"./resolvable":47}],49:[function(require,module,exports){
 "use strict";
 /**
  * @coreapi
@@ -38266,7 +38666,7 @@ var UIRouter = (function () {
 }());
 exports.UIRouter = UIRouter;
 
-},{"./common/common":17,"./common/predicates":22,"./globals":26,"./state/stateRegistry":53,"./state/stateService":54,"./transition/transitionService":64,"./url/urlMatcherFactory":67,"./url/urlRouter":68,"./url/urlService":70,"./view/view":72}],48:[function(require,module,exports){
+},{"./common/common":19,"./common/predicates":24,"./globals":28,"./state/stateRegistry":55,"./state/stateService":56,"./transition/transitionService":66,"./url/urlMatcherFactory":69,"./url/urlRouter":70,"./url/urlService":72,"./view/view":74}],50:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -38279,7 +38679,7 @@ __export(require("./stateRegistry"));
 __export(require("./stateService"));
 __export(require("./targetState"));
 
-},{"./stateBuilder":49,"./stateMatcher":50,"./stateObject":51,"./stateQueueManager":52,"./stateRegistry":53,"./stateService":54,"./targetState":55}],49:[function(require,module,exports){
+},{"./stateBuilder":51,"./stateMatcher":52,"./stateObject":53,"./stateQueueManager":54,"./stateRegistry":55,"./stateService":56,"./targetState":57}],51:[function(require,module,exports){
 "use strict";
 /** @module state */ /** for typedoc */
 var common_1 = require("../common/common");
@@ -38553,7 +38953,7 @@ var StateBuilder = (function () {
 }());
 exports.StateBuilder = StateBuilder;
 
-},{"../common/common":17,"../common/coreservices":18,"../common/hof":20,"../common/predicates":22,"../common/strings":24,"../resolve/resolvable":45}],50:[function(require,module,exports){
+},{"../common/common":19,"../common/coreservices":20,"../common/hof":22,"../common/predicates":24,"../common/strings":26,"../resolve/resolvable":47}],52:[function(require,module,exports){
 "use strict";
 /** @module state */ /** for typedoc */
 var predicates_1 = require("../common/predicates");
@@ -38613,7 +39013,7 @@ var StateMatcher = (function () {
 }());
 exports.StateMatcher = StateMatcher;
 
-},{"../common/common":17,"../common/glob":19,"../common/predicates":22}],51:[function(require,module,exports){
+},{"../common/common":19,"../common/glob":21,"../common/predicates":24}],53:[function(require,module,exports){
 /**
  * @coreapi
  * @module state
@@ -38703,7 +39103,7 @@ var State = (function () {
 }());
 exports.State = State;
 
-},{"../common/common":17,"../common/hof":20}],52:[function(require,module,exports){
+},{"../common/common":19,"../common/hof":22}],54:[function(require,module,exports){
 "use strict";
 /** @module state */ /** for typedoc */
 var common_1 = require("../common/common");
@@ -38792,7 +39192,7 @@ var StateQueueManager = (function () {
 }());
 exports.StateQueueManager = StateQueueManager;
 
-},{"../common/common":17,"../common/predicates":22,"./stateObject":51}],53:[function(require,module,exports){
+},{"../common/common":19,"../common/predicates":24,"./stateObject":53}],55:[function(require,module,exports){
 /**
  * @coreapi
  * @module state
@@ -38949,7 +39349,7 @@ var StateRegistry = (function () {
 }());
 exports.StateRegistry = StateRegistry;
 
-},{"../common/common":17,"../common/hof":20,"./stateBuilder":49,"./stateMatcher":50,"./stateQueueManager":52}],54:[function(require,module,exports){
+},{"../common/common":19,"../common/hof":22,"./stateBuilder":51,"./stateMatcher":52,"./stateQueueManager":54}],56:[function(require,module,exports){
 "use strict";
 /**
  * @coreapi
@@ -39536,7 +39936,7 @@ var StateService = (function () {
 }());
 exports.StateService = StateService;
 
-},{"../common/common":17,"../common/coreservices":18,"../common/glob":19,"../common/hof":20,"../common/predicates":22,"../common/queue":23,"../hooks/lazyLoad":27,"../params/param":36,"../path/node":41,"../path/pathFactory":42,"../resolve/resolveContext":46,"../transition/rejectFactory":60,"../transition/transitionService":64,"./targetState":55}],55:[function(require,module,exports){
+},{"../common/common":19,"../common/coreservices":20,"../common/glob":21,"../common/hof":22,"../common/predicates":24,"../common/queue":25,"../hooks/lazyLoad":29,"../params/param":38,"../path/node":43,"../path/pathFactory":44,"../resolve/resolveContext":48,"../transition/rejectFactory":62,"../transition/transitionService":66,"./targetState":57}],57:[function(require,module,exports){
 /**
  * @coreapi
  * @module state
@@ -39650,7 +40050,7 @@ TargetState.isDef = function (obj) {
 };
 exports.TargetState = TargetState;
 
-},{"../common/common":17,"../common/predicates":22}],56:[function(require,module,exports){
+},{"../common/common":19,"../common/predicates":24}],58:[function(require,module,exports){
 /**
  * @coreapi
  * @module transition
@@ -39771,7 +40171,7 @@ function tupleSort(reverseDepthSort) {
     };
 }
 
-},{"../common/common":17,"../common/predicates":22,"./interface":59,"./transitionHook":63}],57:[function(require,module,exports){
+},{"../common/common":19,"../common/predicates":24,"./interface":61,"./transitionHook":65}],59:[function(require,module,exports){
 "use strict";
 /**
  * @coreapi
@@ -39912,7 +40312,7 @@ function makeEvent(registry, transitionService, eventType) {
 }
 exports.makeEvent = makeEvent;
 
-},{"../common/common":17,"../common/glob":19,"../common/predicates":22,"./interface":59}],58:[function(require,module,exports){
+},{"../common/common":19,"../common/glob":21,"../common/predicates":24,"./interface":61}],60:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -39938,7 +40338,7 @@ __export(require("./transitionHook"));
 __export(require("./transitionEventType"));
 __export(require("./transitionService"));
 
-},{"./hookBuilder":56,"./hookRegistry":57,"./interface":59,"./rejectFactory":60,"./transition":61,"./transitionEventType":62,"./transitionHook":63,"./transitionService":64}],59:[function(require,module,exports){
+},{"./hookBuilder":58,"./hookRegistry":59,"./interface":61,"./rejectFactory":62,"./transition":63,"./transitionEventType":64,"./transitionHook":65,"./transitionService":66}],61:[function(require,module,exports){
 "use strict";
 var TransitionHookPhase;
 (function (TransitionHookPhase) {
@@ -39954,7 +40354,7 @@ var TransitionHookScope;
     TransitionHookScope[TransitionHookScope["STATE"] = 1] = "STATE";
 })(TransitionHookScope = exports.TransitionHookScope || (exports.TransitionHookScope = {}));
 
-},{}],60:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 /**
  * @coreapi
  * @module transition
@@ -40029,7 +40429,7 @@ var Rejection = (function () {
 }());
 exports.Rejection = Rejection;
 
-},{"../common/common":17,"../common/strings":24}],61:[function(require,module,exports){
+},{"../common/common":19,"../common/strings":26}],63:[function(require,module,exports){
 "use strict";
 var trace_1 = require("../common/trace");
 var coreservices_1 = require("../common/coreservices");
@@ -40638,7 +41038,7 @@ var Transition = (function () {
 Transition.diToken = Transition;
 exports.Transition = Transition;
 
-},{"../common/common":17,"../common/coreservices":18,"../common/hof":20,"../common/predicates":22,"../common/trace":25,"../params/param":36,"../path/node":41,"../path/pathFactory":42,"../resolve/resolvable":45,"../resolve/resolveContext":46,"../router":47,"../state/targetState":55,"./hookBuilder":56,"./hookRegistry":57,"./interface":59,"./rejectFactory":60,"./transitionHook":63}],62:[function(require,module,exports){
+},{"../common/common":19,"../common/coreservices":20,"../common/hof":22,"../common/predicates":24,"../common/trace":27,"../params/param":38,"../path/node":43,"../path/pathFactory":44,"../resolve/resolvable":47,"../resolve/resolveContext":48,"../router":49,"../state/targetState":57,"./hookBuilder":58,"./hookRegistry":59,"./interface":61,"./rejectFactory":62,"./transitionHook":65}],64:[function(require,module,exports){
 "use strict";
 var transitionHook_1 = require("./transitionHook");
 /**
@@ -40666,7 +41066,7 @@ var TransitionEventType = (function () {
 }());
 exports.TransitionEventType = TransitionEventType;
 
-},{"./transitionHook":63}],63:[function(require,module,exports){
+},{"./transitionHook":65}],65:[function(require,module,exports){
 "use strict";
 var common_1 = require("../common/common");
 var strings_1 = require("../common/strings");
@@ -40813,7 +41213,7 @@ TransitionHook.THROW_ERROR = function (hook) {
 };
 exports.TransitionHook = TransitionHook;
 
-},{"../common/common":17,"../common/coreservices":18,"../common/hof":20,"../common/predicates":22,"../common/strings":24,"../common/trace":25,"../state/targetState":55,"./rejectFactory":60}],64:[function(require,module,exports){
+},{"../common/common":19,"../common/coreservices":20,"../common/hof":22,"../common/predicates":24,"../common/strings":26,"../common/trace":27,"../state/targetState":57,"./rejectFactory":62}],66:[function(require,module,exports){
 "use strict";
 /**
  * @coreapi
@@ -41050,7 +41450,7 @@ var TransitionService = (function () {
 }());
 exports.TransitionService = TransitionService;
 
-},{"../common/common":17,"../common/hof":20,"../common/predicates":22,"../hooks/lazyLoad":27,"../hooks/onEnterExitRetain":28,"../hooks/redirectTo":29,"../hooks/resolve":30,"../hooks/url":31,"../hooks/views":32,"./hookRegistry":57,"./interface":59,"./transition":61,"./transitionEventType":62,"./transitionHook":63}],65:[function(require,module,exports){
+},{"../common/common":19,"../common/hof":22,"../common/predicates":24,"../hooks/lazyLoad":29,"../hooks/onEnterExitRetain":30,"../hooks/redirectTo":31,"../hooks/resolve":32,"../hooks/url":33,"../hooks/views":34,"./hookRegistry":59,"./interface":61,"./transition":63,"./transitionEventType":64,"./transitionHook":65}],67:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -41061,7 +41461,7 @@ __export(require("./urlRouter"));
 __export(require("./urlRule"));
 __export(require("./urlService"));
 
-},{"./urlMatcher":66,"./urlMatcherFactory":67,"./urlRouter":68,"./urlRule":69,"./urlService":70}],66:[function(require,module,exports){
+},{"./urlMatcher":68,"./urlMatcherFactory":69,"./urlRouter":70,"./urlRule":71,"./urlService":72}],68:[function(require,module,exports){
 "use strict";
 /**
  * @coreapi
@@ -41534,7 +41934,7 @@ var UrlMatcher = (function () {
 UrlMatcher.nameValidator = /^\w+([-.]+\w+)*(?:\[\])?$/;
 exports.UrlMatcher = UrlMatcher;
 
-},{"../common/common":17,"../common/hof":20,"../common/predicates":22,"../common/strings":24,"../params/param":36}],67:[function(require,module,exports){
+},{"../common/common":19,"../common/hof":22,"../common/predicates":24,"../common/strings":26,"../params/param":38}],69:[function(require,module,exports){
 "use strict";
 /**
  * @internalapi
@@ -41661,7 +42061,7 @@ var UrlMatcherFactory = (function () {
 }());
 exports.UrlMatcherFactory = UrlMatcherFactory;
 
-},{"../common/common":17,"../common/predicates":22,"../params/param":36,"../params/paramTypes":38,"./urlMatcher":66}],68:[function(require,module,exports){
+},{"../common/common":19,"../common/predicates":24,"../params/param":38,"../params/paramTypes":40,"./urlMatcher":68}],70:[function(require,module,exports){
 "use strict";
 /**
  * @internalapi
@@ -41906,7 +42306,7 @@ var UrlRouter = (function () {
 }());
 exports.UrlRouter = UrlRouter;
 
-},{"../common/common":17,"../common/hof":20,"../common/predicates":22,"../state/targetState":55,"./urlMatcher":66,"./urlRule":69}],69:[function(require,module,exports){
+},{"../common/common":19,"../common/hof":22,"../common/predicates":24,"../state/targetState":57,"./urlMatcher":68,"./urlRule":71}],71:[function(require,module,exports){
 "use strict";
 /**
  * @coreapi
@@ -42116,7 +42516,7 @@ var BaseUrlRule = (function () {
 }());
 exports.BaseUrlRule = BaseUrlRule;
 
-},{"../common/common":17,"../common/hof":20,"../common/predicates":22,"../state/stateObject":51,"./urlMatcher":66}],70:[function(require,module,exports){
+},{"../common/common":19,"../common/hof":22,"../common/predicates":24,"../state/stateObject":53,"./urlMatcher":68}],72:[function(require,module,exports){
 /**
  * @coreapi
  * @module url
@@ -42196,14 +42596,14 @@ UrlService.locationServiceStub = makeStub(locationServicesFns);
 UrlService.locationConfigStub = makeStub(locationConfigFns);
 exports.UrlService = UrlService;
 
-},{"../common/common":17,"../common/coreservices":18}],71:[function(require,module,exports){
+},{"../common/common":19,"../common/coreservices":20}],73:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 __export(require("./view"));
 
-},{"./view":72}],72:[function(require,module,exports){
+},{"./view":74}],74:[function(require,module,exports){
 "use strict";
 /**
  * @coreapi
@@ -42472,12 +42872,13 @@ var ViewService = (function () {
 }());
 exports.ViewService = ViewService;
 
-},{"../common/common":17,"../common/hof":20,"../common/predicates":22,"../common/trace":25}],73:[function(require,module,exports){
+},{"../common/common":19,"../common/hof":22,"../common/predicates":24,"../common/trace":27}],75:[function(require,module,exports){
 (function () {
     'use strict';
 
     require('angular');
     require('angular-ui-router');
+    require('angular-jwt');
 
     // routes
     require('./app.routes');
@@ -42491,9 +42892,13 @@ exports.ViewService = ViewService;
     require('./pages/register/register.component');
     require('./pages/login/login.component');
 
+    //factories
+    require('./services/tokenService');
+
     angular
         .module('globeCode', [
             'ui.router',
+            'angular-jwt',
             'app.routes',
             'page.index',
             'page.register',
@@ -42501,7 +42906,7 @@ exports.ViewService = ViewService;
         ]);
 
 })();
-},{"./app.routes":74,"./components/foot.component":75,"./components/nav.component":76,"./pages/index/index.component":77,"./pages/login/login.component":78,"./pages/register/register.component":79,"angular":16,"angular-ui-router":4}],74:[function(require,module,exports){
+},{"./app.routes":76,"./components/foot.component":77,"./components/nav.component":78,"./pages/index/index.component":79,"./pages/login/login.component":80,"./pages/register/register.component":81,"./services/tokenService":82,"angular":18,"angular-jwt":2,"angular-ui-router":6}],76:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -42534,7 +42939,7 @@ exports.ViewService = ViewService;
         });
 
 }());
-},{}],75:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -42545,7 +42950,7 @@ exports.ViewService = ViewService;
             templateUrl: 'app/components/foot.template.html' 
         });
 })();
-},{}],76:[function(require,module,exports){
+},{}],78:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -42556,7 +42961,7 @@ exports.ViewService = ViewService;
             templateUrl: 'app/components/nav.template.html' 
         });
 })();
-},{}],77:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -42574,21 +42979,23 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],78:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 (function(){
 
     'use strict';
 
     angular
-        .module('page.login', ['comp.nav', 'comp.foot'])
+        .module('page.login', ['comp.nav', 'comp.foot', 'factory.token'])
         .component('login', {
             controller: loginController,
             templateUrl: 'app/pages/login/login.template.html' 
         });
 
 
-        function loginController($http) {
+        function loginController($http, tokenFactory) {
             var vm = this;            
+
+            
 
             vm.submitLogin = function() {
                 var data = {
@@ -42599,6 +43006,8 @@ exports.ViewService = ViewService;
                 $http.post('http://localhost:8080/api/users/authenticate', data)
                     .then(function(res) {
                         console.log(res);
+                        tokenFactory.saveTokenToLocalStorage(res.data.token);
+                        console.log(tokenFactory.checkIfTokenExpires());
                     })
                     .catch(function(err) {
                         console.log(err);
@@ -42608,7 +43017,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],79:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -42645,4 +43054,33 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}]},{},[73]);
+},{}],82:[function(require,module,exports){
+(function(){
+    'use strict';
+
+    angular
+        .module('factory.token', ['angular-jwt'])
+        .factory('tokenFactory', function(jwtHelper){
+
+            return {
+                saveTokenToLocalStorage: function(token) {
+                    localStorage.setItem("authToken", token);
+                },
+                loadTokenFromLocalStorage: function() {
+                    return localStorage.getItem("authToken");
+                },
+                checkTokenExpirationDate: function() {
+                    return jwtHelper.getTokenExpirationDate(this.loadTokenFromLocalStorage());
+                },
+                checkIfTokenExpires: function() {
+                    
+                    return jwtHelper.isTokenExpired(this.loadTokenFromLocalStorage());
+                }
+
+            }
+
+
+        });
+
+})();
+},{}]},{},[75]);
