@@ -42886,6 +42886,7 @@ exports.ViewService = ViewService;
     // reusable components
     require('./components/nav.component');
     require('./components/foot.component');
+    require('./components/authenticatedNav.component');
 
     //pages
     require('./pages/index/index.component');
@@ -42895,6 +42896,7 @@ exports.ViewService = ViewService;
 
     //factories
     require('./services/tokenService');
+    require('./services/userService');
 
     angular
         .module('globeCode', [
@@ -42908,7 +42910,7 @@ exports.ViewService = ViewService;
         ]);
 
 })();
-},{"./app.routes":76,"./components/foot.component":77,"./components/nav.component":78,"./pages/authenticated/authenticated.component":79,"./pages/index/index.component":80,"./pages/login/login.component":81,"./pages/register/register.component":82,"./services/tokenService":83,"angular":18,"angular-jwt":2,"angular-ui-router":6}],76:[function(require,module,exports){
+},{"./app.routes":76,"./components/authenticatedNav.component":77,"./components/foot.component":78,"./components/nav.component":79,"./pages/authenticated/authenticated.component":80,"./pages/index/index.component":81,"./pages/login/login.component":82,"./pages/register/register.component":83,"./services/tokenService":84,"./services/userService":85,"angular":18,"angular-jwt":2,"angular-ui-router":6}],76:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -42952,12 +42954,23 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
+        .module('comp.authenticatedNav', [])
+        .component('authenticatedNavBar', {
+            templateUrl: 'app/components/authenticatedNav.template.html' 
+        });
+})();
+},{}],78:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
         .module('comp.foot', [])
         .component('footBar', {
             templateUrl: 'app/components/foot.template.html' 
         });
 })();
-},{}],78:[function(require,module,exports){
+},{}],79:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -42968,13 +42981,13 @@ exports.ViewService = ViewService;
             templateUrl: 'app/components/nav.template.html' 
         });
 })();
-},{}],79:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 (function(){
 
     'use strict';
 
     angular
-        .module('page.authenticated', ['comp.foot', 'factory.token'])
+        .module('page.authenticated', ['comp.authenticatedNav','comp.foot', 'factory.token'])
         .component('authenticated', {
             controller: authenticatedController,
             templateUrl: 'app/pages/authenticated/authenticated.template.html' 
@@ -42994,7 +43007,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],80:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43018,22 +43031,27 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],81:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 (function(){
 
     'use strict';
 
     angular
-        .module('page.login', ['comp.nav', 'comp.foot', 'factory.token'])
+        .module('page.login', ['comp.nav', 'comp.foot', 'factory.token', 'factory.user'])
         .component('login', {
             controller: loginController,
             templateUrl: 'app/pages/login/login.template.html' 
         });
 
 
-        function loginController($http, $state, tokenFactory) {
+        function loginController($http, $state, tokenFactory, userFactory) {
             var vm = this;            
 
+            vm.$onInit = function() {
+                if(!tokenFactory.checkIfTokenExpires()) {
+                    $state.go('authenticated');
+                } 
+            }
             
 
             vm.submitLogin = function() {
@@ -43045,6 +43063,7 @@ exports.ViewService = ViewService;
                 $http.post('http://localhost:8080/api/users/authenticate', data)
                     .then(function(res) {
                         tokenFactory.saveTokenToLocalStorage(res.data.token);
+                        userFactory.saveUserDataToLocalStorage(res.data.user);
                         $state.go('authenticated');
                     })
                     .catch(function(err) {
@@ -43055,21 +43074,27 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],82:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 (function(){
 
     'use strict';
 
     angular
-        .module('page.register', ['comp.nav', 'comp.foot', 'factory.token'])
+        .module('page.register', ['comp.nav', 'comp.foot', 'factory.token', 'factory.user'])
         .component('register', {
             controller: registerController,
             templateUrl: 'app/pages/register/register.template.html' 
         });
 
 
-        function registerController($http, $state, tokenFactory) {
+        function registerController($http, $state, tokenFactory, userFactory) {
             var vm = this;
+
+            vm.$onInit = function() {
+                if(!tokenFactory.checkIfTokenExpires()) {
+                    $state.go('authenticated');
+                } 
+            }
 
             vm.submitRegistration = function () {
                 
@@ -43082,6 +43107,7 @@ exports.ViewService = ViewService;
                     .then(function(res) {
                         if(res.data.token) {
                             tokenFactory.saveTokenToLocalStorage(res.data.token);
+                            userFactory.saveUserDataToLocalStorage(res.data.user);
                             $state.go('authenticated');
                         }
                     })
@@ -43095,7 +43121,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],83:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -43119,10 +43145,34 @@ exports.ViewService = ViewService;
                         return jwtHelper.isTokenExpired(this.loadTokenFromLocalStorage())
                     } else {
                         return true;
-                    }
-                     
+                    }    
+                },
+                destroyToken: function() {
+                    localStorage.removeItem("authToken");
                 }
 
+            }
+
+
+        });
+
+})();
+},{}],85:[function(require,module,exports){
+(function(){
+    'use strict';
+
+    angular
+        .module('factory.user', [])
+        .factory('userFactory', function(){
+
+            return {
+                saveUserDataToLocalStorage: function(user){
+                    
+                    localStorage.setItem("user", JSON.stringify(user));
+                },
+                loadUserDataFromLocalStorage: function(){
+                    return localStorage.getItem("user");
+                }
             }
 
 

@@ -21,8 +21,10 @@
                         return jwtHelper.isTokenExpired(this.loadTokenFromLocalStorage())
                     } else {
                         return true;
-                    }
-                     
+                    }    
+                },
+                destroyToken: function() {
+                    localStorage.removeItem("authToken");
                 }
 
             }

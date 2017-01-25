@@ -11,6 +11,7 @@
     // reusable components
     require('./components/nav.component');
     require('./components/foot.component');
+    require('./components/authenticatedNav.component');
 
     //pages
     require('./pages/index/index.component');
@@ -20,6 +21,7 @@
 
     //factories
     require('./services/tokenService');
+    require('./services/userService');
 
     angular
         .module('globeCode', [

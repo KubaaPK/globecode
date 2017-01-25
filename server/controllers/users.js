@@ -55,12 +55,16 @@ router.post('/new', (req, res, next) => {
             res.json({message: "Nie udało się zalożyc konta."});
           }
         } else {
+          const userDataToSent = {
+            email: userData.email
+          }
           const TOKEN = jwt.sign(newUser, "asdasALSDJaklsjdlajlkj312lk3jLASKDJ", {
               expiresIn: 60*60*24
             });
             res.json({
               success: true,
-              token: TOKEN
+              token: TOKEN,
+              user: userDataToSent
             });
         }
       })
@@ -92,12 +96,16 @@ router.post('/authenticate', (req, res, next) => {
           console.log(err);
         } else {
           if(auth) {
+            const userDataToSent = {
+              email: user.email
+            }
             const TOKEN = jwt.sign(user, "asdasALSDJaklsjdlajlkj312lk3jLASKDJ", {
               expiresIn: 60*60*24
             });
             res.json({
               success: true,
-              token: TOKEN
+              token: TOKEN,
+              user: userDataToSent
             });
           } else {
             res.json({message: "Błędny adres email lub hasło."});
