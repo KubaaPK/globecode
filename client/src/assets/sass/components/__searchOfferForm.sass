@@ -1,0 +1,46 @@
+@media only screen and (max-width : 100em)
+    .searchOfferForm
+        position: relative
+        top: 5vh
+        width: 80%
+        display: block
+        margin: 0 auto
+        text-align: center
+            
+        input
+            padding-left: 2%
+            height: 40px
+            width: 37%
+            border: 1px solid $gray
+            border-radius: 3px
+            font:
+                family: $overpass
+                size: .85rem
+            -webkit-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.15)
+            -moz-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.15)
+            box-shadow: 0px 0px 3px 1px rgba(158,158,158,.15)
+
+            &:focus
+                background-color: lighten($gray, 12%)
+                outline: none
+
+        button
+            padding: 10px 0
+            margin-left: 5%
+            width: 15%
+            height: 45px
+            font:
+                size: .8rem
+                family: $overpass
+                weight: 700 
+            text-transform: uppercase
+            letter-spacing: .1rem
+            color: #FFFFFF
+            background-color: $green
+            border-radius: 3px
+            border: 1px solid darken($green, 5%)
+            transition: .2s
+            &:hover
+                background-color: darken($green, 5%)
+                transition: .2s
+                cursor: pointer

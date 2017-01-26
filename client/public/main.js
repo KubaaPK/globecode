@@ -43242,6 +43242,8 @@ exports.ViewService = ViewService;
     require('./components/nav.component');
     require('./components/foot.component');
     require('./components/authenticatedNav.component');
+    require('./components/searchOfferForm.component');
+    require('./components/categoriesList.component');
 
     //pages
     require('./pages/index/index.component');
@@ -43264,20 +43266,23 @@ exports.ViewService = ViewService;
             'page.login',
             'page.authenticated'
         ])
-        .run(function($trace, $transitions, tokenFactory) {
-            $trace.disable('TRANSITION');
-
+        .run(function($trace, $transitions, $state, tokenFactory) {
             $transitions.onStart({ to: 'auth.**' }, function(trans) {
                 var auth = trans.injector().get('tokenFactory')
                 if (auth.IsTokenExpires()) {
-                // User isn't authenticated. Redirect to a new Target State
                 return trans.router.stateService.target('login');
+                }
+            });
+             $transitions.onStart({ to: ['login', 'register', 'index'] }, function(trans) {
+                var auth = trans.injector().get('tokenFactory')
+                if (!auth.IsTokenExpires()) {
+                return trans.router.stateService.target('auth.index');
                 }
             });
         });
         
 })();
-},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/foot.component":79,"./components/nav.component":80,"./pages/authenticated/authenticated.component":81,"./pages/index/index.component":82,"./pages/login/login.component":83,"./pages/register/register.component":84,"./services/tokenService":85,"./services/userService":86,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
+},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/categoriesList.component":79,"./components/foot.component":80,"./components/nav.component":81,"./components/searchOfferForm.component":82,"./pages/authenticated/authenticated.component":83,"./pages/index/index.component":84,"./pages/login/login.component":85,"./pages/register/register.component":86,"./services/tokenService":87,"./services/userService":88,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -43335,12 +43340,23 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
+        .module('comp.categoriesList', [])
+        .component('categoriesList', {
+            templateUrl: 'app/components/categoriesList.template.html' 
+        });
+})();
+},{}],80:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
         .module('comp.foot', [])
         .component('footBar', {
             templateUrl: 'app/components/foot.template.html' 
         });
 })();
-},{}],80:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43351,13 +43367,24 @@ exports.ViewService = ViewService;
             templateUrl: 'app/components/nav.template.html' 
         });
 })();
-},{}],81:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 (function(){
 
     'use strict';
 
     angular
-        .module('page.authenticated', ['comp.authenticatedNav','comp.foot', 'factory.token'])
+        .module('comp.searchOfferForm', [])
+        .component('searchOfferForm', {
+            templateUrl: 'app/components/searchOfferForm.template.html' 
+        });
+})();
+},{}],83:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
+        .module('page.authenticated', ['comp.authenticatedNav','comp.foot', 'comp.searchOfferForm', 'comp.categoriesList', 'factory.token'])
         .component('authenticated', {
             controller: authenticatedController,
             templateUrl: 'app/pages/authenticated/authenticated.template.html' 
@@ -43373,13 +43400,13 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],82:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 (function(){
 
     'use strict';
 
     angular
-        .module('page.index', ['comp.nav', 'comp.foot', 'factory.token'])
+        .module('page.index', ['comp.nav', 'comp.foot', 'comp.searchOfferForm', 'comp.categoriesList', 'factory.token'])
         .component('index', {
             templateUrl: 'app/pages/index/index.template.html',
             controller: indexController
@@ -43392,7 +43419,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],83:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43431,7 +43458,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],84:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43474,7 +43501,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],85:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -43510,7 +43537,7 @@ exports.ViewService = ViewService;
         });
 
 })();
-},{}],86:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function(){
     'use strict';
 

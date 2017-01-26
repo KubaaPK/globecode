@@ -7,7 +7,7 @@
     .nav__list {
       list-style-type: none;
       margin: 0;
-      padding: 2vh 10%;
+      padding: 2.5vh 10%;
       text-align: right; }
       .nav__list__element {
         padding-left: 0;
@@ -29,7 +29,7 @@
 
 @media only screen and (max-width: 100em) {
   .footer {
-    position: absolute;
+    position: relative;
     bottom: 0;
     left: 0;
     right: 0;
@@ -110,7 +110,6 @@
       display: block;
       background-color: #2ECC6E;
       border-radius: 3px;
-      border: 1px solid #DDDDDD;
       color: #FFFFFF;
       font-size: 1rem;
       font-family: "Overpass", sans-serif;
@@ -119,6 +118,67 @@
         background-color: #29b763;
         cursor: pointer;
         transition: .3s; } }
+
+@media only screen and (max-width: 100em) {
+  .searchOfferForm {
+    position: relative;
+    top: 5vh;
+    width: 80%;
+    display: block;
+    margin: 0 auto;
+    text-align: center; }
+    .searchOfferForm input {
+      padding-left: 2%;
+      height: 40px;
+      width: 37%;
+      border: 1px solid #DDDDDD;
+      border-radius: 3px;
+      font-family: "Overpass", sans-serif;
+      font-size: .85rem;
+      -webkit-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
+      -moz-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
+      box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15); }
+      .searchOfferForm input:focus {
+        background-color: #fcfcfc;
+        outline: none; }
+    .searchOfferForm button {
+      padding: 10px 0;
+      margin-left: 5%;
+      width: 15%;
+      height: 45px;
+      font-size: .8rem;
+      font-family: "Overpass", sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1rem;
+      color: #FFFFFF;
+      background-color: #2ECC6E;
+      border-radius: 3px;
+      border: 1px solid #29b763;
+      transition: .2s; }
+      .searchOfferForm button:hover {
+        background-color: #29b763;
+        transition: .2s;
+        cursor: pointer; } }
+
+@media only screen and (max-width: 100em) {
+  .categories {
+    position: relative;
+    margin-left: 10%;
+    margin-top: 75px; }
+    .categories__list {
+      list-style-type: none;
+      padding-left: 0;
+      font-family: "Overpass", sans-serif; }
+      .categories__list__title {
+        font-size: .95rem;
+        color: rgba(0, 0, 0, 0.7);
+        text-transform: uppercase;
+        letter-spacing: .1rem; }
+      .categories__list li {
+        margin: 1vh 0;
+        font-size: .85rem;
+        color: rgba(0, 0, 0, 0.6); } }
 
 body {
   font-size: 62.5%;
