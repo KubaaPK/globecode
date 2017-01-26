@@ -24,7 +24,10 @@
                     url         : '/login',
                     component   : 'login'
                 })
-                .state('authenticated', {
+                .state('auth', {
+                    
+                })
+                .state('auth.index', {
                     name        : 'authenticated',
                     url         : '/authenticated',
                     component   : 'authenticated' 

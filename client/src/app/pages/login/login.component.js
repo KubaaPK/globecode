@@ -13,11 +13,7 @@
         function loginController($http, $state, tokenFactory, userFactory) {
             var vm = this;            
 
-            vm.$onInit = function() {
-                if(!tokenFactory.checkIfTokenExpires()) {
-                    $state.go('authenticated');
-                } 
-            }
+           
             
 
             vm.submitLogin = function() {
@@ -30,7 +26,7 @@
                     .then(function(res) {
                         tokenFactory.saveTokenToLocalStorage(res.data.token);
                         userFactory.saveUserDataToLocalStorage(res.data.user);
-                        $state.go('authenticated');
+                        $state.go('auth.index');
                     })
                     .catch(function(err) {
                         console.log(err);

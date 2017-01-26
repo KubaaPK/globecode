@@ -13,11 +13,6 @@
         function indexController($state, tokenFactory) {
             var vm = this;
 
-             vm.$onInit = function() {
-                if(!tokenFactory.checkIfTokenExpires()) {
-                    $state.go('authenticated');
-                } 
-            }
         }
 
 })();

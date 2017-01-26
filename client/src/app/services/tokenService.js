@@ -16,7 +16,7 @@
                     return jwtHelper.getTokenExpirationDate(this.loadTokenFromLocalStorage());
                 },
                 //if token expires returns true, if not returns false
-                checkIfTokenExpires: function() {
+                IsTokenExpires: function() {
                     if(this.loadTokenFromLocalStorage()) {
                         return jwtHelper.isTokenExpired(this.loadTokenFromLocalStorage())
                     } else {

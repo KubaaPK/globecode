@@ -4,6 +4,7 @@
     require('angular');
     require('angular-ui-router');
     require('angular-jwt');
+    require('angular-middleware');
 
     // routes
     require('./app.routes');
@@ -26,12 +27,24 @@
     angular
         .module('globeCode', [
             'ui.router',
+            'ui.router.middleware',
             'angular-jwt',
             'app.routes',
             'page.index',
             'page.register',
             'page.login',
             'page.authenticated'
-        ]);
+        ])
+        .run(function($trace, $transitions, tokenFactory) {
+            $trace.disable('TRANSITION');
 
+            $transitions.onStart({ to: 'auth.**' }, function(trans) {
+                var auth = trans.injector().get('tokenFactory')
+                if (auth.IsTokenExpires()) {
+                // User isn't authenticated. Redirect to a new Target State
+                return trans.router.stateService.target('login');
+                }
+            });
+        });
+        
 })();

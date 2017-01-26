@@ -13,12 +13,7 @@
         function registerController($http, $state, tokenFactory, userFactory) {
             var vm = this;
 
-            vm.$onInit = function() {
-                if(!tokenFactory.checkIfTokenExpires()) {
-                    $state.go('authenticated');
-                } 
-            }
-
+         
             vm.submitRegistration = function () {
                 
                 var data = {
@@ -31,7 +26,7 @@
                         if(res.data.token) {
                             tokenFactory.saveTokenToLocalStorage(res.data.token);
                             userFactory.saveUserDataToLocalStorage(res.data.user);
-                            $state.go('authenticated');
+                            $state.go('auth.index');
                             
                         }
                     })

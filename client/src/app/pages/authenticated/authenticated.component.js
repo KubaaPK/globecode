@@ -13,11 +13,7 @@
         function authenticatedController($http, $state, tokenFactory) {
             var vm = this;            
 
-            vm.$onInit = function() {
-                if(tokenFactory.checkIfTokenExpires()) {
-                    $state.go('login');
-                } 
-            }
+    
 
 
         }
