@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 const db = require('./config/db');
 const users = require('./controllers/users');
-
+const offers = require('./controllers/offers');
 
 // db connection
 db.connect();
@@ -35,7 +35,8 @@ app.use(function(req, res, next) {
 });
 
 // routes
-app.use('/api/users/', users)
+app.use('/api/users/', users);
+app.use('/api/offer/', offers);
 
 
 // catch 404 and forward to error handler

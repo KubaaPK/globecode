@@ -22,7 +22,15 @@
                     www: vm.newOffer_www,
                     contact: vm.newOffer_contact
                 };
-                console.log(data);
+                
+                
+                $http.post('http://localhost:8080/api/offer/new', data)
+                    .then(function(res) {
+                        console.log(res);
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
             }
 
 
