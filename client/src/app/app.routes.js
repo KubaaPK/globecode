@@ -31,6 +31,11 @@
                     name        : 'authenticated',
                     url         : '/authenticated',
                     component   : 'authenticated' 
+                })
+                .state('auth.addOffer', {
+                    name        : 'addOffer',
+                    url         : '/authenticated/addOffer',
+                    component   : 'addOffer'
                 });
 
             $locationProvider.html5Mode(true);

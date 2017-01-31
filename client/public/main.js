@@ -43250,6 +43250,7 @@ exports.ViewService = ViewService;
     require('./pages/register/register.component');
     require('./pages/login/login.component');
     require('./pages/authenticated/authenticated.component');
+    require('./pages/addOffer/addOffer.component');
 
     //factories
     require('./services/tokenService');
@@ -43264,25 +43265,26 @@ exports.ViewService = ViewService;
             'page.index',
             'page.register',
             'page.login',
-            'page.authenticated'
+            'page.authenticated',
+            'page.addOffer'
         ])
         .run(function($trace, $transitions, $state, tokenFactory) {
             $transitions.onStart({ to: 'auth.**' }, function(trans) {
                 var auth = trans.injector().get('tokenFactory')
-                if (auth.IsTokenExpires()) {
+                if (auth.isTokenExpired()) {
                 return trans.router.stateService.target('login');
                 }
             });
              $transitions.onStart({ to: ['login', 'register', 'index'] }, function(trans) {
                 var auth = trans.injector().get('tokenFactory')
-                if (!auth.IsTokenExpires()) {
+                if (!auth.isTokenExpired()) {
                 return trans.router.stateService.target('auth.index');
                 }
             });
         });
         
 })();
-},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/categoriesList.component":79,"./components/foot.component":80,"./components/nav.component":81,"./components/searchOfferForm.component":82,"./pages/authenticated/authenticated.component":83,"./pages/index/index.component":84,"./pages/login/login.component":85,"./pages/register/register.component":86,"./services/tokenService":87,"./services/userService":88,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
+},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/categoriesList.component":79,"./components/foot.component":80,"./components/nav.component":81,"./components/searchOfferForm.component":82,"./pages/addOffer/addOffer.component":83,"./pages/authenticated/authenticated.component":84,"./pages/index/index.component":85,"./pages/login/login.component":86,"./pages/register/register.component":87,"./services/tokenService":88,"./services/userService":89,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -43316,6 +43318,11 @@ exports.ViewService = ViewService;
                     name        : 'authenticated',
                     url         : '/authenticated',
                     component   : 'authenticated' 
+                })
+                .state('auth.addOffer', {
+                    name        : 'addOffer',
+                    url         : '/authenticated/addOffer',
+                    component   : 'addOffer'
                 });
 
             $locationProvider.html5Mode(true);
@@ -43384,6 +43391,38 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
+        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'comp.searchOfferForm', 'comp.categoriesList', 'factory.token'])
+        .component('addOffer', {
+            controller: addOfferController,
+            templateUrl: 'app/pages/addOffer/addOffer.template.html' 
+        });
+
+
+        function addOfferController($http, $state, tokenFactory) {
+            var vm = this;            
+
+            vm.addNewOffer = function() {
+                var data = {
+                    state: vm.newOffer_state,
+                    shift: vm.newOffer_shift,
+                    companySize: vm.newOffer_companySize,
+                    description: vm.newOffer_description,
+                    www: vm.newOffer_www,
+                    contact: vm.newOffer_contact
+                };
+                console.log(data);
+            }
+
+
+        }
+
+})();
+},{}],84:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
         .module('page.authenticated', ['comp.authenticatedNav','comp.foot', 'comp.searchOfferForm', 'comp.categoriesList', 'factory.token'])
         .component('authenticated', {
             controller: authenticatedController,
@@ -43394,13 +43433,13 @@ exports.ViewService = ViewService;
         function authenticatedController($http, $state, tokenFactory) {
             var vm = this;            
 
-    
+
 
 
         }
 
 })();
-},{}],84:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43419,7 +43458,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],85:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43458,7 +43497,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],86:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43501,7 +43540,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],87:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -43520,9 +43559,9 @@ exports.ViewService = ViewService;
                     return jwtHelper.getTokenExpirationDate(this.loadTokenFromLocalStorage());
                 },
                 //if token expires returns true, if not returns false
-                IsTokenExpires: function() {
+                isTokenExpired: function() {
                     if(this.loadTokenFromLocalStorage()) {
-                        return jwtHelper.isTokenExpired(this.loadTokenFromLocalStorage())
+                        return jwtHelper.isTokenExpired(this.loadTokenFromLocalStorage());  
                     } else {
                         return true;
                     }    
@@ -43537,7 +43576,7 @@ exports.ViewService = ViewService;
         });
 
 })();
-},{}],88:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 (function(){
     'use strict';
 

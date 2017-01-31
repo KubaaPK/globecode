@@ -13,7 +13,7 @@
         function authenticatedController($http, $state, tokenFactory) {
             var vm = this;            
 
-    
+
 
 
         }

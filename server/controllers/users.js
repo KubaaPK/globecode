@@ -59,7 +59,7 @@ router.post('/new', (req, res, next) => {
             email: userData.email
           }
           const TOKEN = jwt.sign(newUser, "asdasALSDJaklsjdlajlkj312lk3jLASKDJ", {
-              expiresIn: 60*60*24
+              expiresIn: 60*60*4
             });
             res.json({
               success: true,

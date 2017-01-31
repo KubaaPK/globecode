@@ -1,0 +1,43 @@
+@media only screen and (max-width : 100em)
+    .addOffer
+        height: 100%
+        background-color: $lightgray
+        &__wrapper
+            padding: 2.5% 10%
+            &__title
+            font:
+                size: 1rem
+                family: $overpass
+
+            .addOfferForm
+                display: block
+                margin: 0 auto
+                &__inputWrapper
+                    width: 100%
+                    select, input, textarea, input
+                        width: 100%
+                        border: 1px solid rgba(#000000, .1)
+                        border-radius: 3px
+                    label
+                        font-size: .75rem
+
+                    select, input
+                        height: 45px
+                    textarea
+                        height: 170px
+                    
+                button
+                    display: block
+                    position: relative
+                    top: 2vh
+                    height: 45px
+                    border: 0
+                    background-color: $green
+                    border: 1px solid darken($green, 10%)
+                    color: #FFFFFF
+                    transition: .3s
+                    font-size: 1.25rem
+                    &:hover
+                        background-color: darken($green, 5%)
+                        cursor: pointer
+                        transition: .3s

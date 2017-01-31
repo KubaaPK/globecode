@@ -25,14 +25,22 @@
           transition: .3s; }
           .nav__list__element__link:hover {
             color: #000000;
-            transition: .3s; } }
+            transition: .3s; }
+          .nav__list__element__link svg {
+            height: 30px; }
+            .nav__list__element__link svg:hover {
+              cursor: pointer; }
+        .nav__list__element .addNewOffer {
+          position: relative;
+          top: -10px;
+          left: -20px; }
+        .nav__list__element .authLogo {
+          position: relative;
+          top: 10px; } }
 
 @media only screen and (max-width: 100em) {
   .footer {
     position: relative;
-    bottom: 0;
-    left: 0;
-    right: 0;
     padding: 2.5% 0;
     width: 80%;
     margin: 0 auto;
@@ -109,6 +117,7 @@
       margin: 0 auto;
       display: block;
       background-color: #2ECC6E;
+      border: 1px solid #25a258;
       border-radius: 3px;
       color: #FFFFFF;
       font-size: 1rem;
@@ -171,13 +180,13 @@
       padding-left: 0;
       font-family: "Overpass", sans-serif; }
       .categories__list__title {
-        font-size: .95rem;
+        font-size: 1.05rem;
         color: rgba(0, 0, 0, 0.7);
         text-transform: uppercase;
         letter-spacing: .1rem; }
       .categories__list li {
         margin: 1vh 0;
-        font-size: .85rem;
+        font-size: .95rem;
         color: rgba(0, 0, 0, 0.6); } }
 
 body {
@@ -190,6 +199,59 @@ body {
     background-color: #F8F9FA; } }
 
 @media only screen and (max-width: 100em) {
+  .login {
+    height: 100%;
+    background-color: #F8F9FA; }
+    .login footer {
+      position: absolute;
+      bottom: 0;
+      left: 10%; } }
+
+@media only screen and (max-width: 100em) {
   .register {
     height: 100%;
-    background-color: #F8F9FA; } }
+    background-color: #F8F9FA;
+    display: block; }
+    .register footer {
+      position: absolute;
+      bottom: 0;
+      left: 10%; } }
+
+@media only screen and (max-width: 100em) {
+  .addOffer {
+    height: 100%;
+    background-color: #F8F9FA; }
+    .addOffer__wrapper {
+      padding: 2.5% 10%;
+      font-size: 1rem;
+      font-family: "Overpass", sans-serif; }
+      .addOffer__wrapper .addOfferForm {
+        display: block;
+        margin: 0 auto; }
+        .addOffer__wrapper .addOfferForm__inputWrapper {
+          width: 100%; }
+          .addOffer__wrapper .addOfferForm__inputWrapper select, .addOffer__wrapper .addOfferForm__inputWrapper input, .addOffer__wrapper .addOfferForm__inputWrapper textarea, .addOffer__wrapper .addOfferForm__inputWrapper input {
+            width: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 3px; }
+          .addOffer__wrapper .addOfferForm__inputWrapper label {
+            font-size: .75rem; }
+          .addOffer__wrapper .addOfferForm__inputWrapper select, .addOffer__wrapper .addOfferForm__inputWrapper input {
+            height: 45px; }
+          .addOffer__wrapper .addOfferForm__inputWrapper textarea {
+            height: 170px; }
+        .addOffer__wrapper .addOfferForm button {
+          display: block;
+          position: relative;
+          top: 2vh;
+          height: 45px;
+          border: 0;
+          background-color: #2ECC6E;
+          border: 1px solid #25a258;
+          color: #FFFFFF;
+          transition: .3s;
+          font-size: 1.25rem; }
+          .addOffer__wrapper .addOfferForm button:hover {
+            background-color: #29b763;
+            cursor: pointer;
+            transition: .3s; } }

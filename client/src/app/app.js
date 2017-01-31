@@ -21,6 +21,7 @@
     require('./pages/register/register.component');
     require('./pages/login/login.component');
     require('./pages/authenticated/authenticated.component');
+    require('./pages/addOffer/addOffer.component');
 
     //factories
     require('./services/tokenService');
@@ -35,18 +36,19 @@
             'page.index',
             'page.register',
             'page.login',
-            'page.authenticated'
+            'page.authenticated',
+            'page.addOffer'
         ])
         .run(function($trace, $transitions, $state, tokenFactory) {
             $transitions.onStart({ to: 'auth.**' }, function(trans) {
                 var auth = trans.injector().get('tokenFactory')
-                if (auth.IsTokenExpires()) {
+                if (auth.isTokenExpired()) {
                 return trans.router.stateService.target('login');
                 }
             });
              $transitions.onStart({ to: ['login', 'register', 'index'] }, function(trans) {
                 var auth = trans.injector().get('tokenFactory')
-                if (!auth.IsTokenExpires()) {
+                if (!auth.isTokenExpired()) {
                 return trans.router.stateService.target('auth.index');
                 }
             });
