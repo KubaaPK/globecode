@@ -15,6 +15,7 @@
     require('./components/authenticatedNav.component');
     require('./components/searchOfferForm.component');
     require('./components/categoriesList.component');
+    require('./components/offer.component');
 
     //pages
     require('./pages/index/index.component');
@@ -23,7 +24,7 @@
     require('./pages/authenticated/authenticated.component');
     require('./pages/addOffer/addOffer.component');
 
-    //factories
+    //services
     require('./services/tokenService');
     require('./services/userService');
 
@@ -37,7 +38,8 @@
             'page.register',
             'page.login',
             'page.authenticated',
-            'page.addOffer'
+            'page.addOffer',
+            'comp.offerList'
         ])
         .run(function($trace, $transitions, $state, tokenFactory) {
             $transitions.onStart({ to: 'auth.**' }, function(trans) {

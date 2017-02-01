@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const offerSchema = new Schema({
+    title       : String,
+    city        : String,
     state       : String,
     shift       : String,
     companySize : String,

@@ -43244,6 +43244,7 @@ exports.ViewService = ViewService;
     require('./components/authenticatedNav.component');
     require('./components/searchOfferForm.component');
     require('./components/categoriesList.component');
+    require('./components/offer.component');
 
     //pages
     require('./pages/index/index.component');
@@ -43252,7 +43253,7 @@ exports.ViewService = ViewService;
     require('./pages/authenticated/authenticated.component');
     require('./pages/addOffer/addOffer.component');
 
-    //factories
+    //services
     require('./services/tokenService');
     require('./services/userService');
 
@@ -43266,7 +43267,8 @@ exports.ViewService = ViewService;
             'page.register',
             'page.login',
             'page.authenticated',
-            'page.addOffer'
+            'page.addOffer',
+            'comp.offerList'
         ])
         .run(function($trace, $transitions, $state, tokenFactory) {
             $transitions.onStart({ to: 'auth.**' }, function(trans) {
@@ -43284,7 +43286,7 @@ exports.ViewService = ViewService;
         });
         
 })();
-},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/categoriesList.component":79,"./components/foot.component":80,"./components/nav.component":81,"./components/searchOfferForm.component":82,"./pages/addOffer/addOffer.component":83,"./pages/authenticated/authenticated.component":84,"./pages/index/index.component":85,"./pages/login/login.component":86,"./pages/register/register.component":87,"./services/tokenService":88,"./services/userService":89,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
+},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/categoriesList.component":79,"./components/foot.component":80,"./components/nav.component":81,"./components/offer.component":82,"./components/searchOfferForm.component":83,"./pages/addOffer/addOffer.component":84,"./pages/authenticated/authenticated.component":85,"./pages/index/index.component":86,"./pages/login/login.component":87,"./pages/register/register.component":88,"./services/tokenService":89,"./services/userService":90,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -43380,12 +43382,41 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
+        .module('comp.offerList', [])
+        .component('offerList', {
+            controller: offerController,
+            templateUrl: 'app/components/offer.template.html'
+        });
+})();
+
+
+    function offerController($http) {
+        var vm = this;
+
+        vm.$onInit = function() {
+            $http.get("http://localhost:8080/api/offer/all")
+                .then(function(res) {
+                    vm.data = res.data;
+                    console.log(vm.data);
+                })
+                .catch(function(err) {
+                    console.log(err);
+                })
+
+        }
+    }
+},{}],83:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
         .module('comp.searchOfferForm', [])
         .component('searchOfferForm', {
             templateUrl: 'app/components/searchOfferForm.template.html' 
         });
 })();
-},{}],83:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43403,12 +43434,14 @@ exports.ViewService = ViewService;
 
             vm.addNewOffer = function() {
                 var data = {
-                    state: vm.newOffer_state,
-                    shift: vm.newOffer_shift,
-                    companySize: vm.newOffer_companySize,
-                    description: vm.newOffer_description,
-                    www: vm.newOffer_www,
-                    contact: vm.newOffer_contact
+                    title       : vm.newOffer_title,
+                    city        : vm.newOffer_city,
+                    state       : vm.newOffer_state,
+                    shift       : vm.newOffer_shift,
+                    companySize : vm.newOffer_companySize,
+                    description : vm.newOffer_description,
+                    www         : vm.newOffer_www,
+                    contact     : vm.newOffer_contact
                 };
                 
                 
@@ -43425,13 +43458,13 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],84:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 (function(){
 
     'use strict';
 
     angular
-        .module('page.authenticated', ['comp.authenticatedNav','comp.foot', 'comp.searchOfferForm', 'comp.categoriesList', 'factory.token'])
+        .module('page.authenticated', ['comp.authenticatedNav','comp.foot', 'comp.searchOfferForm', 'comp.categoriesList', 'comp.offerList', 'factory.token'])
         .component('authenticated', {
             controller: authenticatedController,
             templateUrl: 'app/pages/authenticated/authenticated.template.html' 
@@ -43447,7 +43480,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],85:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43466,7 +43499,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],86:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43505,7 +43538,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],87:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43548,7 +43581,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],88:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -43584,7 +43617,7 @@ exports.ViewService = ViewService;
         });
 
 })();
-},{}],89:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 (function(){
     'use strict';
 

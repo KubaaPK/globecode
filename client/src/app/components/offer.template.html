@@ -1,0 +1,9 @@
+<div class="offers">
+    <div class="offer" ng-repeat="offer in $ctrl.data">
+        <a ui-sref="index" class="offer__title">{{ offer.title }}</a>
+        <span class="offer__city"><i class="fa fa-globe" aria-hidden="true"></i> {{ offer.city }}</span>
+        <span class="offer__state"><i class="fa fa-building" aria-hidden="true"></i> {{ offer.state }}</span>
+        <span class="offer__shift"><i class="fa fa-briefcase" aria-hidden="true"></i> {{ offer.shift }}</span>
+        <span class="offer__companySize"><i class="fa fa-users" aria-hidden="true"></i> {{ offer.companySize }}</span>
+    </div>
+</div>

@@ -33,33 +33,41 @@
     <div class="addOffer__wrapper">
         <form class="addOfferForm" ng-submit="$ctrl.addNewOffer()">
             <div class="addOfferForm__inputWrapper">
+                <label for="addOffer_jobTitle">Tytuł oferty:</label>
+                <input type="text" id="addOffer_jobTitle" required="true" ng-model="$ctrl.newOffer_title">  
+            </div>
+            <div class="addOfferForm__inputWrapper">
+                <label for="addOffer_jobCity">Miasto:</label>
+                <input type="text" id="addOffer_jobCity" required="true" ng-model="$ctrl.newOffer_city">  
+            </div>
+            <div class="addOfferForm__inputWrapper">
                 <label for="addOffer_jobState">Stanowisko</label>
                 <select id="addOffer_jobState" required="true" ng-model="$ctrl.newOffer_state">
-                    <option value="frontend">Frontend</option>
-                    <option value="backend">Backend</option>
-                    <option value="design">Design</option>
-                    <option value="tester">Tester</option>
-                    <option value="management">Management</option>
+                    <option value="Frontend">Frontend</option>
+                    <option value="Backend">Backend</option>
+                    <option value="Design">Design</option>
+                    <option value="Tester">Tester</option>
+                    <option value="Management">Management</option>
                 </select>
             </div>
             <div class="addOfferForm__inputWrapper">
                 <label for="addOffer_jobShift">Wymiar pracy</label>
                 <select id="addOffer_jobShift" required="true"  ng-model="$ctrl.newOffer_shift">
-                    <option value="full-time">Pełen etat</option>
-                    <option value="part-time">Niepełny etat</option>
-                    <option value="contract">Kontrakt</option>
-                    <option value="freelance">Freelance</option>
-                    <option value="practice">Staż</option>
+                    <option value="Pełen etat">Pełen etat</option>
+                    <option value="Niepełny etat">Niepełny etat</option>
+                    <option value="Kontrakt">Kontrakt</option>
+                    <option value="Freelance">Freelance</option>
+                    <option value="Staż">Staż</option>
                 </select>
             </div>
             <div class="addOfferForm__inputWrapper">
                 <label for="addOffer_jobCompanySize">Wielkość firmy</label>
                 <select id="addOffer_jobCompanySize" required="true" ng-model="$ctrl.newOffer_companySize">
-                    <option value="compSize-1-5">1-5</option>
-                    <option value="compSize-6-10">6-10</option>
-                    <option value="compSize-11-20">11-20</option>
-                    <option value="compSize-21-50">21-50</option>
-                    <option value="compSize-51">51+</option>
+                    <option value="1-5">1-5</option>
+                    <option value="6-10">6-10</option>
+                    <option value="11-20">11-20</option>
+                    <option value="21-50">21-50</option>
+                    <option value="51+">51+</option>
                 </select>
             </div>
             <div class="addOfferForm__inputWrapper">

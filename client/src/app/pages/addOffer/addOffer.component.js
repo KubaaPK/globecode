@@ -15,12 +15,14 @@
 
             vm.addNewOffer = function() {
                 var data = {
-                    state: vm.newOffer_state,
-                    shift: vm.newOffer_shift,
-                    companySize: vm.newOffer_companySize,
-                    description: vm.newOffer_description,
-                    www: vm.newOffer_www,
-                    contact: vm.newOffer_contact
+                    title       : vm.newOffer_title,
+                    city        : vm.newOffer_city,
+                    state       : vm.newOffer_state,
+                    shift       : vm.newOffer_shift,
+                    companySize : vm.newOffer_companySize,
+                    description : vm.newOffer_description,
+                    www         : vm.newOffer_www,
+                    contact     : vm.newOffer_contact
                 };
                 
                 
