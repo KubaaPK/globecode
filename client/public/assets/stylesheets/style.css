@@ -139,7 +139,7 @@
     .searchOfferForm input {
       padding-left: 2%;
       height: 40px;
-      width: 37%;
+      width: 25%;
       border: 1px solid #DDDDDD;
       border-radius: 3px;
       font-family: "Overpass", sans-serif;
@@ -218,11 +218,13 @@
         text-decoration: none; }
         .offers .offer__title:hover {
           text-decoration: underline; }
-      .offers .offer span {
-        display: inline-block;
-        margin: 0 1%;
-        font-size: 0.8rem;
-        color: rgba(0, 0, 0, 0.45); } }
+      .offers .offer .offerDetails {
+        display: flex;
+        flex-direction: row; }
+        .offers .offer .offerDetails span {
+          width: 12%;
+          font-size: 0.70rem;
+          color: rgba(0, 0, 0, 0.45); } }
 
 body {
   font-size: 62.5%;

@@ -13,7 +13,6 @@
     require('./components/nav.component');
     require('./components/foot.component');
     require('./components/authenticatedNav.component');
-    require('./components/searchOfferForm.component');
     require('./components/categoriesList.component');
     require('./components/offer.component');
 
@@ -38,8 +37,7 @@
             'page.register',
             'page.login',
             'page.authenticated',
-            'page.addOffer',
-            'comp.offerList'
+            'page.addOffer'
         ])
         .run(function($trace, $transitions, $state, tokenFactory) {
             $transitions.onStart({ to: 'auth.**' }, function(trans) {

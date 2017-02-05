@@ -9,7 +9,8 @@ const offerSchema = new Schema({
     companySize : String,
     descrition  : String,
     www         : String,
-    contact     : String
+    contact     : String,
+    salary      : String
 });
 
 module.exports = mongoose.model('Offer', offerSchema);

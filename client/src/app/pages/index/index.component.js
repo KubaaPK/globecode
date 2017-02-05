@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('page.index', ['comp.nav', 'comp.foot', 'comp.searchOfferForm', 'comp.categoriesList', 'factory.token'])
+        .module('page.index', ['comp.nav', 'comp.foot', 'comp.categoriesList', 'factory.token'])
         .component('index', {
             templateUrl: 'app/pages/index/index.template.html',
             controller: indexController
