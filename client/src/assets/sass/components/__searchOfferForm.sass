@@ -10,7 +10,7 @@
         input
             padding-left: 2%
             height: 40px
-            width: 25%
+            width: 36.5%
             border: 1px solid $gray
             border-radius: 3px
             font:
@@ -19,9 +19,10 @@
             -webkit-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.15)
             -moz-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.15)
             box-shadow: 0px 0px 3px 1px rgba(158,158,158,.15)
-
+            transition: .2s
             &:focus
-                background-color: lighten($gray, 12%)
+                transition: .2s
+                border-color: $green
                 outline: none
 
         button
@@ -37,10 +38,14 @@
             letter-spacing: .1rem
             color: #FFFFFF
             background-color: $green
-            border-radius: 3px
+            border-radius: 3px 3px 6px 6px
             border: 1px solid darken($green, 5%)
+            border-bottom: 3px solid darken($green, 5%)
             transition: .2s
             &:hover
                 background-color: darken($green, 5%)
                 transition: .2s
                 cursor: pointer
+            &:focus
+                outline: 0
+                border-color: #000000

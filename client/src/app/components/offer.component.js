@@ -11,7 +11,7 @@
 })();
 
 
-    function offerController($http) {
+    function offerController($http, $interval) {
         var vm = this;
         vm.$onInit = function() {
             $http.get("http://localhost:8080/api/offer/all")
@@ -21,18 +21,28 @@
                 .catch(function(err) {
                     console.log(err);
                 })
+        };
+        
+        var filtersCheckboxes = document.querySelectorAll('.check-with-label');
+
+        for (var i = 0; i < filtersCheckboxes.length; i++) {
+            filtersCheckboxes[i].addEventListener('change', function(event) {
+                // console.log(vm.Filter);
+                var data = $.map(vm.Filter, function(value, index) {
+                    return [value];
+                });
+                $http.post('http://localhost:8080/api/offer/search', data)
+                    .then(function(res) {
+                        console.log(res);
+                        vm.data = res.data;
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+            });
         }
         
-     
 
-        document.querySelector("#offer_name").addEventListener('input', function(){
-            vm.offerNameFilter = searchOfferService.getSearchByOffer();
-            
-            console.log(searchOfferService.getSearchByOffer());
 
-           jQuery.trigger({ type: 'keypress', which: 13 });
-        });
-       
-        
-
+    
     }

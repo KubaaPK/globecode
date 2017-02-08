@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('page.authenticated', ['comp.authenticatedNav','comp.foot', 'comp.categoriesList', 'comp.offerList', 'factory.token'])
+        .module('page.authenticated', ['comp.authenticatedNav','comp.foot', 'comp.offerList', 'factory.token'])
         .component('authenticated', {
             controller: authenticatedController,
             templateUrl: 'app/pages/authenticated/authenticated.template.html' 

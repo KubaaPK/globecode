@@ -43242,7 +43242,6 @@ exports.ViewService = ViewService;
     require('./components/nav.component');
     require('./components/foot.component');
     require('./components/authenticatedNav.component');
-    require('./components/categoriesList.component');
     require('./components/offer.component');
 
     //pages
@@ -43284,7 +43283,7 @@ exports.ViewService = ViewService;
         });
         
 })();
-},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/categoriesList.component":79,"./components/foot.component":80,"./components/nav.component":81,"./components/offer.component":82,"./pages/addOffer/addOffer.component":83,"./pages/authenticated/authenticated.component":84,"./pages/index/index.component":85,"./pages/login/login.component":86,"./pages/register/register.component":87,"./services/tokenService":88,"./services/userService":89,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
+},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/foot.component":79,"./components/nav.component":80,"./components/offer.component":81,"./pages/addOffer/addOffer.component":82,"./pages/authenticated/authenticated.component":83,"./pages/index/index.component":84,"./pages/login/login.component":85,"./pages/register/register.component":86,"./services/tokenService":87,"./services/userService":88,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -43347,23 +43346,12 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
-        .module('comp.categoriesList', [])
-        .component('categoriesList', {
-            templateUrl: 'app/components/categoriesList.template.html' 
-        });
-})();
-},{}],80:[function(require,module,exports){
-(function(){
-
-    'use strict';
-
-    angular
         .module('comp.foot', [])
         .component('footBar', {
             templateUrl: 'app/components/foot.template.html' 
         });
 })();
-},{}],81:[function(require,module,exports){
+},{}],80:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43374,7 +43362,7 @@ exports.ViewService = ViewService;
             templateUrl: 'app/components/nav.template.html' 
         });
 })();
-},{}],82:[function(require,module,exports){
+},{}],81:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43388,7 +43376,7 @@ exports.ViewService = ViewService;
 })();
 
 
-    function offerController($http) {
+    function offerController($http, $interval) {
         var vm = this;
         vm.$onInit = function() {
             $http.get("http://localhost:8080/api/offer/all")
@@ -43398,28 +43386,38 @@ exports.ViewService = ViewService;
                 .catch(function(err) {
                     console.log(err);
                 })
+        };
+        
+        var filtersCheckboxes = document.querySelectorAll('.check-with-label');
+
+        for (var i = 0; i < filtersCheckboxes.length; i++) {
+            filtersCheckboxes[i].addEventListener('change', function(event) {
+                // console.log(vm.Filter);
+                var data = $.map(vm.Filter, function(value, index) {
+                    return [value];
+                });
+                $http.post('http://localhost:8080/api/offer/search', data)
+                    .then(function(res) {
+                        console.log(res);
+                        vm.data = res.data;
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+            });
         }
         
-     
 
-        document.querySelector("#offer_name").addEventListener('input', function(){
-            vm.offerNameFilter = searchOfferService.getSearchByOffer();
-            
-            console.log(searchOfferService.getSearchByOffer());
 
-           jQuery.trigger({ type: 'keypress', which: 13 });
-        });
-       
-        
-
+    
     }
-},{}],83:[function(require,module,exports){
+},{}],82:[function(require,module,exports){
 (function(){
 
     'use strict';
 
     angular
-        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'comp.categoriesList', 'factory.token'])
+        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.token'])
         .component('addOffer', {
             controller: addOfferController,
             templateUrl: 'app/pages/addOffer/addOffer.template.html' 
@@ -43435,6 +43433,7 @@ exports.ViewService = ViewService;
                     city        : vm.newOffer_city,
                     state       : vm.newOffer_state,
                     shift       : vm.newOffer_shift,
+                    companyName : vm.newOffer_companyName,
                     companySize : vm.newOffer_companySize,
                     description : vm.newOffer_description,
                     www         : vm.newOffer_www,
@@ -43456,13 +43455,13 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],84:[function(require,module,exports){
+},{}],83:[function(require,module,exports){
 (function(){
 
     'use strict';
 
     angular
-        .module('page.authenticated', ['comp.authenticatedNav','comp.foot', 'comp.categoriesList', 'comp.offerList', 'factory.token'])
+        .module('page.authenticated', ['comp.authenticatedNav','comp.foot', 'comp.offerList', 'factory.token'])
         .component('authenticated', {
             controller: authenticatedController,
             templateUrl: 'app/pages/authenticated/authenticated.template.html' 
@@ -43478,13 +43477,13 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],85:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 (function(){
 
     'use strict';
 
     angular
-        .module('page.index', ['comp.nav', 'comp.foot', 'comp.categoriesList', 'factory.token'])
+        .module('page.index', ['comp.nav', 'comp.foot', 'factory.token'])
         .component('index', {
             templateUrl: 'app/pages/index/index.template.html',
             controller: indexController
@@ -43497,7 +43496,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],86:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43536,7 +43535,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],87:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43579,7 +43578,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],88:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -43615,7 +43614,7 @@ exports.ViewService = ViewService;
         });
 
 })();
-},{}],89:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function(){
     'use strict';
 

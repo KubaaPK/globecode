@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'comp.categoriesList', 'factory.token'])
+        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.token'])
         .component('addOffer', {
             controller: addOfferController,
             templateUrl: 'app/pages/addOffer/addOffer.template.html' 
@@ -19,6 +19,7 @@
                     city        : vm.newOffer_city,
                     state       : vm.newOffer_state,
                     shift       : vm.newOffer_shift,
+                    companyName : vm.newOffer_companyName,
                     companySize : vm.newOffer_companySize,
                     description : vm.newOffer_description,
                     www         : vm.newOffer_www,

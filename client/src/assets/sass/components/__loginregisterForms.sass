@@ -15,9 +15,10 @@
         &__title
             padding: 6vh 2.5%
             display: block
-            background-color: #FCFCFC
+            background-color: $green
+            color: #FFFFFF
             text-align: center
-            border-bottom: 1px solid $gray
+            border-bottom: 3px solid darken($green, 10%)
             font:
                 size: 1.5rem
                 family: $overpass
@@ -30,16 +31,21 @@
         input
             box-sizing: border-box
             width: 90%
-            height: 35px
+            height: 40px
             margin: 2vh auto
             display: block
             padding: 0 2%
-            border-radius: 3px
-            border: 1px solid $gray
+            border: 0
+            border-bottom: 1px solid $gray
             background-color: #FFFFFF
             font:
                 family: $overpass
                 size: .9rem
+            transition: .2s
+            &:focus
+                outline: none
+                border-color: $green
+                transition: .2s
 
         button
             position: relative
@@ -49,8 +55,9 @@
             margin: 0 auto
             display: block
             background-color: $green
-            border: 1px solid darken($green, 10%)
-            border-radius: 3px
+            border: 2px solid $green
+            border-radius: 3px 3px 6px 6px
+            border-bottom: 5px solid darken($green, 10%)
             color: #FFFFFF
             font:
                 size: 1rem

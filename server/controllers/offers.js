@@ -20,7 +20,7 @@ router.post('/new', (req, res, next) => {
 });
 
 /*
-    Get all offers as json object
+    Get all offers as a json object
 */
 router.get('/all', (req, res, next) => {
     Offer.find({}, (err, offers) => {
@@ -33,6 +33,35 @@ router.get('/all', (req, res, next) => {
 });
 
 
+// router.post('/search', (req, res, next) => {
+//     let params = req.body;
+//     console.log(params);
+
+//     Offer.find({$or:[
+//         {$and:[
+//             {state:{$in:params}}, {shift:{$in:params}}, {companySize:{$in:params}}
+//         ]},
+//         {$and: [
+//             {state:{$in:params}}, {shift:{$in:params}}
+//         ]},
+//         {$and: [
+//             {state:{$in:params}}, {companySize: {$in:params}}
+//         ]},
+//         {$and: [
+//             {shift:{$in:params}}, {companySize: {$in:params}}
+//         ]},
+//         {$and: [
+//             {shift:{$in:params}}
+//         ]}
+//         ]}, (err, offers) => {
+//         if(err) {
+//             res.json({message: "Nie udało się załadować ofert."});
+//         } else {
+//             res.json(offers);
+//         }
+//     })
+
+// });
 
 
 

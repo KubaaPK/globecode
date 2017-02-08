@@ -7,6 +7,7 @@ const offerSchema = new Schema({
     state       : String,
     shift       : String,
     companySize : String,
+    companyName : String,
     descrition  : String,
     www         : String,
     contact     : String,

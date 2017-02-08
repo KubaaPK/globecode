@@ -21,3 +21,24 @@
                 margin: 1vh 0
                 font-size: .95rem
                 color: rgba(#000000, .6)
+            
+            .check-with-label
+                display: none
+            .label-for-check
+                position: relative
+                &:hover
+                    cursor: pointer
+            .check-with-label:checked + .label-for-check 
+                &:after
+                    position: absolute
+                    content: ''
+                    display: block
+                    height: 6px
+                    width: 6px
+                    border-radius: 50%
+                    background-color: rgba(#000000, .6)
+                    top: 4px
+                    left: -10px
+           
+            
+                    

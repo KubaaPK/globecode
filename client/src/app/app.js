@@ -13,7 +13,6 @@
     require('./components/nav.component');
     require('./components/foot.component');
     require('./components/authenticatedNav.component');
-    require('./components/categoriesList.component');
     require('./components/offer.component');
 
     //pages
