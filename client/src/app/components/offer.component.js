@@ -30,11 +30,10 @@
 
         for (var i = 0; i < filtersCheckboxes.length; i++) {
             filtersCheckboxes[i].addEventListener('change', function(event) {
-                // console.log(vm.Filter);
                 var data = $.map(vm.Filter, function(value, index) {
                     return [value];
                 });
-                
+                console.log(data);
                 $http.post('http://localhost:8080/api/offer/search', data)
                     .then(function(res) {
                         vm.data = [];

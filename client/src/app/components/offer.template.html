@@ -20,26 +20,26 @@
     <ul class="categories__list">
         <h3 class="categories__list__title">Stanowisko</h3>
         {{ $ctrl.Filter }}
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-frontend" ng-model="$ctrl.Filter.Frontend" ng-true-value="'Frontend'" ng-false-value=""><label for="check-frontend" class="label-for-check">Frontend</label></li>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-backend"  ng-model="$ctrl.Filter.Backend"  ng-true-value="'Backend'" ng-false-value=""><label for="check-backend" class="label-for-check">Backend</label></li>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-design" ng-model="$ctrl.Filter.Design" ng-true-value="'Design'" ng-false-value=""><label for="check-design" class="label-for-check">Design</label></li>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-tester" ng-model="$ctrl.Filter.Tester" ng-true-value="'Tester'" ng-false-value=""><label for="check-tester" class="label-for-check">Tester</label></li>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-management" ng-model="$ctrl.Filter.Management" ng-true-value="'Management'" ng-false-value=""><label for="check-management" class="label-for-check">Management</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-frontend" ng-model="$ctrl.Filter.state" ng-true-value="'Frontend'" ng-false-value=""><label for="check-frontend" class="label-for-check">Frontend</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-backend"  ng-model="$ctrl.Filter.state"  ng-true-value="'Backend'" ng-false-value=""><label for="check-backend" class="label-for-check">Backend</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-design" ng-model="$ctrl.Filter.state" ng-true-value="'Design'" ng-false-value=""><label for="check-design" class="label-for-check">Design</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-tester" ng-model="$ctrl.Filter.state" ng-true-value="'Tester'" ng-false-value=""><label for="check-tester" class="label-for-check">Tester</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-management" ng-model="$ctrl.Filter.state" ng-true-value="'Management'" ng-false-value=""><label for="check-management" class="label-for-check">Management</label></li>
     </ul>
     <ul class="categories__list">
         <h3 class="categories__list__title">Wymiar pracy</h3>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-fulltime" ng-model="$ctrl.Filter.Fulltime" ng-true-value="'Pełen etat'" ng-false-value=""><label for="check-fulltime" class="label-for-check">Pełen etat</label></li>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-parttime"  ng-model="$ctrl.Filter.Parttime" ng-true-value="'Niepełny etat'" ng-false-value=""><label for="check-parttime" class="label-for-check">Niepełny etat</label></li>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-contract" ng-model="$ctrl.Filter.Contract" ng-true-value="'Kontrakt'" ng-false-value=""><label for="check-contract" class="label-for-check">Kontrakt</label></li>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-freelance" ng-model="$ctrl.Filter.Freelance" ng-true-value="'Freelance'" ng-false-value=""><label for="check-freelance" class="label-for-check">Freelance</label></li>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-pratice" ng-model="$ctrl.Filter.Pratice" ng-true-value="'Staż'" ng-false-value=""><label for="check-pratice" class="label-for-check">Staż</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-fulltime" ng-model="$ctrl.Filter.shift" ng-true-value="'Pełen etat'" ng-false-value=""><label for="check-fulltime" class="label-for-check">Pełen etat</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-parttime"  ng-model="$ctrl.Filter.shift" ng-true-value="'Niepełny etat'" ng-false-value=""><label for="check-parttime" class="label-for-check">Niepełny etat</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-contract" ng-model="$ctrl.Filter.shift" ng-true-value="'Kontrakt'" ng-false-value=""><label for="check-contract" class="label-for-check">Kontrakt</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-freelance" ng-model="$ctrl.Filter.shift" ng-true-value="'Freelance'" ng-false-value=""><label for="check-freelance" class="label-for-check">Freelance</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-pratice" ng-model="$ctrl.Filter.shift" ng-true-value="'Staż'" ng-false-value=""><label for="check-pratice" class="label-for-check">Staż</label></li>
     </ul>
     <ul class="categories__list">
         <h3 class="categories__list__title">Ilośc pracowników</h3>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-1-10" ng-model="$ctrl.Filter.size15" ng-true-value="'1-10'" ng-false-value=""><label for="check-1-10" class="label-for-check">1-10</label></li>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-11-50" ng-model="$ctrl.Filter.size610" ng-true-value="'11-50'" ng-false-value=""><label for="check-11-50" class="label-for-check">11-50</label></li>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-51-100" ng-model="$ctrl.Filter.size1120" ng-true-value="'51-100'" ng-false-value=""><label for="check-51-100" class="label-for-check">51-100</label></li>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-101-500" ng-model="$ctrl.Filter.size2150" ng-true-value="'101-500'" ng-false-value=""><label for="check-101-500" class="label-for-check">101-500</label></li>
-        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-501plus" ng-model="$ctrl.Filter.size50plus" ng-true-value="'501+'" ng-false-value=""><label for="check-501plus" class="label-for-check">501+</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-1-10" ng-model="$ctrl.Filter.companySize" ng-true-value="'1-10'" ng-false-value=""><label for="check-1-10" class="label-for-check">1-10</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-11-50" ng-model="$ctrl.Filter.companySize" ng-true-value="'11-50'" ng-false-value=""><label for="check-11-50" class="label-for-check">11-50</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-51-100" ng-model="$ctrl.Filter.companySize" ng-true-value="'51-100'" ng-false-value=""><label for="check-51-100" class="label-for-check">51-100</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-101-500" ng-model="$ctrl.Filter.companySize" ng-true-value="'101-500'" ng-false-value=""><label for="check-101-500" class="label-for-check">101-500</label></li>
+        <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-501plus" ng-model="$ctrl.Filter.companySize" ng-true-value="'501+'" ng-false-value=""><label for="check-501plus" class="label-for-check">501+</label></li>
     </ul>
 </div>
