@@ -253,9 +253,11 @@
         display: flex;
         flex-direction: row; }
         .offers .offer .offerDetails span {
-          width: 12%;
+          width: 15%;
           font-size: 0.70rem;
-          color: rgba(0, 0, 0, 0.45); } }
+          color: rgba(0, 0, 0, 0.45); }
+          .offers .offer .offerDetails span:nth-child(n+2) {
+            width: 10%; } }
 
 body {
   font-size: 62.5%;
@@ -322,6 +324,11 @@ body {
           text-transform: uppercase;
           color: rgba(0, 0, 0, 0.7);
           letter-spacing: .1rem; }
+        .addOffer__wrapper .addOfferForm .salaryInputs {
+          display: flex;
+          flex-direction: row; }
+          .addOffer__wrapper .addOfferForm .salaryInputs .salaryWrapper {
+            width: 50%; }
         .addOffer__wrapper .addOfferForm__inputWrapper {
           margin: 3vh auto;
           display: block;

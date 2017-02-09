@@ -16,7 +16,10 @@
         vm.$onInit = function() {
             $http.get("http://localhost:8080/api/offer/all")
                 .then(function(res) {
-                    vm.data = res.data;
+                    vm.data = [];
+                    for(var i = 0; i<res.data.length;i++) {
+                        vm.data.push(res.data[i].fields);
+                    }
                 })
                 .catch(function(err) {
                     console.log(err);
@@ -31,10 +34,14 @@
                 var data = $.map(vm.Filter, function(value, index) {
                     return [value];
                 });
+                
                 $http.post('http://localhost:8080/api/offer/search', data)
                     .then(function(res) {
-                        console.log(res);
-                        vm.data = res.data;
+                        vm.data = [];
+                        for(var i = 0; i<res.data.length;i++) {
+                            vm.data.push(res.data[i].fields);
+                        }   
+                        console.log(vm.data);
                     })
                     .catch(function(err) {
                         console.log(err);
@@ -44,5 +51,6 @@
         
 
 
+
     
-    }
+    } // end of controller

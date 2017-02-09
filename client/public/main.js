@@ -43381,7 +43381,10 @@ exports.ViewService = ViewService;
         vm.$onInit = function() {
             $http.get("http://localhost:8080/api/offer/all")
                 .then(function(res) {
-                    vm.data = res.data;
+                    vm.data = [];
+                    for(var i = 0; i<res.data.length;i++) {
+                        vm.data.push(res.data[i].fields);
+                    }
                 })
                 .catch(function(err) {
                     console.log(err);
@@ -43396,10 +43399,14 @@ exports.ViewService = ViewService;
                 var data = $.map(vm.Filter, function(value, index) {
                     return [value];
                 });
+                
                 $http.post('http://localhost:8080/api/offer/search', data)
                     .then(function(res) {
-                        console.log(res);
-                        vm.data = res.data;
+                        vm.data = [];
+                        for(var i = 0; i<res.data.length;i++) {
+                            vm.data.push(res.data[i].fields);
+                        }   
+                        console.log(vm.data);
                     })
                     .catch(function(err) {
                         console.log(err);
@@ -43409,8 +43416,9 @@ exports.ViewService = ViewService;
         
 
 
+
     
-    }
+    } // end of controller
 },{}],82:[function(require,module,exports){
 (function(){
 
@@ -43438,7 +43446,9 @@ exports.ViewService = ViewService;
                     description : vm.newOffer_description,
                     www         : vm.newOffer_www,
                     contact     : vm.newOffer_contact,
-                    salary      : vm.newOffer_salary
+                    salaryMin   : vm.newOffer_salaryMin,
+                    salaryMax   : vm.newOffer_salaryMax,
+                    tags        : [vm.newOffer_state, vm.newOffer_shift, vm.newOffer_companySize]
                 };
                 
                 

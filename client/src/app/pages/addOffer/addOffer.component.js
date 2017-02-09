@@ -24,7 +24,9 @@
                     description : vm.newOffer_description,
                     www         : vm.newOffer_www,
                     contact     : vm.newOffer_contact,
-                    salary      : vm.newOffer_salary
+                    salaryMin   : vm.newOffer_salaryMin,
+                    salaryMax   : vm.newOffer_salaryMax,
+                    tags        : [vm.newOffer_state, vm.newOffer_shift, vm.newOffer_companySize]
                 };
                 
                 

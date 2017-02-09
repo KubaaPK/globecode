@@ -77,9 +77,15 @@
                 <label for="addOffer_jobDescription">Opis stanowiska<span class="addOfferForm__inputWrapper__requiredStar">*</span></label>
                 <textarea id="addOffer_jobDescription" required="true" ng-model="$ctrl.newOffer_description"></textarea>  
             </div>
-            <div class="addOfferForm__inputWrapper">
-                <label for="addOffer_salary">Pensja<span class="addOfferForm__inputWrapper__requiredStar">*</span></label>
-                <input type="number" id="addOffer_salary" required="true" ng-model="$ctrl.newOffer_salary">
+            <div class="addOfferForm__inputWrapper salaryInputs">
+                <div class="salaryWrapper">
+                    <label for="addOffer_salaryMin">Zarobki od<span class="addOfferForm__inputWrapper__requiredStar">*</span> <span class="addOfferForm__inputWrapper__example"> w PLN</span></label>
+                    <input type="number" id="addOffer_salaryMin" required="true" ng-model="$ctrl.newOffer_salaryMin">
+                </div>
+                <div class="salaryWrapper">
+                    <label for="addOffer_salaryMax">Zarobki do<span class="addOfferForm__inputWrapper__requiredStar">*</span><span class="addOfferForm__inputWrapper__example"> w PLN</span></label>
+                    <input type="number" id="addOffer_salaryMax" required="true" ng-model="$ctrl.newOffer_salaryMax">
+                </div>
             </div>
             <p class="addOfferForm__subtitle">O firmie</p>
             <div class="addOfferForm__inputWrapper">

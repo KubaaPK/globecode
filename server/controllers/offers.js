@@ -7,9 +7,13 @@ const Offer   = require('../models/Offer');
     Add new offer to database
 */
 router.post('/new', (req, res, next) => {
-    const data = req.body;
-    const newOffer = new Offer(data);
+    let data = req.body;
 
+    let fields = {
+        fields: data
+    } 
+    console.log(fields);
+    let newOffer = new Offer(fields);
     newOffer.save((err) => {
         if(err) {
             res.json({message: "Nie udało się dodać oferty."});
@@ -33,35 +37,39 @@ router.get('/all', (req, res, next) => {
 });
 
 
-// router.post('/search', (req, res, next) => {
-//     let params = req.body;
-//     console.log(params);
+router.post('/search', (req, res, next) => {
+    let filters = req.body;
+    Array.prototype.clean = function(deleteValue) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i] == deleteValue) {         
+        this.splice(i, 1);
+        i--;
+        }
+    }
+    return this;
+    };
+    filters.clean(null);
+    console.log(filters);
+    if(filters.length === 0) {
+        Offer.find({}, (err, offers) => {
+            if(err) {
+                res.json({message: "Nie udało się załadować ofert."});
+            } else {
+                res.json(offers);
+            }
+        })
+    } else {
+        Offer.find({"fields.tags": {$all: filters}}, (err, offers) => {
+            if(err){
+                console.log(err);
+            } else {
+                res.json(offers);
+            }
+        })
+    }
 
-//     Offer.find({$or:[
-//         {$and:[
-//             {state:{$in:params}}, {shift:{$in:params}}, {companySize:{$in:params}}
-//         ]},
-//         {$and: [
-//             {state:{$in:params}}, {shift:{$in:params}}
-//         ]},
-//         {$and: [
-//             {state:{$in:params}}, {companySize: {$in:params}}
-//         ]},
-//         {$and: [
-//             {shift:{$in:params}}, {companySize: {$in:params}}
-//         ]},
-//         {$and: [
-//             {shift:{$in:params}}
-//         ]}
-//         ]}, (err, offers) => {
-//         if(err) {
-//             res.json({message: "Nie udało się załadować ofert."});
-//         } else {
-//             res.json(offers);
-//         }
-//     })
 
-// });
+});
 
 
 
