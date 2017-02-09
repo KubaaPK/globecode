@@ -19,7 +19,6 @@
 <div class="categories">
     <ul class="categories__list">
         <h3 class="categories__list__title">Stanowisko</h3>
-        {{ $ctrl.Filter }}
         <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-frontend" ng-model="$ctrl.Filter.state" ng-true-value="'Frontend'" ng-false-value=""><label for="check-frontend" class="label-for-check">Frontend</label></li>
         <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-backend"  ng-model="$ctrl.Filter.state"  ng-true-value="'Backend'" ng-false-value=""><label for="check-backend" class="label-for-check">Backend</label></li>
         <li><input type="checkbox" name="checkbox" value="value" class="check-with-label" id="check-design" ng-model="$ctrl.Filter.state" ng-true-value="'Design'" ng-false-value=""><label for="check-design" class="label-for-check">Design</label></li>
