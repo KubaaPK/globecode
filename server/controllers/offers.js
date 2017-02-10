@@ -36,7 +36,9 @@ router.get('/all', (req, res, next) => {
     })
 });
 
-
+/*
+    Search offers by params given by post request
+*/
 router.post('/search', (req, res, next) => {
     let filters = req.body;
     Array.prototype.clean = function(deleteValue) {
@@ -71,6 +73,89 @@ router.post('/search', (req, res, next) => {
 
 });
 
+router.get('/amount', (req, res, next) => {
+    Offer.find({}, (err, offer) => {
+        if(err) {
+            console.log(err);
+        } else {
+            const states = ["Frontend", "Backend", "Design", "Tester", "Management"],
+                  shifts = ["Pełen etat", "Niepełny etat", "Kontrakt", "Freelance", "Staż"],
+                  compSize = ["1-10", "11-50", "51-100", "101-500", "500+"];
+            
+            amounts = {
+                "Frontend": 0,
+                "Backend": 0,
+                "Design": 0,
+                "Tester": 0,
+                "Management": 0,
+                "Fulltime": 0,
+                "Parttime": 0,
+                "Contract": 0,
+                "Freelance": 0,
+                "Practice": 0,
+                "cs110": 0,
+                "cs1150": 0,
+                "cs51100": 0,
+                "cs101500": 0,
+                "cs501": 0
+            }
+
+            for (let i = 0; i< offer.length; i++) {
+                if(offer[i].fields.state === states[0]) {
+                    amounts.Frontend++;
+                }
+                if(offer[i].fields.state === states[1]) {
+                    amounts.Backend++;
+                }
+                if(offer[i].fields.state === states[2]) {
+                    amounts.Design++;
+                }
+                if(offer[i].fields.state === states[3]) {
+                    amounts.Tester++;
+                }
+                if(offer[i].fields.state === states[4]) {
+                    amounts.Management++;
+                }
+
+                if(offer[i].fields.shift === shifts[0]) {
+                    amounts.Fulltime++;
+                }
+                if(offer[i].fields.shift === shifts[1]) {
+                    amounts.Parttime++;
+                }
+                if(offer[i].fields.shift === shifts[2]) {
+                    amounts.Contract++;
+                }
+                if(offer[i].fields.shift === shifts[3]) {
+                    amounts.Freelance++;
+                }
+                if(offer[i].fields.shift === shifts[4]) {
+                    amounts.Practice++;
+                }
+
+
+                if(offer[i].fields.companySize === compSize[0]) {
+                    amounts.cs110++;
+                }
+                if(offer[i].fields.companySize === compSize[1]) {
+                    amounts.cs1150++;
+                }
+                if(offer[i].fields.companySize === compSize[2]) {
+                    amounts.cs51100++;
+                }
+                if(offer[i].fields.companySize === compSize[3]) {
+                    amounts.cs101500++;
+                }
+                if(offer[i].fields.companySize === compSize[4]) {
+                    amounts.cs501++;
+                }
+
+            }
+
+            res.json(amounts);
+        }
+    })
+});
 
 
 module.exports = router;

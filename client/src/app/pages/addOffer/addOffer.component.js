@@ -32,13 +32,16 @@
                 
                 $http.post('http://localhost:8080/api/offer/new', data)
                     .then(function(res) {
-                        console.log(res);
+                        $state.go('auth.index');
                     })
                     .catch(function(err) {
                         console.log(err);
                     });
             }
 
+            vm.backToIndex = function() {
+                $state.go('auth.index');
+            }
 
         }
 

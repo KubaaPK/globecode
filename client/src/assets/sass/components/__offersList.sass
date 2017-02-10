@@ -26,15 +26,32 @@
             box-sizing: border-box
             font-family: $overpass
             &__title
+                position: relative
                 margin-bottom: 1vh
                 font:
                     size: 1.25rem
                 color: rgba(#000000, .9)
                 text-decoration: none
                 transition: .3s
+                &:after
+                    content: ''
+                    display: block
+                    position: absolute
+                    bottom: -10px
+                    left: 0
+                    width: 100%
+                    height: 1px 
+                    background-color: $gray
+                    opacity: 0
+                    transition: .3s
                 &:hover
                     color: rgba(#000000, .7)
                     transition: .3s
+                    &:after
+                        bottom: -3px
+                        opacity: 1
+                        transition: .3s
+
             .offerDetails
                 display: flex
                 flex-direction: row

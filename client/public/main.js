@@ -43386,11 +43386,19 @@ exports.ViewService = ViewService;
                         vm.data.push(res.data[i].fields);
                     }
                     vm.offersAmount = res.data.length;
-                    offerPlural(res.data.length);
                 })
                 .catch(function(err) {
                     console.log(err);
+                });
+
+            $http.get("http://localhost:8080/api/offer/amount")
+                .then(function(res) {
+                    vm.amounts = res.data;
                 })
+                .catch(function(err) {
+                    console.log(err);
+                })  
+
         };
         
         var filtersCheckboxes = document.querySelectorAll('.check-with-label');
@@ -43400,7 +43408,6 @@ exports.ViewService = ViewService;
                 var data = $.map(vm.Filter, function(value, index) {
                     return [value];
                 });
-                console.log(data);
                 $http.post('http://localhost:8080/api/offer/search', data)
                     .then(function(res) {
                         vm.data = [];
@@ -43408,26 +43415,21 @@ exports.ViewService = ViewService;
                             vm.data.push(res.data[i].fields);
                         }   
                         vm.offersAmount = res.data.length;
-                        offerPlural(res.data.length);
+                        console.log(vm.data);
                     })
                     .catch(function(err) {
                         console.log(err);
                     });
+                $http.get("http://localhost:8080/api/offer/amount")
+                    .then(function(res) {
+                        vm.amounts = res.data;
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                })  
             });
         }
         
-
-        function offerPlural(offers) {
-            if(offers === 0 ) {
-                vm.offerPlural = "ofert";
-            } else if(offers === 1) {
-                vm.offerPlural = "ofertę";
-            } else if(offers === 2 || offers === 3 || offers === 4) {
-                vm.offerPlural = "oferty";
-            } else {
-                vm.offerPlural = "ofert";
-            }
-        }
 
 
 
@@ -43468,13 +43470,16 @@ exports.ViewService = ViewService;
                 
                 $http.post('http://localhost:8080/api/offer/new', data)
                     .then(function(res) {
-                        console.log(res);
+                        $state.go('auth.index');
                     })
                     .catch(function(err) {
                         console.log(err);
                     });
             }
 
+            vm.backToIndex = function() {
+                $state.go('auth.index');
+            }
 
         }
 
