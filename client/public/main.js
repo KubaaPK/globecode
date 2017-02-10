@@ -43252,7 +43252,7 @@ exports.ViewService = ViewService;
     require('./pages/addOffer/addOffer.component');
 
     //services
-    require('./services/tokenService');
+    require('./services/authService');
     require('./services/userService');
     require('./services/offersService');
 
@@ -43268,9 +43268,9 @@ exports.ViewService = ViewService;
             'page.authenticated',
             'page.addOffer'
         ])
-        .run(function($trace, $transitions, $state, tokenFactory) {
+        .run(function($trace, $transitions, $state, authFactory) {
             $transitions.onStart({ to: 'auth.**' }, function(trans) {
-                var auth = trans.injector().get('tokenFactory')
+                var auth = trans.injector().get('authFactory')
                 if (auth.isTokenExpired()) {
                 return trans.router.stateService.target('login');
                 }
@@ -43284,7 +43284,7 @@ exports.ViewService = ViewService;
         });
         
 })();
-},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/foot.component":79,"./components/nav.component":80,"./components/offer.component":81,"./pages/addOffer/addOffer.component":82,"./pages/authenticated/authenticated.component":83,"./pages/index/index.component":84,"./pages/login/login.component":85,"./pages/register/register.component":86,"./services/offersService":87,"./services/tokenService":88,"./services/userService":89,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
+},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/foot.component":79,"./components/nav.component":80,"./components/offer.component":81,"./pages/addOffer/addOffer.component":82,"./pages/authenticated/authenticated.component":83,"./pages/index/index.component":84,"./pages/login/login.component":85,"./pages/register/register.component":86,"./services/authService":87,"./services/offersService":88,"./services/userService":89,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -43432,7 +43432,7 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
-        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.token', 'factory.offers'])
+        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.auth', 'factory.offers'])
         .component('addOffer', {
             controller: addOfferController,
             templateUrl: 'app/pages/addOffer/addOffer.template.html' 
@@ -43481,14 +43481,14 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
-        .module('page.authenticated', ['comp.authenticatedNav','comp.foot', 'comp.offerList', 'factory.token'])
+        .module('page.authenticated', ['comp.authenticatedNav','comp.foot', 'comp.offerList', 'factory.auth'])
         .component('authenticated', {
             controller: authenticatedController,
             templateUrl: 'app/pages/authenticated/authenticated.template.html' 
         });
 
 
-        function authenticatedController($http, $state, tokenFactory) {
+        function authenticatedController($http, $state, authFactory) {
             var vm = this;            
 
 
@@ -43503,14 +43503,14 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
-        .module('page.index', ['comp.nav', 'comp.foot', 'factory.token'])
+        .module('page.index', ['comp.nav', 'comp.foot', 'factory.auth'])
         .component('index', {
             templateUrl: 'app/pages/index/index.template.html',
             controller: indexController
         });
 
 
-        function indexController($state, tokenFactory) {
+        function indexController($state, authFactory) {
             var vm = this;
 
         }
@@ -43522,14 +43522,14 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
-        .module('page.login', ['comp.nav', 'comp.foot', 'factory.token', 'factory.user'])
+        .module('page.login', ['comp.nav', 'comp.foot', 'factory.auth', 'factory.user'])
         .component('login', {
             controller: loginController,
             templateUrl: 'app/pages/login/login.template.html' 
         });
 
 
-        function loginController($http, $state, tokenFactory, userFactory) {
+        function loginController($http, $state, authFactory, userFactory) {
             var vm = this;            
 
            
@@ -43541,9 +43541,9 @@ exports.ViewService = ViewService;
                     password    : vm.loginPassword
                 }
 
-                $http.post('http://localhost:8080/api/users/authenticate', data)
+                authFactory.authenticateUser()
                     .then(function(res) {
-                        tokenFactory.saveTokenToLocalStorage(res.data.token);
+                        authFactory.saveTokenToLocalStorage(res.data.token);
                         userFactory.saveUserDataToLocalStorage(res.data.user);
                         $state.go('auth.index');
                     })
@@ -43561,14 +43561,14 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
-        .module('page.register', ['comp.nav', 'comp.foot', 'factory.token', 'factory.user'])
+        .module('page.register', ['comp.nav', 'comp.foot', 'factory.auth', 'factory.user'])
         .component('register', {
             controller: registerController,
             templateUrl: 'app/pages/register/register.template.html' 
         });
 
 
-        function registerController($http, $state, tokenFactory, userFactory) {
+        function registerController($http, $state, authFactory, userFactory) {
             var vm = this;
 
          
@@ -43579,13 +43579,12 @@ exports.ViewService = ViewService;
                     password    : vm.registerPassword
                 }
 
-                $http.post('http://localhost:8080/api/users/new', data)
+                userFactory.postNewUser()
                     .then(function(res) {
                         if(res.data.token) {
-                            tokenFactory.saveTokenToLocalStorage(res.data.token);
+                            authFactory.saveTokenToLocalStorage(res.data.token);
                             userFactory.saveUserDataToLocalStorage(res.data.user);
                             $state.go('auth.index');
-                            
                         }
                     })
                     .catch(function(err) {
@@ -43603,32 +43602,8 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
-        .module('factory.offers', [])
-        .factory('offersFactory', function($http){
-
-            return {
-               getAllOffers: function() {
-                    return $http.get('http://localhost:8080/api/offer/all');
-               },
-               getOffersAmounts: function() {
-                    return $http.get("http://localhost:8080/api/offer/amount");
-               },
-               postSearchOffers: function(data) {
-                    return $http.post('http://localhost:8080/api/offer/search', data);
-               }
-            }
-
-
-        });
-
-})();
-},{}],88:[function(require,module,exports){
-(function(){
-    'use strict';
-
-    angular
-        .module('factory.token', ['angular-jwt'])
-        .factory('tokenFactory', function(jwtHelper){
+        .module('factory.auth', ['angular-jwt'])
+        .factory('authFactory', function(jwtHelper){
 
             return {
                 saveTokenToLocalStorage: function(token) {
@@ -43650,8 +43625,38 @@ exports.ViewService = ViewService;
                 },
                 destroyToken: function() {
                     localStorage.removeItem("authToken");
+                },
+                authenticateUser: function(data) {
+                    return $http.post('http://localhost:8080/api/users/authenticate', data);
                 }
 
+            }
+
+
+        });
+
+})();
+},{}],88:[function(require,module,exports){
+(function(){
+    'use strict';
+
+    angular
+        .module('factory.offers', [])
+        .factory('offersFactory', function($http){
+
+            return {
+               getAllOffers: function() {
+                    return $http.get('http://localhost:8080/api/offer/all');
+               },
+               getOffersAmounts: function() {
+                    return $http.get("http://localhost:8080/api/offer/amount");
+               },
+               postSearchOffers: function(data) {
+                    return $http.post('http://localhost:8080/api/offer/search', data);
+               },
+               postNewOffer: function(data) {
+                   $http.post('http://localhost:8080/api/offer/new', data);
+               }
             }
 
 
@@ -43664,15 +43669,17 @@ exports.ViewService = ViewService;
 
     angular
         .module('factory.user', [])
-        .factory('userFactory', function(){
+        .factory('userFactory', function($http){
 
             return {
                 saveUserDataToLocalStorage: function(user){
-                    
                     localStorage.setItem("user", JSON.stringify(user));
                 },
                 loadUserDataFromLocalStorage: function(){
                     return localStorage.getItem("user");
+                },
+                postNewUser: function(data) {
+                    return $http.post('http://localhost:8080/api/users/new', data)
                 }
             }
 

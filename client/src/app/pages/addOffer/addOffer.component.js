@@ -3,7 +3,7 @@
     'use strict';
 
     angular
-        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.token', 'factory.offers'])
+        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.auth', 'factory.offers'])
         .component('addOffer', {
             controller: addOfferController,
             templateUrl: 'app/pages/addOffer/addOffer.template.html' 

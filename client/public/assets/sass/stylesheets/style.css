@@ -1,0 +1,449 @@
+@import url("https://fonts.googleapis.com/css?family=Overpass:300,400,700");
+@media only screen and (max-width: 100em) {
+  .nav {
+    width: 100%;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #DDDDDD; }
+    .nav__list {
+      list-style-type: none;
+      margin: 0;
+      padding: 2.5vh 10%;
+      text-align: right; }
+      .nav__list__element {
+        padding-left: 0;
+        display: inline-block; }
+        .nav__list__element:first-child {
+          float: left; }
+        .nav__list__element:nth-child(n+2) {
+          margin: 0 .5%; }
+        .nav__list__element__link {
+          text-decoration: none;
+          text-transform: uppercase;
+          font-family: "Overpass", sans-serif;
+          font-size: 0.9rem;
+          color: rgba(0, 0, 0, 0.7);
+          transition: .3s; }
+          .nav__list__element__link:after {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #DDDDDD;
+            opacity: 0;
+            transition: .3s; }
+          .nav__list__element__link:hover {
+            color: #000000;
+            transition: .3s; }
+            .nav__list__element__link:hover:after {
+              bottom: -3px;
+              opacity: 1;
+              transition: .3s; }
+          .nav__list__element__link svg {
+            height: 30px; }
+            .nav__list__element__link svg:hover {
+              cursor: pointer; }
+        .nav__list__element .addNewOffer {
+          position: relative;
+          top: -10px;
+          left: -20px; }
+        .nav__list__element .authLogo {
+          position: relative;
+          top: 10px; } }
+
+@media only screen and (max-width: 100em) {
+  .footer {
+    position: relative;
+    padding: 2.5% 0;
+    width: 80%;
+    margin: 0 auto;
+    border-top: 1px solid #DDDDDD;
+    display: flex; }
+    .footer__text {
+      width: 50%; }
+      .footer__text__title {
+        font-family: "Overpass", sans-serif;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: rgba(0, 0, 0, 0.7); }
+      .footer__text__subtitle {
+        font-family: "Overpass", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 400;
+        letter-spacing: .05rem;
+        color: rgba(0, 0, 0, 0.7); }
+    .footer__nav {
+      list-style-type: none;
+      width: 50%;
+      text-align: right;
+      margin-top: 2%; }
+      .footer__nav__element {
+        display: inline-block;
+        margin: 0 1%; }
+        .footer__nav__element__link {
+          color: rgba(0, 0, 0, 0.7);
+          font-family: "Overpass", sans-serif;
+          font-size: 0.85rem;
+          text-decoration: none; } }
+
+@media only screen and (max-width: 100em) {
+  .loginregisterForm {
+    position: relative;
+    top: 5vh;
+    display: block;
+    width: 300px;
+    background-color: #FFFFFF;
+    margin: 0 auto;
+    padding-bottom: 3%;
+    -webkit-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
+    -moz-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
+    box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15); }
+    .loginregisterForm__title {
+      padding: 6vh 2.5%;
+      display: block;
+      background-color: #2ECC6E;
+      color: #FFFFFF;
+      text-align: center;
+      border-bottom: 3px solid #25a258;
+      font-size: 1.5rem;
+      font-family: "Overpass", sans-serif; }
+    .loginregisterForm label {
+      margin-left: 5%;
+      font-family: "Overpass", sans-serif;
+      font-size: .9rem; }
+    .loginregisterForm input {
+      box-sizing: border-box;
+      width: 90%;
+      height: 40px;
+      margin: 2vh auto;
+      display: block;
+      padding: 0 2%;
+      border: 0;
+      border-bottom: 1px solid #DDDDDD;
+      background-color: #FFFFFF;
+      font-family: "Overpass", sans-serif;
+      font-size: .9rem;
+      transition: .2s; }
+      .loginregisterForm input:focus {
+        outline: none;
+        border-color: #2ECC6E;
+        transition: .2s; }
+    .loginregisterForm button {
+      position: relative;
+      top: 4vh;
+      width: 90%;
+      height: 45px;
+      margin: 0 auto;
+      display: block;
+      background-color: #2ECC6E;
+      border: 2px solid #2ECC6E;
+      border-radius: 3px 3px 6px 6px;
+      border-bottom: 5px solid #25a258;
+      color: #FFFFFF;
+      font-size: 1rem;
+      font-family: "Overpass", sans-serif;
+      transition: .3s; }
+      .loginregisterForm button:hover {
+        background-color: #29b763;
+        cursor: pointer;
+        transition: .3s; } }
+
+@media only screen and (max-width: 100em) {
+  .searchOfferForm {
+    position: relative;
+    top: 5vh;
+    width: 80%;
+    display: block;
+    margin: 0 auto;
+    text-align: center; }
+    .searchOfferForm input {
+      padding-left: 2%;
+      height: 40px;
+      width: 36.5%;
+      border: 1px solid #DDDDDD;
+      border-radius: 3px;
+      font-family: "Overpass", sans-serif;
+      font-size: .85rem;
+      -webkit-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
+      -moz-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
+      box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
+      transition: .2s; }
+      .searchOfferForm input:focus {
+        transition: .2s;
+        border-color: #2ECC6E;
+        outline: none; }
+    .searchOfferForm button {
+      padding: 10px 0;
+      margin-left: 5%;
+      width: 15%;
+      height: 45px;
+      font-size: .8rem;
+      font-family: "Overpass", sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1rem;
+      color: #FFFFFF;
+      background-color: #2ECC6E;
+      border-radius: 3px 3px 6px 6px;
+      border: 1px solid #29b763;
+      border-bottom: 3px solid #29b763;
+      transition: .2s; }
+      .searchOfferForm button:hover {
+        background-color: #29b763;
+        transition: .2s;
+        cursor: pointer; }
+      .searchOfferForm button:focus {
+        outline: 0;
+        border-color: #000000; } }
+
+@media only screen and (max-width: 100em) {
+  .categories {
+    position: relative;
+    margin-left: 10%;
+    margin-top: 75px;
+    width: 20%;
+    float: left; }
+    .categories__list {
+      list-style-type: none;
+      padding-left: 0;
+      font-family: "Overpass", sans-serif; }
+      .categories__list__categoryAmount {
+        margin-right: 10%; }
+      .categories__list__title {
+        font-size: 1.05rem;
+        color: rgba(0, 0, 0, 0.7);
+        text-transform: uppercase;
+        letter-spacing: .1rem; }
+      .categories__list li {
+        margin: 1vh 0;
+        font-size: .95rem;
+        color: rgba(0, 0, 0, 0.6);
+        display: flex;
+        flex-direction: row; }
+        .categories__list li span {
+          width: 5%; }
+      .categories__list .check-with-label {
+        display: none; }
+      .categories__list .label-for-check {
+        position: relative; }
+        .categories__list .label-for-check:after {
+          position: absolute;
+          content: '';
+          display: block;
+          height: 6px;
+          width: 6px;
+          border-radius: 50%;
+          background-color: rgba(0, 0, 0, 0.6);
+          top: 4px;
+          left: -10px;
+          opacity: 0;
+          transition: .3s; }
+        .categories__list .label-for-check:hover {
+          cursor: pointer; }
+      .categories__list .check-with-label:checked + .label-for-check:after {
+        transition: .3s;
+        opacity: 1; } }
+
+@media only screen and (max-width: 100em) {
+  .offers {
+    width: 70%;
+    float: right;
+    display: block;
+    margin-top: 75px; }
+    .offers__amount {
+      font-family: "Overpass", sans-serif;
+      font-size: 1rem;
+      font-weight: 300; }
+      .offers__amount span {
+        font-weight: 700; }
+    .offers .offer {
+      border-radius: 2px;
+      -webkit-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.1);
+      -moz-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.1);
+      box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.1);
+      background-color: #FFFFFF;
+      display: block;
+      width: 85%;
+      float: left;
+      margin: 1vh 0;
+      padding: 3vh 2%;
+      box-sizing: border-box;
+      font-family: "Overpass", sans-serif; }
+      .offers .offer__title {
+        position: relative;
+        margin-bottom: 1vh;
+        font-size: 1.25rem;
+        color: rgba(0, 0, 0, 0.9);
+        text-decoration: none;
+        transition: .3s; }
+        .offers .offer__title:after {
+          content: '';
+          display: block;
+          position: absolute;
+          bottom: -10px;
+          left: 0;
+          width: 100%;
+          height: 1px;
+          background-color: #DDDDDD;
+          opacity: 0;
+          transition: .3s; }
+        .offers .offer__title:hover {
+          color: rgba(0, 0, 0, 0.7);
+          transition: .3s; }
+          .offers .offer__title:hover:after {
+            bottom: -3px;
+            opacity: 1;
+            transition: .3s; }
+      .offers .offer .offerDetails {
+        display: flex;
+        flex-direction: row;
+        margin-top: 1.5vh; }
+        .offers .offer .offerDetails span {
+          width: 18%;
+          font-size: 0.70rem;
+          color: rgba(0, 0, 0, 0.45); }
+          .offers .offer .offerDetails span:nth-child(n+2) {
+            width: 10%; } }
+
+body {
+  font-size: 62.5%;
+  background-color: #F8F9FA; }
+
+@media only screen and (max-width: 100em) {
+  .index {
+    height: 100%;
+    background-color: #F8F9FA; } }
+
+@media only screen and (max-width: 100em) {
+  .login {
+    height: 100%;
+    background-color: #F8F9FA; }
+    .login footer {
+      position: absolute;
+      bottom: 0;
+      left: 10%; } }
+
+@media only screen and (max-width: 100em) {
+  .register {
+    height: 100%;
+    background-color: #F8F9FA;
+    display: block; }
+    .register footer {
+      position: absolute;
+      bottom: 0;
+      left: 10%; } }
+
+@media only screen and (max-width: 100em) {
+  .addOffer {
+    height: 100%;
+    background-color: #F8F9FA; }
+    .addOffer__wrapper {
+      padding: 2.5% 25%;
+      font-size: 1rem;
+      font-family: "Overpass", sans-serif; }
+      .addOffer__wrapper .addOfferForm {
+        padding: 0 0 5% 0;
+        display: block;
+        margin: 0 auto;
+        background-color: #FFFFFF;
+        -webkit-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
+        -moz-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
+        box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15); }
+        .addOffer__wrapper .addOfferForm__title {
+          padding: 7.5% 0;
+          margin-bottom: 10vh;
+          font-family: "Overpass", sans-serif;
+          font-size: 2rem;
+          text-align: center;
+          display: block;
+          background-color: #2ECC6E;
+          color: #FFFFFF;
+          border-bottom: 3px solid #25a258; }
+        .addOffer__wrapper .addOfferForm__subtitle {
+          font-family: "Overpass", sans-serif;
+          font-size: 1.5rem;
+          font-weight: 700;
+          display: block;
+          border-bottom: 1px solid #DDDDDD;
+          width: 90%;
+          margin: 5vh auto;
+          text-transform: uppercase;
+          color: rgba(0, 0, 0, 0.7);
+          letter-spacing: .1rem; }
+        .addOffer__wrapper .addOfferForm .salaryInputs {
+          display: flex;
+          flex-direction: row; }
+          .addOffer__wrapper .addOfferForm .salaryInputs .salaryWrapper {
+            width: 50%; }
+        .addOffer__wrapper .addOfferForm__inputWrapper {
+          margin: 3vh auto;
+          display: block;
+          width: 90%; }
+          .addOffer__wrapper .addOfferForm__inputWrapper__requiredStar {
+            color: #e50048; }
+          .addOffer__wrapper .addOfferForm__inputWrapper__example {
+            opacity: .5; }
+          .addOffer__wrapper .addOfferForm__inputWrapper select, .addOffer__wrapper .addOfferForm__inputWrapper input, .addOffer__wrapper .addOfferForm__inputWrapper textarea, .addOffer__wrapper .addOfferForm__inputWrapper input {
+            padding-left: 1.5%;
+            box-sizing: border-box;
+            width: 100%;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            -webkit-box-shadow: 0px 0px 3px 0px rgba(158, 158, 158, 0.15);
+            -moz-box-shadow: 0px 0px 3px 0px rgba(158, 158, 158, 0.15);
+            box-shadow: 0px 0px 3px 0px rgba(158, 158, 158, 0.15);
+            transition: .2s; }
+            .addOffer__wrapper .addOfferForm__inputWrapper select:focus, .addOffer__wrapper .addOfferForm__inputWrapper input:focus, .addOffer__wrapper .addOfferForm__inputWrapper textarea:focus, .addOffer__wrapper .addOfferForm__inputWrapper input:focus {
+              outline: 0;
+              border-color: #2ECC6E;
+              transition: .2s; }
+          .addOffer__wrapper .addOfferForm__inputWrapper label {
+            margin-bottom: 1vh;
+            display: block;
+            font-size: 1rem;
+            font-family: "Overpass", sans-serif;
+            font-weight: 300; }
+          .addOffer__wrapper .addOfferForm__inputWrapper select, .addOffer__wrapper .addOfferForm__inputWrapper input {
+            height: 45px; }
+          .addOffer__wrapper .addOfferForm__inputWrapper textarea {
+            padding-top: 1.5%;
+            height: 70vh; }
+        .addOffer__wrapper .addOfferForm .buttons {
+          display: flex;
+          flex-direction: row;
+          margin-left: 5%; }
+          .addOffer__wrapper .addOfferForm .buttons button {
+            margin: 0 .5%;
+            width: 20%;
+            height: 60px;
+            position: relative;
+            border: 0;
+            background-color: #2ECC6E;
+            border-radius: 3px 3px 6px 6px;
+            border: 1px solid #25a258;
+            border-bottom: 3px solid #25a258;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            transition: .3s;
+            font-size: 1rem;
+            font-family: "Overpass", sans-serif; }
+            .addOffer__wrapper .addOfferForm .buttons button:hover {
+              background-color: #29b763;
+              cursor: pointer;
+              transition: .3s; }
+            .addOffer__wrapper .addOfferForm .buttons button:focus {
+              outline: 0;
+              border-color: #000000; }
+            .addOffer__wrapper .addOfferForm .buttons button:nth-child(2) {
+              background-color: #FFFFFF;
+              color: #000000;
+              border-radius: 3px 3px 6px 6px;
+              border-color: #DDDDDD;
+              border-bottom: 3px solid #c4c4c4; }
+              .addOffer__wrapper .addOfferForm .buttons button:nth-child(2):hover {
+                background-color: #F8F9FA; }
+              .addOffer__wrapper .addOfferForm .buttons button:nth-child(2):focus {
+                outline: 0;
+                border-color: #2ECC6E; } }

@@ -3,14 +3,14 @@
     'use strict';
 
     angular
-        .module('page.login', ['comp.nav', 'comp.foot', 'factory.token', 'factory.user'])
+        .module('page.login', ['comp.nav', 'comp.foot', 'factory.auth', 'factory.user'])
         .component('login', {
             controller: loginController,
             templateUrl: 'app/pages/login/login.template.html' 
         });
 
 
-        function loginController($http, $state, tokenFactory, userFactory) {
+        function loginController($http, $state, authFactory, userFactory) {
             var vm = this;            
 
            
@@ -22,9 +22,9 @@
                     password    : vm.loginPassword
                 }
 
-                $http.post('http://localhost:8080/api/users/authenticate', data)
+                authFactory.authenticateUser()
                     .then(function(res) {
-                        tokenFactory.saveTokenToLocalStorage(res.data.token);
+                        authFactory.saveTokenToLocalStorage(res.data.token);
                         userFactory.saveUserDataToLocalStorage(res.data.user);
                         $state.go('auth.index');
                     })

@@ -2,8 +2,8 @@
     'use strict';
 
     angular
-        .module('factory.token', ['angular-jwt'])
-        .factory('tokenFactory', function(jwtHelper){
+        .module('factory.auth', ['angular-jwt'])
+        .factory('authFactory', function(jwtHelper){
 
             return {
                 saveTokenToLocalStorage: function(token) {
@@ -25,6 +25,9 @@
                 },
                 destroyToken: function() {
                     localStorage.removeItem("authToken");
+                },
+                authenticateUser: function(data) {
+                    return $http.post('http://localhost:8080/api/users/authenticate', data);
                 }
 
             }
