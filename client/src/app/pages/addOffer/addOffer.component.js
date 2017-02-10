@@ -3,14 +3,14 @@
     'use strict';
 
     angular
-        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.token'])
+        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.token', 'factory.offers'])
         .component('addOffer', {
             controller: addOfferController,
             templateUrl: 'app/pages/addOffer/addOffer.template.html' 
         });
 
 
-        function addOfferController($http, $state, tokenFactory) {
+        function addOfferController($http, $state, offersFactory) {
             var vm = this;            
 
             vm.addNewOffer = function() {
@@ -30,7 +30,7 @@
                 };
                 
                 
-                $http.post('http://localhost:8080/api/offer/new', data)
+                offersFactory.postNewOffer()
                     .then(function(res) {
                         $state.go('auth.index');
                     })

@@ -25,6 +25,7 @@
     //services
     require('./services/tokenService');
     require('./services/userService');
+    require('./services/offersService');
 
     angular
         .module('globeCode', [

@@ -43254,6 +43254,7 @@ exports.ViewService = ViewService;
     //services
     require('./services/tokenService');
     require('./services/userService');
+    require('./services/offersService');
 
     angular
         .module('globeCode', [
@@ -43283,7 +43284,7 @@ exports.ViewService = ViewService;
         });
         
 })();
-},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/foot.component":79,"./components/nav.component":80,"./components/offer.component":81,"./pages/addOffer/addOffer.component":82,"./pages/authenticated/authenticated.component":83,"./pages/index/index.component":84,"./pages/login/login.component":85,"./pages/register/register.component":86,"./services/tokenService":87,"./services/userService":88,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
+},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/foot.component":79,"./components/nav.component":80,"./components/offer.component":81,"./pages/addOffer/addOffer.component":82,"./pages/authenticated/authenticated.component":83,"./pages/index/index.component":84,"./pages/login/login.component":85,"./pages/register/register.component":86,"./services/offersService":87,"./services/tokenService":88,"./services/userService":89,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -43368,7 +43369,7 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
-        .module('comp.offerList', [])
+        .module('comp.offerList', ['factory.offers'])
         .component('offerList', {
             controller: offerController,
             templateUrl: 'app/components/offer.template.html'
@@ -43376,64 +43377,54 @@ exports.ViewService = ViewService;
 })();
 
 
-    function offerController($http, $interval) {
+    function offerController($http, offersFactory) {
         var vm = this;
+        
         vm.$onInit = function() {
-            $http.get("http://localhost:8080/api/offer/all")
+
+            offersFactory.getAllOffers()
                 .then(function(res) {
                     vm.data = [];
                     for(var i = 0; i<res.data.length;i++) {
                         vm.data.push(res.data[i].fields);
                     }
-                    vm.offersAmount = res.data.length;
+                    vm.allOffersAmount = res.data.length;
                 })
                 .catch(function(err) {
                     console.log(err);
                 });
 
-            $http.get("http://localhost:8080/api/offer/amount")
+            offersFactory.getOffersAmounts()
                 .then(function(res) {
                     vm.amounts = res.data;
                 })
                 .catch(function(err) {
                     console.log(err);
-                })  
-
+                });
         };
         
         var filtersCheckboxes = document.querySelectorAll('.check-with-label');
-
         for (var i = 0; i < filtersCheckboxes.length; i++) {
             filtersCheckboxes[i].addEventListener('change', function(event) {
                 var data = $.map(vm.Filter, function(value, index) {
                     return [value];
                 });
-                $http.post('http://localhost:8080/api/offer/search', data)
+                offersFactory.postSearchOffers(data)
                     .then(function(res) {
                         vm.data = [];
                         for(var i = 0; i<res.data.length;i++) {
                             vm.data.push(res.data[i].fields);
                         }   
-                        vm.offersAmount = res.data.length;
-                        console.log(vm.data);
+                        vm.allOffersAmount = res.data.length;
                     })
                     .catch(function(err) {
                         console.log(err);
                     });
-                $http.get("http://localhost:8080/api/offer/amount")
-                    .then(function(res) {
-                        vm.amounts = res.data;
-                    })
-                    .catch(function(err) {
-                        console.log(err);
-                })  
+                offersFactory.getOffersAmounts().then(function(res) {
+                    vm.amounts = res.data;
+                }); 
             });
         }
-        
-
-
-
-    
     } // end of controller
 },{}],82:[function(require,module,exports){
 (function(){
@@ -43441,14 +43432,14 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
-        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.token'])
+        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.token', 'factory.offers'])
         .component('addOffer', {
             controller: addOfferController,
             templateUrl: 'app/pages/addOffer/addOffer.template.html' 
         });
 
 
-        function addOfferController($http, $state, tokenFactory) {
+        function addOfferController($http, $state, offersFactory) {
             var vm = this;            
 
             vm.addNewOffer = function() {
@@ -43468,7 +43459,7 @@ exports.ViewService = ViewService;
                 };
                 
                 
-                $http.post('http://localhost:8080/api/offer/new', data)
+                offersFactory.postNewOffer()
                     .then(function(res) {
                         $state.go('auth.index');
                     })
@@ -43612,6 +43603,30 @@ exports.ViewService = ViewService;
     'use strict';
 
     angular
+        .module('factory.offers', [])
+        .factory('offersFactory', function($http){
+
+            return {
+               getAllOffers: function() {
+                    return $http.get('http://localhost:8080/api/offer/all');
+               },
+               getOffersAmounts: function() {
+                    return $http.get("http://localhost:8080/api/offer/amount");
+               },
+               postSearchOffers: function(data) {
+                    return $http.post('http://localhost:8080/api/offer/search', data);
+               }
+            }
+
+
+        });
+
+})();
+},{}],88:[function(require,module,exports){
+(function(){
+    'use strict';
+
+    angular
         .module('factory.token', ['angular-jwt'])
         .factory('tokenFactory', function(jwtHelper){
 
@@ -43643,7 +43658,7 @@ exports.ViewService = ViewService;
         });
 
 })();
-},{}],88:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 (function(){
     'use strict';
 
