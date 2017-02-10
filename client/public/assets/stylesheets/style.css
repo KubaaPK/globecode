@@ -226,6 +226,12 @@
     float: right;
     display: block;
     margin-top: 75px; }
+    .offers__amount {
+      font-family: "Overpass", sans-serif;
+      font-size: 1rem;
+      font-weight: 300; }
+      .offers__amount span {
+        font-weight: 700; }
     .offers .offer {
       border-radius: 2px;
       -webkit-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.1);
@@ -242,7 +248,6 @@
       .offers .offer__title {
         margin-bottom: 1vh;
         font-size: 1.25rem;
-        display: block;
         color: rgba(0, 0, 0, 0.9);
         text-decoration: none;
         transition: .3s; }
@@ -251,9 +256,10 @@
           transition: .3s; }
       .offers .offer .offerDetails {
         display: flex;
-        flex-direction: row; }
+        flex-direction: row;
+        margin-top: 1.5vh; }
         .offers .offer .offerDetails span {
-          width: 15%;
+          width: 18%;
           font-size: 0.70rem;
           color: rgba(0, 0, 0, 0.45); }
           .offers .offer .offerDetails span:nth-child(n+2) {

@@ -4,6 +4,13 @@
         float: right
         display: block
         margin-top: 75px
+        &__amount
+            font:
+                family: $overpass
+                size: 1rem
+                weight: 300
+            span
+                font-weight: 700
 
         .offer
             border-radius: 2px
@@ -22,7 +29,6 @@
                 margin-bottom: 1vh
                 font:
                     size: 1.25rem
-                display: block
                 color: rgba(#000000, .9)
                 text-decoration: none
                 transition: .3s
@@ -32,8 +38,9 @@
             .offerDetails
                 display: flex
                 flex-direction: row
+                margin-top: 1.5vh
                 span
-                    width: 15%
+                    width: 18%
                     font-size: 0.70rem
                     color: rgba(#000000, .45)
                     &:nth-child(n+2)

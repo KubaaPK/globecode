@@ -4,6 +4,7 @@
     <button type="submit">Szukaj</button>
 </form>
 <div class="offers">
+    <p class="offers__amount">Wyszukano <span>{{ $ctrl.offersAmount }}</span> {{$ctrl.offerPlural}}.</p>
     <div class="offer" ng-repeat="offer in $ctrl.data | filter: {title: $ctrl.searchOfferByName, city: $ctrl.searchOfferByLocation}">
         <a ui-sref="index" class="offer__title">{{ offer.title }}</a>
         <div class="offerDetails">
