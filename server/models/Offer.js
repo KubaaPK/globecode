@@ -9,7 +9,7 @@ const offerSchema = new Schema({
         shift       : {type: String},
         companySize : {type: String},
         companyName : {type: String},
-        descrition  : {type: String},
+        description : {type: String},
         www         : {type: String},
         contact     : {type: String},
         salaryMin   : {type: Number},

@@ -3,7 +3,7 @@
 
     angular
         .module('factory.auth', ['angular-jwt'])
-        .factory('authFactory', function(jwtHelper){
+        .factory('authFactory', function(jwtHelper, $http){
 
             return {
                 saveTokenToLocalStorage: function(token) {

@@ -22,7 +22,7 @@
                     password    : vm.loginPassword
                 }
 
-                authFactory.authenticateUser()
+                authFactory.authenticateUser(data)
                     .then(function(res) {
                         authFactory.saveTokenToLocalStorage(res.data.token);
                         userFactory.saveUserDataToLocalStorage(res.data.user);

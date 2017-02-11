@@ -36,7 +36,12 @@
                     name        : 'addOffer',
                     url         : '/authenticated/addOffer',
                     component   : 'addOffer'
-                });
+                })
+                .state('offerDetail', {
+                    name        : 'offerDetail',
+                    url         : '/offer/:offerId',
+                    component   : 'offerDetails'
+                })
 
             $locationProvider.html5Mode(true);
 

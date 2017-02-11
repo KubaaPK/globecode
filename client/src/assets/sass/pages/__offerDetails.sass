@@ -1,0 +1,100 @@
+@media only screen and (max-width : 100em)
+    .offerDetails
+        padding: 2% 10%
+        display: flex
+        flex-direction: row
+        &__firmname
+            color: rgba(#000000, .7)
+            margin-bottom: 6vh
+            text-align: center
+            font:
+                size: 1.5rem
+                family: $overpass
+                weight: 700
+
+        .jobDetails
+            padding: 2.5% 0 
+            display: block
+            width: 65%
+            height: auto
+            margin-right: 5%
+            background-color: #FFFFFF
+            order: 1
+            -webkit-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.05)
+            -moz-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.05)
+            box-shadow: 0px 0px 3px 1px rgba(158,158,158,.05)
+        
+            &__jobTitle
+                position: relative
+                color: rgba(#000000, .7)
+                margin-top: 2.5vh
+                text-align: center
+                font:
+                    size: 1.75rem
+                    family: $overpass   
+                    weight: 700
+            
+            &__jobDescription
+                padding: 0 5% 25% 5% 
+                position: relative
+                top: 15vh
+                font:
+                    family: $slabo
+                    size: 1.25rem
+                line-height: 1.75rem
+
+
+
+            &__detailsWrapper
+                position: relative
+                top: 2vh
+                display: flex
+                flex-direction: row
+                text-align: center
+                padding: 3% 0
+                width: 90%
+                margin: 0 auto
+                border-top: 1px solid rgba(#000000, .2)
+                border-bottom: 1px solid rgba(#000000, .2)
+                &__detail
+                    width: 25%
+                    opacity: .6
+                    font:
+                        size: .75rem
+                        family: $overpass
+                    i
+                        margin-right: 5%
+
+        .contactDetails
+            order: 2
+            align-self: flex-start
+            padding: 2.5%
+            box-sizing: border-box
+            width: 30%
+            display: block
+            background-color: #FFFFFF
+            border-radius: 3px
+            -webkit-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.05)
+            -moz-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.05)
+            box-shadow: 0px 0px 3px 1px rgba(158,158,158,.05)
+
+            hr
+                margin: 2vh 0
+                display: block
+                height: .001rem
+                opacity: .2
+
+
+            p
+                text-align: center
+                a
+                    font:
+                        size: 1rem
+                        family: $overpass
+                        weight: 300
+                    text-decoration: none
+                    color: rgba(#000000, .7)
+                    transition: .2s
+                    &:hover
+                        color: #000000
+                        transition: .2s

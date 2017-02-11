@@ -30,7 +30,7 @@
                 };
                 
                 
-                offersFactory.postNewOffer()
+                offersFactory.postNewOffer(data)
                     .then(function(res) {
                         $state.go('auth.index');
                     })

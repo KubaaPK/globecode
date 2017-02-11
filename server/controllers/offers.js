@@ -37,6 +37,22 @@ router.get('/all', (req, res, next) => {
 });
 
 /*
+    Get exact offer details by given ID
+*/
+
+router.get('/detail/:id', (req, res, next ) => {
+    
+    Offer.findOne({_id: req.params.id}, (err, offer ) => {
+        if(err) {
+            console.log(err);
+        } else {
+            res.json(offer);
+        }
+    })
+});
+
+
+/*
     Search offers by params given by post request
 */
 router.post('/search', (req, res, next) => {

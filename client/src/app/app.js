@@ -21,6 +21,7 @@
     require('./pages/login/login.component');
     require('./pages/authenticated/authenticated.component');
     require('./pages/addOffer/addOffer.component');
+    require('./pages/offerDetails/offerDetails.component');
 
     //services
     require('./services/authService');
@@ -37,7 +38,8 @@
             'page.register',
             'page.login',
             'page.authenticated',
-            'page.addOffer'
+            'page.addOffer',
+            'page.offerDetails'
         ])
         .run(function($trace, $transitions, $state, authFactory) {
             $transitions.onStart({ to: 'auth.**' }, function(trans) {
@@ -47,7 +49,7 @@
                 }
             });
              $transitions.onStart({ to: ['login', 'register', 'index'] }, function(trans) {
-                var auth = trans.injector().get('tokenFactory')
+                var auth = trans.injector().get('authFactory')
                 if (!auth.isTokenExpired()) {
                 return trans.router.stateService.target('auth.index');
                 }

@@ -6,7 +6,7 @@
 <div class="offers">
     <p class="offers__amount"><span>{{ $ctrl.allOffersAmount }}</span> wyszukanych ofert.</p>
     <div class="offer" ng-repeat="offer in $ctrl.data | filter: {title: $ctrl.searchOfferByName, city: $ctrl.searchOfferByLocation}">
-        <a ui-sref="index" class="offer__title">{{ offer.title }}</a>
+        <a ui-sref="offerDetail({offerId: $ctrl.offerId[$index]})" class="offer__title">{{ offer.title }}</a>
         <div class="offerDetails">
             <span class="offer__salary"><i class="fa fa-money" aria-hidden="true"></i> {{ offer.salaryMin }} - {{ offer.salaryMax }} PLN</span>
             <span class="offer__city"><i class="fa fa-globe" aria-hidden="true"></i> {{ offer.city }}</span>
@@ -14,6 +14,7 @@
             <span class="offer__shift"><i class="fa fa-briefcase" aria-hidden="true"></i> {{ offer.shift }}</span>
             <span class="offer__companySize"><i class="fa fa-users" aria-hidden="true"></i> {{ offer.companySize }}</span>
         </div>
+    
     </div>
 </div>
 

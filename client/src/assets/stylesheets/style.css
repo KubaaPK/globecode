@@ -1,4 +1,5 @@
-@import url("https://fonts.googleapis.com/css?family=Overpass:300,400,700");
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,700");
+@import url("https://fonts.googleapis.com/css?family=Slabo+27px");
 @media only screen and (max-width: 100em) {
   .nav {
     width: 100%;
@@ -19,7 +20,7 @@
         .nav__list__element__link {
           text-decoration: none;
           text-transform: uppercase;
-          font-family: "Overpass", sans-serif;
+          font-family: "Lato", sans-serif;
           font-size: 0.9rem;
           color: rgba(0, 0, 0, 0.7);
           transition: .3s; }
@@ -64,12 +65,12 @@
     .footer__text {
       width: 50%; }
       .footer__text__title {
-        font-family: "Overpass", sans-serif;
+        font-family: "Lato", sans-serif;
         font-size: 1.1rem;
         font-weight: 700;
         color: rgba(0, 0, 0, 0.7); }
       .footer__text__subtitle {
-        font-family: "Overpass", sans-serif;
+        font-family: "Lato", sans-serif;
         font-size: 0.85rem;
         font-weight: 400;
         letter-spacing: .05rem;
@@ -84,7 +85,7 @@
         margin: 0 1%; }
         .footer__nav__element__link {
           color: rgba(0, 0, 0, 0.7);
-          font-family: "Overpass", sans-serif;
+          font-family: "Lato", sans-serif;
           font-size: 0.85rem;
           text-decoration: none; } }
 
@@ -108,10 +109,10 @@
       text-align: center;
       border-bottom: 3px solid #25a258;
       font-size: 1.5rem;
-      font-family: "Overpass", sans-serif; }
+      font-family: "Lato", sans-serif; }
     .loginregisterForm label {
       margin-left: 5%;
-      font-family: "Overpass", sans-serif;
+      font-family: "Lato", sans-serif;
       font-size: .9rem; }
     .loginregisterForm input {
       box-sizing: border-box;
@@ -123,7 +124,7 @@
       border: 0;
       border-bottom: 1px solid #DDDDDD;
       background-color: #FFFFFF;
-      font-family: "Overpass", sans-serif;
+      font-family: "Lato", sans-serif;
       font-size: .9rem;
       transition: .2s; }
       .loginregisterForm input:focus {
@@ -143,7 +144,7 @@
       border-bottom: 5px solid #25a258;
       color: #FFFFFF;
       font-size: 1rem;
-      font-family: "Overpass", sans-serif;
+      font-family: "Lato", sans-serif;
       transition: .3s; }
       .loginregisterForm button:hover {
         background-color: #29b763;
@@ -164,7 +165,7 @@
       width: 36.5%;
       border: 1px solid #DDDDDD;
       border-radius: 3px;
-      font-family: "Overpass", sans-serif;
+      font-family: "Lato", sans-serif;
       font-size: .85rem;
       -webkit-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
       -moz-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
@@ -180,7 +181,7 @@
       width: 15%;
       height: 45px;
       font-size: .8rem;
-      font-family: "Overpass", sans-serif;
+      font-family: "Lato", sans-serif;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .1rem;
@@ -208,7 +209,7 @@
     .categories__list {
       list-style-type: none;
       padding-left: 0;
-      font-family: "Overpass", sans-serif; }
+      font-family: "Lato", sans-serif; }
       .categories__list__categoryAmount {
         margin-right: 10%; }
       .categories__list__title {
@@ -247,13 +248,15 @@
         opacity: 1; } }
 
 @media only screen and (max-width: 100em) {
+  a {
+    cursor: pointer; }
   .offers {
     width: 70%;
     float: right;
     display: block;
     margin-top: 75px; }
     .offers__amount {
-      font-family: "Overpass", sans-serif;
+      font-family: "Lato", sans-serif;
       font-size: 1rem;
       font-weight: 300; }
       .offers__amount span {
@@ -270,7 +273,7 @@
       margin: 1vh 0;
       padding: 3vh 2%;
       box-sizing: border-box;
-      font-family: "Overpass", sans-serif; }
+      font-family: "Lato", sans-serif; }
       .offers .offer__title {
         position: relative;
         margin-bottom: 1vh;
@@ -299,13 +302,16 @@
       .offers .offer .offerDetails {
         display: flex;
         flex-direction: row;
-        margin-top: 1.5vh; }
+        margin-top: 1.5vh;
+        padding-left: 0; }
         .offers .offer .offerDetails span {
           width: 18%;
           font-size: 0.70rem;
           color: rgba(0, 0, 0, 0.45); }
+          .offers .offer .offerDetails span i {
+            margin-right: 5%; }
           .offers .offer .offerDetails span:nth-child(n+2) {
-            width: 10%; } }
+            width: 12%; } }
 
 body {
   font-size: 62.5%;
@@ -342,7 +348,7 @@ body {
     .addOffer__wrapper {
       padding: 2.5% 25%;
       font-size: 1rem;
-      font-family: "Overpass", sans-serif; }
+      font-family: "Lato", sans-serif; }
       .addOffer__wrapper .addOfferForm {
         padding: 0 0 5% 0;
         display: block;
@@ -354,7 +360,7 @@ body {
         .addOffer__wrapper .addOfferForm__title {
           padding: 7.5% 0;
           margin-bottom: 10vh;
-          font-family: "Overpass", sans-serif;
+          font-family: "Lato", sans-serif;
           font-size: 2rem;
           text-align: center;
           display: block;
@@ -362,7 +368,7 @@ body {
           color: #FFFFFF;
           border-bottom: 3px solid #25a258; }
         .addOffer__wrapper .addOfferForm__subtitle {
-          font-family: "Overpass", sans-serif;
+          font-family: "Lato", sans-serif;
           font-size: 1.5rem;
           font-weight: 700;
           display: block;
@@ -403,7 +409,7 @@ body {
             margin-bottom: 1vh;
             display: block;
             font-size: 1rem;
-            font-family: "Overpass", sans-serif;
+            font-family: "Lato", sans-serif;
             font-weight: 300; }
           .addOffer__wrapper .addOfferForm__inputWrapper select, .addOffer__wrapper .addOfferForm__inputWrapper input {
             height: 45px; }
@@ -428,7 +434,7 @@ body {
             text-transform: uppercase;
             transition: .3s;
             font-size: 1rem;
-            font-family: "Overpass", sans-serif; }
+            font-family: "Lato", sans-serif; }
             .addOffer__wrapper .addOfferForm .buttons button:hover {
               background-color: #29b763;
               cursor: pointer;
@@ -447,3 +453,89 @@ body {
               .addOffer__wrapper .addOfferForm .buttons button:nth-child(2):focus {
                 outline: 0;
                 border-color: #2ECC6E; } }
+
+@media only screen and (max-width: 100em) {
+  .offerDetails {
+    padding: 2% 10%;
+    display: flex;
+    flex-direction: row; }
+    .offerDetails__firmname {
+      color: rgba(0, 0, 0, 0.7);
+      margin-bottom: 6vh;
+      text-align: center;
+      font-size: 1.5rem;
+      font-family: "Lato", sans-serif;
+      font-weight: 700; }
+    .offerDetails .jobDetails {
+      padding: 2.5% 0;
+      display: block;
+      width: 65%;
+      height: auto;
+      margin-right: 5%;
+      background-color: #FFFFFF;
+      order: 1;
+      -webkit-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.05);
+      -moz-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.05);
+      box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.05); }
+      .offerDetails .jobDetails__jobTitle {
+        position: relative;
+        color: rgba(0, 0, 0, 0.7);
+        margin-top: 2.5vh;
+        text-align: center;
+        font-size: 1.75rem;
+        font-family: "Lato", sans-serif;
+        font-weight: 700; }
+      .offerDetails .jobDetails__jobDescription {
+        padding: 0 5% 25% 5%;
+        position: relative;
+        top: 15vh;
+        font-family: "Slabo 27px", serif;
+        font-size: 1.25rem;
+        line-height: 1.75rem; }
+      .offerDetails .jobDetails__detailsWrapper {
+        position: relative;
+        top: 2vh;
+        display: flex;
+        flex-direction: row;
+        text-align: center;
+        padding: 3% 0;
+        width: 90%;
+        margin: 0 auto;
+        border-top: 1px solid rgba(0, 0, 0, 0.2);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
+        .offerDetails .jobDetails__detailsWrapper__detail {
+          width: 25%;
+          opacity: .6;
+          font-size: .75rem;
+          font-family: "Lato", sans-serif; }
+          .offerDetails .jobDetails__detailsWrapper__detail i {
+            margin-right: 5%; }
+    .offerDetails .contactDetails {
+      order: 2;
+      align-self: flex-start;
+      padding: 2.5%;
+      box-sizing: border-box;
+      width: 30%;
+      display: block;
+      background-color: #FFFFFF;
+      border-radius: 3px;
+      -webkit-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.05);
+      -moz-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.05);
+      box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.05); }
+      .offerDetails .contactDetails hr {
+        margin: 2vh 0;
+        display: block;
+        height: .001rem;
+        opacity: .2; }
+      .offerDetails .contactDetails p {
+        text-align: center; }
+        .offerDetails .contactDetails p a {
+          font-size: 1rem;
+          font-family: "Lato", sans-serif;
+          font-weight: 300;
+          text-decoration: none;
+          color: rgba(0, 0, 0, 0.7);
+          transition: .2s; }
+          .offerDetails .contactDetails p a:hover {
+            color: #000000;
+            transition: .2s; } }

@@ -43250,6 +43250,7 @@ exports.ViewService = ViewService;
     require('./pages/login/login.component');
     require('./pages/authenticated/authenticated.component');
     require('./pages/addOffer/addOffer.component');
+    require('./pages/offerDetails/offerDetails.component');
 
     //services
     require('./services/authService');
@@ -43266,7 +43267,8 @@ exports.ViewService = ViewService;
             'page.register',
             'page.login',
             'page.authenticated',
-            'page.addOffer'
+            'page.addOffer',
+            'page.offerDetails'
         ])
         .run(function($trace, $transitions, $state, authFactory) {
             $transitions.onStart({ to: 'auth.**' }, function(trans) {
@@ -43276,7 +43278,7 @@ exports.ViewService = ViewService;
                 }
             });
              $transitions.onStart({ to: ['login', 'register', 'index'] }, function(trans) {
-                var auth = trans.injector().get('tokenFactory')
+                var auth = trans.injector().get('authFactory')
                 if (!auth.isTokenExpired()) {
                 return trans.router.stateService.target('auth.index');
                 }
@@ -43284,7 +43286,7 @@ exports.ViewService = ViewService;
         });
         
 })();
-},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/foot.component":79,"./components/nav.component":80,"./components/offer.component":81,"./pages/addOffer/addOffer.component":82,"./pages/authenticated/authenticated.component":83,"./pages/index/index.component":84,"./pages/login/login.component":85,"./pages/register/register.component":86,"./services/authService":87,"./services/offersService":88,"./services/userService":89,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
+},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/foot.component":79,"./components/nav.component":80,"./components/offer.component":81,"./pages/addOffer/addOffer.component":82,"./pages/authenticated/authenticated.component":83,"./pages/index/index.component":84,"./pages/login/login.component":85,"./pages/offerDetails/offerDetails.component":86,"./pages/register/register.component":87,"./services/authService":88,"./services/offersService":89,"./services/userService":90,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -43323,7 +43325,12 @@ exports.ViewService = ViewService;
                     name        : 'addOffer',
                     url         : '/authenticated/addOffer',
                     component   : 'addOffer'
-                });
+                })
+                .state('offerDetail', {
+                    name        : 'offerDetail',
+                    url         : '/offer/:offerId',
+                    component   : 'offerDetails'
+                })
 
             $locationProvider.html5Mode(true);
 
@@ -43385,8 +43392,10 @@ exports.ViewService = ViewService;
             offersFactory.getAllOffers()
                 .then(function(res) {
                     vm.data = [];
+                    vm.offerId = [];
                     for(var i = 0; i<res.data.length;i++) {
                         vm.data.push(res.data[i].fields);
+                        vm.offerId.push(res.data[i]._id);
                     }
                     vm.allOffersAmount = res.data.length;
                 })
@@ -43459,7 +43468,7 @@ exports.ViewService = ViewService;
                 };
                 
                 
-                offersFactory.postNewOffer()
+                offersFactory.postNewOffer(data)
                     .then(function(res) {
                         $state.go('auth.index');
                     })
@@ -43541,7 +43550,7 @@ exports.ViewService = ViewService;
                     password    : vm.loginPassword
                 }
 
-                authFactory.authenticateUser()
+                authFactory.authenticateUser(data)
                     .then(function(res) {
                         authFactory.saveTokenToLocalStorage(res.data.token);
                         userFactory.saveUserDataToLocalStorage(res.data.user);
@@ -43556,6 +43565,39 @@ exports.ViewService = ViewService;
 
 })();
 },{}],86:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
+        .module('page.offerDetails', ['comp.authenticatedNav','comp.foot', 'factory.auth', 'factory.offers'])
+        .component('offerDetails', {
+            controller: offerDetailsController,
+            templateUrl: 'app/pages/offerDetails/offerDetails.template.html' 
+        });
+
+
+        function offerDetailsController($http, $state, $stateParams, offersFactory) {
+            var vm = this;            
+            
+            var offerID = $stateParams.offerId;
+            
+            vm.$onInit = function() {
+                offersFactory.getOfferDetails(offerID).then(function(res) {
+                    vm.details = res.data.fields;
+                    console.log(vm.details);           
+                })
+                .catch(function(err){
+                    console.log(err);
+                })
+            }
+
+
+
+        }
+
+})();
+},{}],87:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43597,13 +43639,13 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],87:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function(){
     'use strict';
 
     angular
         .module('factory.auth', ['angular-jwt'])
-        .factory('authFactory', function(jwtHelper){
+        .factory('authFactory', function(jwtHelper, $http){
 
             return {
                 saveTokenToLocalStorage: function(token) {
@@ -43636,7 +43678,7 @@ exports.ViewService = ViewService;
         });
 
 })();
-},{}],88:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -43648,6 +43690,9 @@ exports.ViewService = ViewService;
                getAllOffers: function() {
                     return $http.get('http://localhost:8080/api/offer/all');
                },
+               getOfferDetails: function(offerID) {
+                    return $http.get('http://localhost:8080/api/offer/detail/' + offerID);
+               },
                getOffersAmounts: function() {
                     return $http.get("http://localhost:8080/api/offer/amount");
                },
@@ -43655,7 +43700,7 @@ exports.ViewService = ViewService;
                     return $http.post('http://localhost:8080/api/offer/search', data);
                },
                postNewOffer: function(data) {
-                   $http.post('http://localhost:8080/api/offer/new', data);
+                    return $http.post('http://localhost:8080/api/offer/new', data);
                }
             }
 
@@ -43663,7 +43708,7 @@ exports.ViewService = ViewService;
         });
 
 })();
-},{}],89:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 (function(){
     'use strict';
 
