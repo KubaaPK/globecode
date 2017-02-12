@@ -10,15 +10,18 @@
         });
 
 
-        function offerDetailsController($http, $state, $stateParams, offersFactory) {
+        function offerDetailsController($http, $state, $stateParams, $sce, offersFactory) {
             var vm = this;            
             
             var offerID = $stateParams.offerId;
-            
+           
             vm.$onInit = function() {
                 offersFactory.getOfferDetails(offerID).then(function(res) {
                     vm.details = res.data.fields;
-                    console.log(vm.details);           
+                    console.log(vm.details); 
+                    vm.jobDescriptionEscaped = function() {
+                        return $sce.trustAsHtml(vm.details.description);
+                    };          
                 })
                 .catch(function(err){
                     console.log(err);

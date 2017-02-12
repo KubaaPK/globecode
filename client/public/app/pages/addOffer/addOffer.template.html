@@ -75,7 +75,8 @@
             </div>
             <div class="addOfferForm__inputWrapper">
                 <label for="addOffer_jobDescription">Opis stanowiska<span class="addOfferForm__inputWrapper__requiredStar">*</span></label>
-                <textarea id="addOffer_jobDescription" required="true" ng-model="$ctrl.newOffer_description"></textarea>  
+                <textarea id="addOffer_jobDescription" summernote config="$ctrl.options" required="true" ng-model="$ctrl.newOffer_description"></textarea>  
+                
             </div>
             <div class="addOfferForm__inputWrapper salaryInputs">
                 <div class="salaryWrapper">

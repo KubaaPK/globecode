@@ -14,14 +14,14 @@
             &__title
                 font:
                     family: $overpass
-                    size: 1.1rem
+                    size: 2.1rem
                     weight: 700
                 color: rgba(#000000, 0.7)
                 
             &__subtitle
                 font:
                     family: $overpass
-                    size: 0.85rem
+                    size: 1.3rem
                     weight: 400
                 letter-spacing: .05rem
                 color: rgba(#000000, 0.7)
@@ -36,10 +36,30 @@
                 display: inline-block
                 margin: 0 1%
                 &__link
+                    position: relative
                     color: rgba(#000000, 0.7)
                     font:
                         family: $overpass
-                        size: 0.85rem
+                        size: 1.25rem
                     text-decoration: none
-                    
+                    transition: .3s
+                    &:after
+                        content: ''
+                        display: block
+                        position: absolute
+                        bottom: -10px
+                        left: 0
+                        width: 100%
+                        height: 1px 
+                        background-color: $gray
+                        opacity: 0
+                        transition: .3s
+                    &:hover
+                        color: #000000
+                        transition: .3s
+                        text-decoration: none
+                        &:after
+                            bottom: -3px
+                            opacity: 1
+                            transition: .3s
             

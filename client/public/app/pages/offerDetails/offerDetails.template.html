@@ -39,7 +39,7 @@
             <p class="jobDetails__jobTitle">{{ $ctrl.details.title }}</p>
             <div class="jobDetails__detailsWrapper">
                 <div class="jobDetails__detailsWrapper__detail">
-                    <i class="fa fa-money" aria-hidden="true"></i>{{ $ctrl.details.companySize }}
+                    <i class="fa fa-money" aria-hidden="true"></i>{{ $ctrl.details.salaryMin }} - {{ $ctrl.details.salaryMax }} PLN
                 </div>
                 <div class="jobDetails__detailsWrapper__detail">
                     <i class="fa fa-globe" aria-hidden="true"></i>{{ $ctrl.details.city }}
@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div class="jobDetails__jobDescription">
-                {{ $ctrl.details.description }}
+                <p ng-bind-html="$ctrl.jobDescriptionEscaped()"></p>
             </div>
         </div>
     </main>

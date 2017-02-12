@@ -5,6 +5,7 @@
     require('angular-ui-router');
     require('angular-jwt');
     require('angular-middleware');
+    require('./libs/angular-summernote');
 
     // routes
     require('./app.routes');
@@ -31,8 +32,8 @@
     angular
         .module('globeCode', [
             'ui.router',
-            'ui.router.middleware',
             'angular-jwt',
+            'summernote',
             'app.routes',
             'page.index',
             'page.register',

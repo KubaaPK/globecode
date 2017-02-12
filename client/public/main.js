@@ -43234,6 +43234,7 @@ exports.ViewService = ViewService;
     require('angular-ui-router');
     require('angular-jwt');
     require('angular-middleware');
+    require('./libs/angular-summernote');
 
     // routes
     require('./app.routes');
@@ -43260,8 +43261,8 @@ exports.ViewService = ViewService;
     angular
         .module('globeCode', [
             'ui.router',
-            'ui.router.middleware',
             'angular-jwt',
+            'summernote',
             'app.routes',
             'page.index',
             'page.register',
@@ -43286,7 +43287,7 @@ exports.ViewService = ViewService;
         });
         
 })();
-},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/foot.component":79,"./components/nav.component":80,"./components/offer.component":81,"./pages/addOffer/addOffer.component":82,"./pages/authenticated/authenticated.component":83,"./pages/index/index.component":84,"./pages/login/login.component":85,"./pages/offerDetails/offerDetails.component":86,"./pages/register/register.component":87,"./services/authService":88,"./services/offersService":89,"./services/userService":90,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
+},{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/foot.component":79,"./components/nav.component":80,"./components/offer.component":81,"./libs/angular-summernote":82,"./pages/addOffer/addOffer.component":83,"./pages/authenticated/authenticated.component":84,"./pages/index/index.component":85,"./pages/login/login.component":86,"./pages/offerDetails/offerDetails.component":87,"./pages/register/register.component":88,"./services/authService":89,"./services/offersService":90,"./services/userService":91,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -43436,6 +43437,213 @@ exports.ViewService = ViewService;
         }
     } // end of controller
 },{}],82:[function(require,module,exports){
+/*  angular-summernote v0.8.1 | (c) 2016 JeongHoon Byun | MIT license */
+/* global angular */
+angular.module('summernote', [])
+
+  .controller('SummernoteController', ['$scope', '$attrs', '$timeout', function($scope, $attrs, $timeout) {
+    'use strict';
+
+    var currentElement,
+        summernoteConfig = angular.copy($scope.summernoteConfig) || {};
+
+    if (angular.isDefined($attrs.height)) { summernoteConfig.height = +$attrs.height; }
+    if (angular.isDefined($attrs.minHeight)) { summernoteConfig.minHeight = +$attrs.minHeight; }
+    if (angular.isDefined($attrs.maxHeight)) { summernoteConfig.maxHeight = +$attrs.maxHeight; }
+    if (angular.isDefined($attrs.placeholder)) { summernoteConfig.placeholder = $attrs.placeholder; }
+    if (angular.isDefined($attrs.focus)) { summernoteConfig.focus = true; }
+    if (angular.isDefined($attrs.airmode)) { summernoteConfig.airMode = true; }
+    if (angular.isDefined($attrs.lang)) {
+      if (!angular.isDefined($.summernote.lang[$attrs.lang])) {
+        throw new Error('"' + $attrs.lang + '" lang file must be exist.');
+      }
+      summernoteConfig.lang = $attrs.lang;
+    }
+
+    summernoteConfig.callbacks = summernoteConfig.callbacks || {};
+
+    if (angular.isDefined($attrs.onInit)) {
+      summernoteConfig.callbacks.onInit = function(evt) {
+        $scope.init({evt:evt});
+      };
+    }
+    if (angular.isDefined($attrs.onEnter)) {
+      summernoteConfig.callbacks.onEnter = function(evt) {
+        $scope.enter({evt:evt});
+      };
+    }
+    if (angular.isDefined($attrs.onFocus)) {
+      summernoteConfig.callbacks.onFocus = function(evt) {
+        $scope.focus({evt:evt});
+      };
+    }
+    if (angular.isDefined($attrs.onPaste)) {
+      summernoteConfig.callbacks.onPaste = function(evt) {
+        $scope.paste({evt:evt});
+      };
+    }
+    if (angular.isDefined($attrs.onKeyup)) {
+      summernoteConfig.callbacks.onKeyup = function(evt) {
+        $scope.keyup({evt:evt});
+      };
+    }
+    if (angular.isDefined($attrs.onKeydown)) {
+      summernoteConfig.callbacks.onKeydown = function(evt) {
+        $scope.keydown({evt:evt});
+      };
+    }
+    if (angular.isDefined($attrs.onImageUpload)) {
+      summernoteConfig.callbacks.onImageUpload = function(files) {
+        $scope.imageUpload({files:files, editable: $scope.editable});
+      };
+    }
+    if (angular.isDefined($attrs.onMediaDelete)) {
+      summernoteConfig.callbacks.onMediaDelete = function(target) {
+        // make new object that has information of target to avoid error:isecdom
+        var removedMedia = {attrs: {}};
+        removedMedia.tagName = target[0].tagName;
+        angular.forEach(target[0].attributes, function(attr) {
+          removedMedia.attrs[attr.name] = attr.value;
+        });
+        $scope.mediaDelete({target: removedMedia});
+      };
+    }
+
+    this.activate = function(scope, element, ngModel) {
+      var updateNgModel = function() {
+        var newValue = element.summernote('code');
+        if (element.summernote('isEmpty')) { newValue = ''; }
+        if (ngModel && ngModel.$viewValue !== newValue) {
+          $timeout(function() {
+            ngModel.$setViewValue(newValue);
+          }, 0);
+        }
+      };
+
+      var originalOnChange = summernoteConfig.callbacks.onChange;
+      summernoteConfig.callbacks.onChange = function (contents) {
+        $timeout(function () {
+          if (element.summernote('isEmpty')) {
+            contents = '';
+          }
+          updateNgModel();
+        }, 0);
+        if (angular.isDefined($attrs.onChange)) {
+          $scope.change({contents: contents, editable: $scope.editable});
+        } else if (angular.isFunction(originalOnChange)) {
+          originalOnChange.apply(this, arguments);
+        }
+      };
+      if (angular.isDefined($attrs.onBlur)) {
+        summernoteConfig.callbacks.onBlur = function (evt) {
+          (!summernoteConfig.airMode) && element.blur();
+          $scope.blur({evt: evt});
+        };
+      }
+      element.summernote(summernoteConfig);
+
+      var editor$ = element.next('.note-editor'),
+          unwatchNgModel;
+      editor$.find('.note-toolbar').click(function() {
+        updateNgModel();
+
+        // sync ngModel in codeview mode
+        if (editor$.hasClass('codeview')) {
+          editor$.on('keyup', updateNgModel);
+          if (ngModel) {
+            unwatchNgModel = scope.$watch(function () {
+              return ngModel.$modelValue;
+            }, function(newValue) {
+              editor$.find('.note-codable').val(newValue);
+            });
+          }
+        } else {
+          editor$.off('keyup', updateNgModel);
+          if (angular.isFunction(unwatchNgModel)) {
+            unwatchNgModel();
+          }
+        }
+      });
+
+      if (ngModel) {
+        ngModel.$render = function() {
+          if (ngModel.$viewValue) {
+            element.summernote('code', ngModel.$viewValue);
+          } else {
+            element.summernote('empty');
+          }
+        };
+      }
+
+      // set editable to avoid error:isecdom since Angular v1.3
+      if (angular.isDefined($attrs.editable)) {
+        $scope.editable = editor$.find('.note-editable');
+      }
+      if (angular.isDefined($attrs.editor)) {
+        $scope.editor = element;
+      }
+
+      currentElement = element;
+      // use jquery Event binding instead $on('$destroy') to preserve options data of DOM
+      element.on('$destroy', function() {
+        element.summernote('destroy');
+        $scope.summernoteDestroyed = true;
+      });
+    };
+
+    $scope.$on('$destroy', function () {
+      // when destroying scope directly
+      if (!$scope.summernoteDestroyed) {
+        currentElement.summernote('destroy');
+      }
+    });
+  }])
+  .directive('summernote', [function() {
+    'use strict';
+
+    return {
+      restrict: 'EA',
+      transclude: 'element',
+      replace: true,
+      require: ['summernote', '?ngModel'],
+      controller: 'SummernoteController',
+      scope: {
+        summernoteConfig: '=config',
+        editable: '=',
+        editor: '=',
+        init: '&onInit',
+        enter: '&onEnter',
+        focus: '&onFocus',
+        blur: '&onBlur',
+        paste: '&onPaste',
+        keyup: '&onKeyup',
+        keydown: '&onKeydown',
+        change: '&onChange',
+        imageUpload: '&onImageUpload',
+        mediaDelete: '&onMediaDelete'
+      },
+      template: '<div class="summernote"></div>',
+      link: function(scope, element, attrs, ctrls, transclude) {
+        var summernoteController = ctrls[0],
+          ngModel = ctrls[1];
+
+          if (!ngModel) {
+            transclude(scope, function(clone, scope) {
+              // to prevent binding to angular scope (It require `tranclude: 'element'`)
+              element.append(clone.html());
+            });
+            summernoteController.activate(scope, element, ngModel);
+          } else {
+            var clearWatch = scope.$watch(function() { return ngModel.$viewValue; }, function(value) {
+              clearWatch();
+              element.append(value);
+              summernoteController.activate(scope, element, ngModel);
+            }, true);
+          }
+      }
+    };
+  }]);
+},{}],83:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43450,6 +43658,17 @@ exports.ViewService = ViewService;
 
         function addOfferController($http, $state, offersFactory) {
             var vm = this;            
+
+            vm.options = {
+                minHeight: 700,
+                fontSize: 16,
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline']],
+                    ['fontsize', ['fontsize']],
+                    ['para', ['ul', 'ol']]
+                ]
+            };
+
 
             vm.addNewOffer = function() {
                 var data = {
@@ -43467,7 +43686,7 @@ exports.ViewService = ViewService;
                     tags        : [vm.newOffer_state, vm.newOffer_shift, vm.newOffer_companySize]
                 };
                 
-                
+            
                 offersFactory.postNewOffer(data)
                     .then(function(res) {
                         $state.go('auth.index');
@@ -43484,7 +43703,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],83:[function(require,module,exports){
+},{}],84:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43506,7 +43725,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],84:[function(require,module,exports){
+},{}],85:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43525,7 +43744,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],85:[function(require,module,exports){
+},{}],86:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43564,7 +43783,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],86:[function(require,module,exports){
+},{}],87:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43577,15 +43796,18 @@ exports.ViewService = ViewService;
         });
 
 
-        function offerDetailsController($http, $state, $stateParams, offersFactory) {
+        function offerDetailsController($http, $state, $stateParams, $sce, offersFactory) {
             var vm = this;            
             
             var offerID = $stateParams.offerId;
-            
+           
             vm.$onInit = function() {
                 offersFactory.getOfferDetails(offerID).then(function(res) {
                     vm.details = res.data.fields;
-                    console.log(vm.details);           
+                    console.log(vm.details); 
+                    vm.jobDescriptionEscaped = function() {
+                        return $sce.trustAsHtml(vm.details.description);
+                    };          
                 })
                 .catch(function(err){
                     console.log(err);
@@ -43597,7 +43819,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],87:[function(require,module,exports){
+},{}],88:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -43639,7 +43861,7 @@ exports.ViewService = ViewService;
         }
 
 })();
-},{}],88:[function(require,module,exports){
+},{}],89:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -43678,7 +43900,7 @@ exports.ViewService = ViewService;
         });
 
 })();
-},{}],89:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -43708,7 +43930,7 @@ exports.ViewService = ViewService;
         });
 
 })();
-},{}],90:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 (function(){
     'use strict';
 

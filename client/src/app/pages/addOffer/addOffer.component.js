@@ -13,6 +13,17 @@
         function addOfferController($http, $state, offersFactory) {
             var vm = this;            
 
+            vm.options = {
+                minHeight: 700,
+                fontSize: 16,
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline']],
+                    ['fontsize', ['fontsize']],
+                    ['para', ['ul', 'ol']]
+                ]
+            };
+
+
             vm.addNewOffer = function() {
                 var data = {
                     title       : vm.newOffer_title,
@@ -29,7 +40,7 @@
                     tags        : [vm.newOffer_state, vm.newOffer_shift, vm.newOffer_companySize]
                 };
                 
-                
+            
                 offersFactory.postNewOffer(data)
                     .then(function(res) {
                         $state.go('auth.index');

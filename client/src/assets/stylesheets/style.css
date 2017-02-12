@@ -21,9 +21,11 @@
           text-decoration: none;
           text-transform: uppercase;
           font-family: "Lato", sans-serif;
-          font-size: 0.9rem;
+          font-size: 1.2rem;
           color: rgba(0, 0, 0, 0.7);
           transition: .3s; }
+          .nav__list__element__link:hover {
+            text-decoration: none; }
           .nav__list__element__link:after {
             content: '';
             display: block;
@@ -66,12 +68,12 @@
       width: 50%; }
       .footer__text__title {
         font-family: "Lato", sans-serif;
-        font-size: 1.1rem;
+        font-size: 2.1rem;
         font-weight: 700;
         color: rgba(0, 0, 0, 0.7); }
       .footer__text__subtitle {
         font-family: "Lato", sans-serif;
-        font-size: 0.85rem;
+        font-size: 1.3rem;
         font-weight: 400;
         letter-spacing: .05rem;
         color: rgba(0, 0, 0, 0.7); }
@@ -84,10 +86,31 @@
         display: inline-block;
         margin: 0 1%; }
         .footer__nav__element__link {
+          position: relative;
           color: rgba(0, 0, 0, 0.7);
           font-family: "Lato", sans-serif;
-          font-size: 0.85rem;
-          text-decoration: none; } }
+          font-size: 1.25rem;
+          text-decoration: none;
+          transition: .3s; }
+          .footer__nav__element__link:after {
+            content: '';
+            display: block;
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #DDDDDD;
+            opacity: 0;
+            transition: .3s; }
+          .footer__nav__element__link:hover {
+            color: #000000;
+            transition: .3s;
+            text-decoration: none; }
+            .footer__nav__element__link:hover:after {
+              bottom: -3px;
+              opacity: 1;
+              transition: .3s; } }
 
 @media only screen and (max-width: 100em) {
   .loginregisterForm {
@@ -108,12 +131,12 @@
       color: #FFFFFF;
       text-align: center;
       border-bottom: 3px solid #25a258;
-      font-size: 1.5rem;
+      font-size: 2rem;
       font-family: "Lato", sans-serif; }
     .loginregisterForm label {
       margin-left: 5%;
       font-family: "Lato", sans-serif;
-      font-size: .9rem; }
+      font-size: 1.2rem; }
     .loginregisterForm input {
       box-sizing: border-box;
       width: 90%;
@@ -125,7 +148,7 @@
       border-bottom: 1px solid #DDDDDD;
       background-color: #FFFFFF;
       font-family: "Lato", sans-serif;
-      font-size: .9rem;
+      font-size: 1.2rem;
       transition: .2s; }
       .loginregisterForm input:focus {
         outline: none;
@@ -143,7 +166,7 @@
       border-radius: 3px 3px 6px 6px;
       border-bottom: 5px solid #25a258;
       color: #FFFFFF;
-      font-size: 1rem;
+      font-size: 1.4rem;
       font-family: "Lato", sans-serif;
       transition: .3s; }
       .loginregisterForm button:hover {
@@ -166,7 +189,7 @@
       border: 1px solid #DDDDDD;
       border-radius: 3px;
       font-family: "Lato", sans-serif;
-      font-size: .85rem;
+      font-size: 1.2rem;
       -webkit-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
       -moz-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
       box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.15);
@@ -180,7 +203,7 @@
       margin-left: 5%;
       width: 15%;
       height: 45px;
-      font-size: .8rem;
+      font-size: 1.2rem;
       font-family: "Lato", sans-serif;
       font-weight: 700;
       text-transform: uppercase;
@@ -213,13 +236,14 @@
       .categories__list__categoryAmount {
         margin-right: 10%; }
       .categories__list__title {
-        font-size: 1.05rem;
+        font-size: 1.5rem;
+        font-weight: 700;
         color: rgba(0, 0, 0, 0.7);
         text-transform: uppercase;
         letter-spacing: .1rem; }
       .categories__list li {
         margin: 1vh 0;
-        font-size: .95rem;
+        font-size: 1.4rem;
         color: rgba(0, 0, 0, 0.6);
         display: flex;
         flex-direction: row; }
@@ -237,7 +261,7 @@
           width: 6px;
           border-radius: 50%;
           background-color: rgba(0, 0, 0, 0.6);
-          top: 4px;
+          top: 7px;
           left: -10px;
           opacity: 0;
           transition: .3s; }
@@ -257,7 +281,7 @@
     margin-top: 75px; }
     .offers__amount {
       font-family: "Lato", sans-serif;
-      font-size: 1rem;
+      font-size: 2rem;
       font-weight: 300; }
       .offers__amount span {
         font-weight: 700; }
@@ -277,7 +301,7 @@
       .offers .offer__title {
         position: relative;
         margin-bottom: 1vh;
-        font-size: 1.25rem;
+        font-size: 2rem;
         color: rgba(0, 0, 0, 0.9);
         text-decoration: none;
         transition: .3s; }
@@ -306,7 +330,7 @@
         padding-left: 0; }
         .offers .offer .offerDetails span {
           width: 18%;
-          font-size: 0.70rem;
+          font-size: 1.2rem;
           color: rgba(0, 0, 0, 0.45); }
           .offers .offer .offerDetails span i {
             margin-right: 5%; }
@@ -363,13 +387,15 @@ body {
           font-family: "Lato", sans-serif;
           font-size: 2rem;
           text-align: center;
+          text-transform: uppercase;
+          letter-spacing: .2rem;
           display: block;
           background-color: #2ECC6E;
           color: #FFFFFF;
           border-bottom: 3px solid #25a258; }
         .addOffer__wrapper .addOfferForm__subtitle {
           font-family: "Lato", sans-serif;
-          font-size: 1.5rem;
+          font-size: 1.75rem;
           font-weight: 700;
           display: block;
           border-bottom: 1px solid #DDDDDD;
@@ -400,7 +426,9 @@ body {
             -webkit-box-shadow: 0px 0px 3px 0px rgba(158, 158, 158, 0.15);
             -moz-box-shadow: 0px 0px 3px 0px rgba(158, 158, 158, 0.15);
             box-shadow: 0px 0px 3px 0px rgba(158, 158, 158, 0.15);
-            transition: .2s; }
+            transition: .2s;
+            font-family: "Lato", sans-serif;
+            font-size: 1.45rem; }
             .addOffer__wrapper .addOfferForm__inputWrapper select:focus, .addOffer__wrapper .addOfferForm__inputWrapper input:focus, .addOffer__wrapper .addOfferForm__inputWrapper textarea:focus, .addOffer__wrapper .addOfferForm__inputWrapper input:focus {
               outline: 0;
               border-color: #2ECC6E;
@@ -408,7 +436,7 @@ body {
           .addOffer__wrapper .addOfferForm__inputWrapper label {
             margin-bottom: 1vh;
             display: block;
-            font-size: 1rem;
+            font-size: 1.75rem;
             font-family: "Lato", sans-serif;
             font-weight: 300; }
           .addOffer__wrapper .addOfferForm__inputWrapper select, .addOffer__wrapper .addOfferForm__inputWrapper input {
@@ -433,7 +461,7 @@ body {
             color: #FFFFFF;
             text-transform: uppercase;
             transition: .3s;
-            font-size: 1rem;
+            font-size: 1.45rem;
             font-family: "Lato", sans-serif; }
             .addOffer__wrapper .addOfferForm .buttons button:hover {
               background-color: #29b763;
@@ -463,7 +491,7 @@ body {
       color: rgba(0, 0, 0, 0.7);
       margin-bottom: 6vh;
       text-align: center;
-      font-size: 1.5rem;
+      font-size: 2rem;
       font-family: "Lato", sans-serif;
       font-weight: 700; }
     .offerDetails .jobDetails {
@@ -480,18 +508,16 @@ body {
       .offerDetails .jobDetails__jobTitle {
         position: relative;
         color: rgba(0, 0, 0, 0.7);
-        margin-top: 2.5vh;
+        margin-top: 3.5vh;
         text-align: center;
-        font-size: 1.75rem;
+        font-size: 2.75rem;
         font-family: "Lato", sans-serif;
         font-weight: 700; }
       .offerDetails .jobDetails__jobDescription {
         padding: 0 5% 25% 5%;
         position: relative;
         top: 15vh;
-        font-family: "Slabo 27px", serif;
-        font-size: 1.25rem;
-        line-height: 1.75rem; }
+        font-family: "Slabo 27px", serif; }
       .offerDetails .jobDetails__detailsWrapper {
         position: relative;
         top: 2vh;
@@ -506,7 +532,7 @@ body {
         .offerDetails .jobDetails__detailsWrapper__detail {
           width: 25%;
           opacity: .6;
-          font-size: .75rem;
+          font-size: 1.2rem;
           font-family: "Lato", sans-serif; }
           .offerDetails .jobDetails__detailsWrapper__detail i {
             margin-right: 5%; }
@@ -526,13 +552,13 @@ body {
         margin: 2vh 0;
         display: block;
         height: .001rem;
-        opacity: .2; }
+        opacity: .5; }
       .offerDetails .contactDetails p {
         text-align: center; }
         .offerDetails .contactDetails p a {
-          font-size: 1rem;
+          font-size: 1.25rem;
           font-family: "Lato", sans-serif;
-          font-weight: 300;
+          font-weight: 400;
           text-decoration: none;
           color: rgba(0, 0, 0, 0.7);
           transition: .2s; }
