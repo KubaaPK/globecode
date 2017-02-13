@@ -15,7 +15,6 @@
 
             vm.options = {
                 minHeight: 700,
-                fontSize: 16,
                 toolbar: [
                     ['style', ['bold', 'italic', 'underline']],
                     ['fontsize', ['fontsize']],

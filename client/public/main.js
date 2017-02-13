@@ -43661,7 +43661,6 @@ angular.module('summernote', [])
 
             vm.options = {
                 minHeight: 700,
-                fontSize: 16,
                 toolbar: [
                     ['style', ['bold', 'italic', 'underline']],
                     ['fontsize', ['fontsize']],
@@ -43731,7 +43730,7 @@ angular.module('summernote', [])
     'use strict';
 
     angular
-        .module('page.index', ['comp.nav', 'comp.foot', 'factory.auth'])
+        .module('page.index', ['comp.nav', 'comp.foot', 'factory.auth', 'comp.offerList'])
         .component('index', {
             templateUrl: 'app/pages/index/index.template.html',
             controller: indexController
