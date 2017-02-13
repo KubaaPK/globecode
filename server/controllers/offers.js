@@ -62,18 +62,27 @@ router.get('/detail/:id', (req, res, next ) => {
     Search offers by params given by post request
 */
 router.post('/search', (req, res, next) => {
-    let filters = req.body;
-    Array.prototype.clean = function(deleteValue) {
-    for (var i = 0; i < this.length; i++) {
-        if (this[i] == deleteValue) {         
-        this.splice(i, 1);
-        i--;
-        }
+    let filters = [];
+    for(var key in req.body) {
+        filters.push(req.body[key]);
+        
     }
-    return this;
-    };
-    filters.clean(null);
-    console.log(filters);
+
+    // for (let i = 0; i<3;i++) {
+    //     filters.push(req.body[i]);
+    // }
+
+    // Array.prototype.clean = function(deleteValue) {
+    // for (var i = 0; i < this.length; i++) {
+    //     if (this[i] == deleteValue) {         
+    //     this.splice(i, 1);
+    //     i--;
+    //     }
+    // }
+    // return this;
+    // };
+    // filters.clean(null);
+    // console.log(filters);
     if(filters.length === 0) {
         Offer.find({}, (err, offers) => {
             if(err) {
