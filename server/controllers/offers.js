@@ -6,6 +6,10 @@ const Offer   = require('../models/Offer');
 /*
     Add new offer to database
 */
+
+
+
+
 router.post('/new', (req, res, next) => {
     let data = req.body;
 
@@ -20,8 +24,10 @@ router.post('/new', (req, res, next) => {
         } else {
             res.json({message: "Pomyślnie dodano ofertę."});
         }
-    })
+    });
 });
+
+
 
 /*
     Get all offers as a json object
@@ -172,6 +178,11 @@ router.get('/amount', (req, res, next) => {
         }
     })
 });
+
+
+
+
+
 
 
 module.exports = router;

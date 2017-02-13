@@ -15,7 +15,7 @@ const JWTAuth = ((req, res, next) => {
   if (token) {
 
     // verifies secret and checks exp
-    jwt.verify(token, "asdasALSDJaklsjdlajlkj312lk3jLASKDJ", (err, decoded) => {      
+    jwt.verify(token, app.get('authSecretVariable') , (err, decoded) => {      
       if (err) {
         return res.json({ success: false, message: 'Failed to authenticate token.' });    
       } else {
@@ -58,7 +58,7 @@ router.post('/new', (req, res, next) => {
           const userDataToSent = {
             email: userData.email
           }
-          const TOKEN = jwt.sign(newUser, "asdasALSDJaklsjdlajlkj312lk3jLASKDJ", {
+          const TOKEN = jwt.sign(newUser, app.get('authSecretVariable'), {
               expiresIn: 60*60*4
             });
             res.json({
