@@ -1,10 +1,11 @@
 const express = require('express');
+const app = express();
 const bcrypt  = require('bcrypt-nodejs');
 const jwt     = require('jsonwebtoken');
 const router  = express.Router();
-
+const auth = require('./../config/auth');
 const User    = require('../models/User'); 
-
+app.set('authSecretVariable', auth.secret); 
 
 
 const JWTAuth = ((req, res, next) => {
@@ -99,7 +100,7 @@ router.post('/authenticate', (req, res, next) => {
             const userDataToSent = {
               email: user.email
             }
-            const TOKEN = jwt.sign(user, "asdasALSDJaklsjdlajlkj312lk3jLASKDJ", {
+            const TOKEN = jwt.sign(user, app.get('authSecretVariable'), {
               expiresIn: 60*60*24
             });
             res.json({

@@ -9,6 +9,33 @@
         border-top: 1px solid $gray 
         display: flex
 
+        .opacity-visible
+            opacity: 1 !important
+            transition: .3s
+
+        .backToTop
+            position: fixed
+            right: 2.5%
+            bottom: 5%
+            display: block
+            color: #FFFFFF
+            font-size: 2rem
+            padding: .25% .5%
+            color: #FFFFFF
+            background-color: $green
+            border-radius: 3px 3px 6px 6px
+            border: 1px solid darken($green, 5%)
+            border-bottom: 3px solid darken($green, 5%)
+            transition: .2s
+            opacity: 0
+            transition: .3s
+            &:hover
+                background-color: darken($green, 5%)
+                transition: .2s
+                cursor: pointer
+            &:focus
+                outline: 0
+
         &__text
             width: 50%
             &__title

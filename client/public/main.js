@@ -43381,6 +43381,17 @@ exports.ViewService = ViewService;
         .component('footBar', {
             templateUrl: 'app/components/foot.template.html' 
         });
+
+
+        window.addEventListener('scroll', function(){
+            if(window.pageYOffset > 600) {
+                document.querySelector('.backToTop').classList.add('opacity-visible');
+            } else {
+                document.querySelector('.backToTop').classList.remove('opacity-visible');
+            }
+        });
+
+
 })();
 },{}],80:[function(require,module,exports){
 (function(){
@@ -43872,12 +43883,13 @@ angular.module('summernote', [])
                     password    : vm.registerPassword
                 }
 
-                userFactory.postNewUser()
+                userFactory.postNewUser(data)
                     .then(function(res) {
                         if(res.data.token) {
                             authFactory.saveTokenToLocalStorage(res.data.token);
                             userFactory.saveUserDataToLocalStorage(res.data.user);
                             $state.go('auth.index');
+                        
                         }
                     })
                     .catch(function(err) {
@@ -43920,7 +43932,11 @@ angular.module('summernote', [])
                     localStorage.removeItem("authToken");
                 },
                 authenticateUser: function(data) {
-                    return $http.post('http://localhost:8080/api/users/authenticate', data);
+                    return $http.post('http://localhost:8080/api/users/authenticate', data, {
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded'
+                                    } 
+                    });
                 }
 
             }
@@ -43984,7 +44000,11 @@ angular.module('summernote', [])
                     return localStorage.getItem("user");
                 },
                 postNewUser: function(data) {
-                    return $http.post('http://localhost:8080/api/users/new', data)
+                    return $http.post('http://localhost:8080/api/users/new', data, {
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded'
+                                    } 
+                    });
                 }
             }
 

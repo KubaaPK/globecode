@@ -27,7 +27,11 @@
                     localStorage.removeItem("authToken");
                 },
                 authenticateUser: function(data) {
-                    return $http.post('http://localhost:8080/api/users/authenticate', data);
+                    return $http.post('http://localhost:8080/api/users/authenticate', data, {
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded'
+                                    } 
+                    });
                 }
 
             }

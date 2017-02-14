@@ -21,12 +21,13 @@
                     password    : vm.registerPassword
                 }
 
-                userFactory.postNewUser()
+                userFactory.postNewUser(data)
                     .then(function(res) {
                         if(res.data.token) {
                             authFactory.saveTokenToLocalStorage(res.data.token);
                             userFactory.saveUserDataToLocalStorage(res.data.user);
                             $state.go('auth.index');
+                        
                         }
                     })
                     .catch(function(err) {
