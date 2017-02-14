@@ -38,7 +38,6 @@
                     salaryMax   : vm.newOffer_salaryMax,
                     tags        : [vm.newOffer_state, vm.newOffer_shift, vm.newOffer_companySize]
                 };
-                
             
                 offersFactory.postNewOffer(data)
                     .then(function(res) {

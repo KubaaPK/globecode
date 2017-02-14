@@ -15,7 +15,7 @@
         var vm = this;
         
         vm.$onInit = function() {
-
+            vm.offersDisplayLimit = 5;
             offersFactory.getAllOffers()
                 .then(function(res) {
                     vm.data = [];
@@ -39,12 +39,18 @@
                 });
         };
         
+
+       
+     
+
+
         var filtersCheckboxes = document.querySelectorAll('.check-with-label');
         for (var i = 0; i < filtersCheckboxes.length; i++) {
             filtersCheckboxes[i].addEventListener('change', function(event) {
                 var data = $.map(vm.Filter, function(value, index) {
                     return [value];
                 });
+                
                 offersFactory.postSearchOffers(data)
                     .then(function(res) {
                         vm.data = [];
@@ -61,4 +67,7 @@
                 }); 
             });
         }
+
+       
+
     } // end of controller

@@ -43284,8 +43284,30 @@ exports.ViewService = ViewService;
                 return trans.router.stateService.target('auth.index');
                 }
             });
-        });
-        
+        })
+        .run(function($http, $httpParamSerializerJQLike) {
+            $http.defaults.transformRequest.unshift($httpParamSerializerJQLike);
+        })
+        .config(['$httpProvider', function ($httpProvider) {
+
+            $httpProvider.defaults.headers.common = {};
+            $httpProvider.defaults.headers.post = {};
+            $httpProvider.defaults.headers.put = {};
+            $httpProvider.defaults.headers.patch = {};
+
+            $httpProvider.defaults.transformRequest.unshift(function (data, headersGetter) {
+                var key, result = [];
+
+                if (typeof data === "string")
+                return data;
+
+                for (key in data) {
+                if (data.hasOwnProperty(key))
+                    result.push(encodeURIComponent(key) + "=" + encodeURIComponent(data[key]));
+                }
+                return result.join("&");
+            });
+        }]);
 })();
 },{"./app.routes":77,"./components/authenticatedNav.component":78,"./components/foot.component":79,"./components/nav.component":80,"./components/offer.component":81,"./libs/angular-summernote":82,"./pages/addOffer/addOffer.component":83,"./pages/authenticated/authenticated.component":84,"./pages/index/index.component":85,"./pages/login/login.component":86,"./pages/offerDetails/offerDetails.component":87,"./pages/register/register.component":88,"./services/authService":89,"./services/offersService":90,"./services/userService":91,"angular":19,"angular-jwt":2,"angular-middleware":3,"angular-ui-router":7}],77:[function(require,module,exports){
 (function () {
@@ -43389,7 +43411,7 @@ exports.ViewService = ViewService;
         var vm = this;
         
         vm.$onInit = function() {
-
+            vm.offersDisplayLimit = 5;
             offersFactory.getAllOffers()
                 .then(function(res) {
                     vm.data = [];
@@ -43413,12 +43435,18 @@ exports.ViewService = ViewService;
                 });
         };
         
+
+       
+     
+
+
         var filtersCheckboxes = document.querySelectorAll('.check-with-label');
         for (var i = 0; i < filtersCheckboxes.length; i++) {
             filtersCheckboxes[i].addEventListener('change', function(event) {
                 var data = $.map(vm.Filter, function(value, index) {
                     return [value];
                 });
+                
                 offersFactory.postSearchOffers(data)
                     .then(function(res) {
                         vm.data = [];
@@ -43435,6 +43463,9 @@ exports.ViewService = ViewService;
                 }); 
             });
         }
+
+       
+
     } // end of controller
 },{}],82:[function(require,module,exports){
 /*  angular-summernote v0.8.1 | (c) 2016 JeongHoon Byun | MIT license */
@@ -43684,7 +43715,6 @@ angular.module('summernote', [])
                     salaryMax   : vm.newOffer_salaryMax,
                     tags        : [vm.newOffer_state, vm.newOffer_shift, vm.newOffer_companySize]
                 };
-                
             
                 offersFactory.postNewOffer(data)
                     .then(function(res) {
@@ -43904,8 +43934,8 @@ angular.module('summernote', [])
     'use strict';
 
     angular
-        .module('factory.offers', [])
-        .factory('offersFactory', function($http){
+        .module('factory.offers', ['factory.auth'])
+        .factory('offersFactory', function($http, authFactory){
 
             return {
                getAllOffers: function() {
@@ -43918,10 +43948,19 @@ angular.module('summernote', [])
                     return $http.get("http://localhost:8080/api/offer/amount");
                },
                postSearchOffers: function(data) {
-                    return $http.post('http://localhost:8080/api/offer/search', data);
+                    return $http.post('http://localhost:8080/api/offer/search', data, {
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded'
+                                    }
+                    }) 
                },
                postNewOffer: function(data) {
-                    return $http.post('http://localhost:8080/api/offer/new', data);
+                    return $http.post('http://localhost:8080/api/offer/new', data, {
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded',
+                                        'x-access-token': authFactory.loadTokenFromLocalStorage()
+                                    } 
+                    }) 
                }
             }
 

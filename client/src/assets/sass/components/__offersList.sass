@@ -13,6 +13,34 @@
                 weight: 300
             span
                 font-weight: 700
+        
+        .loadMoreOffer
+            display: block
+            width: 85%
+            text-align: center
+            &__btn
+                padding: 1% 2%
+                margin: 5% 0
+                font:
+                    size: 1.2rem
+                    family: $overpass
+                    weight: 300
+                
+                text-transform: uppercase
+                letter-spacing: .1rem
+                color: #FFFFFF
+                background-color: $green
+                border-radius: 3px 3px 6px 6px
+                border: 1px solid darken($green, 5%)
+                border-bottom: 3px solid darken($green, 5%)
+                transition: .2s
+                &:hover
+                    background-color: darken($green, 5%)
+                    transition: .2s
+                    cursor: pointer
+                &:focus
+                    outline: 0
+                    border-color: #000000
 
         .offer
             border-radius: 2px
@@ -53,7 +81,7 @@
                         bottom: -3px
                         opacity: 1
                         transition: .3s
-
+            
             .offerDetails
                 display: flex
                 flex-direction: row

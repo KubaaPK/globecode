@@ -5,7 +5,7 @@
 </form>
 <div class="offers">
     <p class="offers__amount"><span>{{ $ctrl.allOffersAmount }}</span> wyszukanych ofert.</p>
-    <div class="offer" ng-repeat="offer in $ctrl.data | filter: {title: $ctrl.searchOfferByName, city: $ctrl.searchOfferByLocation}">
+    <div class="offer" ng-repeat="offer in $ctrl.data | filter: {title: $ctrl.searchOfferByName, city: $ctrl.searchOfferByLocation} | limitTo: $ctrl.offersDisplayLimit">
         <a ui-sref="offerDetail({offerId: $ctrl.offerId[$index]})" class="offer__title">{{ offer.title }}</a>
         <div class="offerDetails">
             <span class="offer__salary"><i class="fa fa-money" aria-hidden="true"></i> {{ offer.salaryMin }} - {{ offer.salaryMax }} PLN</span>
@@ -14,9 +14,12 @@
             <span class="offer__shift"><i class="fa fa-briefcase" aria-hidden="true"></i> {{ offer.shift }}</span>
             <span class="offer__companySize"><i class="fa fa-users" aria-hidden="true"></i> {{ offer.companySize }}</span>
         </div>
-    
+    </div>
+    <div class="loadMoreOffer">
+        <button class="loadMoreOffer__btn"  ng-click="$ctrl.offersDisplayLimit = $ctrl.offersDisplayLimit + 5">Załaduj więcej</button>
     </div>
 </div>
+
 
 <div class="categories">
     <ul class="categories__list">

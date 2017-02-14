@@ -21,7 +21,7 @@
           text-decoration: none;
           text-transform: uppercase;
           font-family: "Lato", sans-serif;
-          font-size: 1.2rem;
+          font-size: 1.3rem;
           color: rgba(0, 0, 0, 0.7);
           transition: .3s; }
           .nav__list__element__link:hover {
@@ -285,6 +285,31 @@
       font-weight: 300; }
       .offers__amount span {
         font-weight: 700; }
+    .offers .loadMoreOffer {
+      display: block;
+      width: 85%;
+      text-align: center; }
+      .offers .loadMoreOffer__btn {
+        padding: 1% 2%;
+        margin: 5% 0;
+        font-size: 1.2rem;
+        font-family: "Lato", sans-serif;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: .1rem;
+        color: #FFFFFF;
+        background-color: #2ECC6E;
+        border-radius: 3px 3px 6px 6px;
+        border: 1px solid #29b763;
+        border-bottom: 3px solid #29b763;
+        transition: .2s; }
+        .offers .loadMoreOffer__btn:hover {
+          background-color: #29b763;
+          transition: .2s;
+          cursor: pointer; }
+        .offers .loadMoreOffer__btn:focus {
+          outline: 0;
+          border-color: #000000; }
     .offers .offer {
       border-radius: 2px;
       -webkit-box-shadow: 0px 0px 3px 1px rgba(158, 158, 158, 0.1);

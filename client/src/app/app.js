@@ -55,6 +55,28 @@
                 return trans.router.stateService.target('auth.index');
                 }
             });
-        });
-        
+        })
+        .run(function($http, $httpParamSerializerJQLike) {
+            $http.defaults.transformRequest.unshift($httpParamSerializerJQLike);
+        })
+        .config(['$httpProvider', function ($httpProvider) {
+
+            $httpProvider.defaults.headers.common = {};
+            $httpProvider.defaults.headers.post = {};
+            $httpProvider.defaults.headers.put = {};
+            $httpProvider.defaults.headers.patch = {};
+
+            $httpProvider.defaults.transformRequest.unshift(function (data, headersGetter) {
+                var key, result = [];
+
+                if (typeof data === "string")
+                return data;
+
+                for (key in data) {
+                if (data.hasOwnProperty(key))
+                    result.push(encodeURIComponent(key) + "=" + encodeURIComponent(data[key]));
+                }
+                return result.join("&");
+            });
+        }]);
 })();
