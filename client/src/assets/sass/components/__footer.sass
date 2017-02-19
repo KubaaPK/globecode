@@ -1,92 +1,98 @@
-@media only screen and (max-width : 100em)
+@media only screen and (min-width : $mobile)
     .footer
-        position: relative
-
-        padding: 2.5% 0
-        width: 80%
-        margin: 0 auto
-        
-        border-top: 1px solid $gray 
-        display: flex
-
-        .opacity-visible
-            opacity: 1 !important
-            transition: .3s
-
-        .backToTop
-            position: fixed
-            right: 2.5%
-            bottom: 5%
-            display: block
-            color: #FFFFFF
-            font-size: 2rem
-            padding: .25% .5%
-            color: #FFFFFF
-            background-color: $green
-            border-radius: 3px 3px 6px 6px
-            border: 1px solid darken($green, 5%)
-            border-bottom: 3px solid darken($green, 5%)
-            transition: .2s
-            opacity: 0
-            transition: .3s
-            &:hover
-                background-color: darken($green, 5%)
-                transition: .2s
-                cursor: pointer
-            &:focus
-                outline: 0
+        border-top: 1px solid $gray
+        display: block
+        width: 90%
+        margin: 3vh auto
+        padding: 5% 0
 
         &__text
-            width: 50%
+            font:
+                family: $lato
             &__title
+                margin-bottom: 0
                 font:
-                    family: $overpass
-                    size: 2.1rem
-                    weight: 700
-                color: rgba(#000000, 0.7)
-                
+                    size: 1.75rem
+                font-weight: bold
             &__subtitle
+                margin-top: 0vh
                 font:
-                    family: $overpass
-                    size: 1.3rem
-                    weight: 400
-                letter-spacing: .05rem
-                color: rgba(#000000, 0.7)
-
+                    size: 1.25rem
         &__nav
-            list-style-type: none
-            width: 50%
-            text-align: right
-            margin-top: 2%
-
+            padding-left: 0
             &__element
-                display: inline-block
-                margin: 0 1%
+                list-style-type: none
                 &__link
-                    position: relative
-                    color: rgba(#000000, 0.7)
                     font:
-                        family: $overpass
-                        size: 1.25rem
-                    text-decoration: none
-                    transition: .3s
-                    &:after
-                        content: ''
-                        display: block
-                        position: absolute
-                        bottom: -10px
-                        left: 0
-                        width: 100%
-                        height: 1px 
-                        background-color: $gray
-                        opacity: 0
-                        transition: .3s
+                        size: 1rem
+                        family: $lato
+                    color: #000000
+        
+        .opacity-visible
+            opacity: 1 !important
+            transition: .2s
+        .backToTop
+            position: fixed
+            padding: .5%
+            right: 2.5%
+            bottom: 5%
+            font-size: 1.5rem
+            color: #FFFFFF
+            background-color: $blue
+            border: 1px solid darken($blue, 10%)
+            border-radius: 3px
+            transition: .2s
+            opacity: 0
+            &:hover
+                background-color: darken($blue, 10%)
+                transition: .2s
+
+
+@media only screen and (min-width : $tablet)
+    .footer
+        display: flex
+        flex-direction: row
+        &__text
+            width: 50%
+            font:
+                family: $lato
+            &__title
+                margin-bottom: 0
+                font:
+                    size: 1.75rem
+                font-weight: bold
+            &__subtitle
+                margin-top: 0vh
+                font:
+                    size: 1.25rem
+        &__nav
+            width: 50%
+            padding-left: 0
+            text-align: right
+            &__element
+                list-style-type: none
+                display: inline-block
+                margin: 1% 
+                &__link
+                    font:
+                        size: 1rem
+                        family: $lato
+                    color: #000000
+
+@media only screen and (min-width : $smallPC)
+    .footer
+        &__nav
+           &__element
+                list-style-type: none
+                display: inline-block
+                margin: 3% 1% 
+                &__link
+                    font:
+                        size: 1.4rem
+                        family: $lato
+                    color: rgba(#000000, .6)
+                    transition: .2s
                     &:hover
-                        color: #000000
-                        transition: .3s
                         text-decoration: none
-                        &:after
-                            bottom: -3px
-                            opacity: 1
-                            transition: .3s
-            
+                        color: #000000
+                        transition: .2s

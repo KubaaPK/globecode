@@ -1,57 +1,199 @@
-@media only screen and (max-width : 100em)
+@media only screen and (min-width : $mobile) 
+    .showFilters
+        display: block
+        width: 40%
+        margin: 0 auto
+        padding: 1rem 0
+
+        background-color: transparent
+        border: 1px solid $blue
+
+        color: #000000
+        font:
+            size: 1.2rem
+            family: $lato
+        text-transform: uppercase
+        transition: 0.1s
+        &:active
+            background-color: $blue
+            transition: 0.1s
+            outline: none
+            color: #FFFFFF
+        &:focus
+            outline: none
+    
+    .displayFilers
+        display: flex !important
     .categories
-        position: relative
-        margin-left: 10%
-        margin-top: 75px
-        width: 20%
-        float: left
+        width: 80%
+        margin: 0 auto
+        display: none
+        flex-direction: column
         &__list
-            list-style-type: none
             padding-left: 0
-            font-family: $overpass
-            &__categoryAmount
-                margin-right: 10%
+            list-style-type: none
+            text-align: right
             &__title
                 font:
+                    family: $lato
                     size: 1.5rem
-                    weight: 700
-                color: rgba(#000000, .7)
-
                 text-transform: uppercase
-                letter-spacing: .1rem
-
+            
             li
-                margin: 1vh 0
-                font-size: 1.4rem
-                color: rgba(#000000, .6)
                 display: flex
                 flex-direction: row
+                width: 100%
                 span
-                    width: 5%
-                
-            
-            .check-with-label
-                display: none
-            .label-for-check
-                position: relative
-                &:after
-                    position: absolute
-                    content: ''
-                    display: block
-                    height: 6px
-                    width: 6px
-                    border-radius: 50%
-                    background-color: rgba(#000000, .6)
-                    top: 7px
-                    left: -10px
-                    opacity: 0
-                    transition: .3s
-                &:hover
-                    cursor: pointer
+                    margin-left: 8% 
+                    width: 10%
+                    font:
+                        family: $lato
+                        size: 1.25rem
+                        weight: 300
+                input
+                    display: none
+                        
+                .label-for-check 
+                    width: 90%
+                    position: relative
+                    font:
+                        family: $lato
+                        size: 1.25rem
+                    &:after
+                        position: absolute
+                        display: block
+                        content: ''
+                        height: 7px
+                        width: 7px
+                        border-radius: 50%
+                        top: 5px
+                        right: -22px
+                        background-color: darken($gray, 45%) 
+                        opacity: 0
+                        transition: 0.3s
+
             .check-with-label:checked + .label-for-check 
+              
                 &:after
-                    transition: .3s
                     opacity: 1
-           
-            
-                    
+                    transition: 0.3s
+
+@media only screen and (min-width : $tablet) 
+    .showFilters
+        margin: 5vh auto
+    .categories
+        display: none
+        width: 70%
+        padding-right: 75px
+        flex-direction: row
+
+        &__list
+            width: calc(100% / 3)
+            &__title
+                text-align: right
+                font-size: 1.2rem
+            li
+                display: flex
+                width: 115%
+                span
+                    margin-left: 5% 
+                    width: 10%
+                    font:
+                        family: $lato
+                        size: 1.25rem
+                        weight: 300
+                input
+                    display: none
+                        
+                .label-for-check 
+                    width: 70%
+                    position: relative
+                    font:
+                        family: $lato
+                        size: 1.25rem
+                    &:after
+                        position: absolute
+                        display: block
+                        content: ''
+                        height: 7px
+                        width: 7px
+                        border-radius: 50%
+                        top: 5px
+                        right: -13px
+                        background-color: darken($gray, 45%) 
+                        opacity: 0
+                        transition: 0.3s
+
+            .check-with-label:checked + .label-for-check 
+              
+                &:after
+                    opacity: 1
+                    transition: 0.3s
+
+
+@media only screen and (min-width : $smallPC) 
+    .showFilters
+        display: none
+    
+    .categories
+        width: 20%
+        margin-left: 10%
+        padding-top: 0
+        margin-top: 5vh
+        display: block
+        float: left
+        box-shadow: none
+        background-color: transparent
+        text-align: left
+        &__list
+            padding-left: 0
+            list-style-type: none
+            &__title
+                width: 200px
+                display: block
+                font:
+                    family: $lato
+                    size: 1.6rem
+                    weight: bold
+                text-transform: uppercase
+                text-align: left
+                color: #495a62
+            li
+                display: flex
+                flex-direction: row
+                width: 100px
+                span
+                    margin-left: 0
+                    text-align: right
+                    order: 1
+                     
+                    width: 10%
+                    font:
+                        family: $lato
+                        size: 1.5rem
+                        weight: 300
+                input
+                    display: none
+                        
+                .label-for-check
+                    text-align: left
+                    margin-left: 20px
+                    order: 2 
+                    font:
+                        size: 1.5rem
+                        weight: 400
+                    color: #7996a3
+                    transition: 0.3s
+                    &:hover
+                        cursor: pointer
+                        color: rgba(#000000, .8)
+                        transition: 0.3s
+                    &:after
+                        left: -13px
+                        top: 7px
+        
+@media only screen and (min-width : $PC) 
+    .categories
+        &__list
+            li
+                width: 150px

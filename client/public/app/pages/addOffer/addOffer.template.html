@@ -1,8 +1,6 @@
 <main class="addOffer">
 
     <authenticated-nav-bar></authenticated-nav-bar>
-
-    <div class="addOffer__wrapper">
         <form class="addOfferForm" ng-submit="$ctrl.addNewOffer()">
             <p class="addOfferForm__title">Dodaj ofertę</p>
 
@@ -62,8 +60,8 @@
             </div>
             <p class="addOfferForm__subtitle">O firmie</p>
             <div class="addOfferForm__inputWrapper">
-                <label for="addOffer_companySite">Nazwa firmy<span class="addOfferForm__inputWrapper__requiredStar">*</span></label>
-                <input type="text" id="addOffer_companySite" ng-model="$ctrl.newOffer_companyName">
+                <label for="addOffer_companyName">Nazwa firmy<span class="addOfferForm__inputWrapper__requiredStar">*</span></label>
+                <input type="text" id="addOffer_companyName" ng-model="$ctrl.newOffer_companyName">
             </div>
             <div class="addOfferForm__inputWrapper">
                 <label for="addOffer_companySite">Strona internetowa firmy</label>
@@ -78,8 +76,5 @@
                 <button type="button" ng-click="$ctrl.backToIndex()">Anuluj</button>
             </div>
         </form>
-    </div>
-
-
     <foot-bar></foot-bar>
 </main>

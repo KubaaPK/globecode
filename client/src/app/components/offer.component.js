@@ -15,7 +15,7 @@
         var vm = this;
         
         vm.$onInit = function() {
-            vm.offersDisplayLimit = 5;
+            vm.offersDisplayLimit = 7;
             offersFactory.getAllOffers()
                 .then(function(res) {
                     vm.data = [];
@@ -69,5 +69,14 @@
         }
 
        
+
+        var showFiltersBtn = document.querySelector('.showFilters'),
+            filters = document.querySelector('.categories');
+
+        showFiltersBtn.addEventListener('click', function() {
+            filters.classList.toggle('displayFilers');
+        })
+
+
 
     } // end of controller

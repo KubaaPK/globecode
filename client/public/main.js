@@ -43368,8 +43368,30 @@ exports.ViewService = ViewService;
     angular
         .module('comp.authenticatedNav', [])
         .component('authenticatedNavBar', {
-            templateUrl: 'app/components/authenticatedNav.template.html' 
+            templateUrl: 'app/components/authenticatedNav.template.html',
+            controller: authenticatedNavController 
         });
+
+        function authenticatedNavController() {
+            var vm = this;
+
+            vm.logOut = function() {
+                localStorage.removeItem("authToken");
+                localStorage.removeItem("user");
+            }
+
+
+
+            var navigation = document.querySelector('.navigation-content'),
+                showMenuBtn = document.querySelector('.showMenu');
+
+            showMenuBtn.addEventListener('click', function() {
+                navigation.classList.toggle('displayMenu');
+            })
+
+
+        }
+
 })();
 },{}],79:[function(require,module,exports){
 (function(){
@@ -43401,8 +43423,22 @@ exports.ViewService = ViewService;
     angular
         .module('comp.nav', [])
         .component('navBar', {
-            templateUrl: 'app/components/nav.template.html' 
+            templateUrl: 'app/components/nav.template.html',
+            controller: navController
         });
+
+        function navController() {
+            var vm = this;
+
+
+            var navigation = document.querySelector('.navigation-content'),
+                showMenuBtn = document.querySelector('.showMenu');
+
+            showMenuBtn.addEventListener('click', function() {
+                navigation.classList.toggle('displayMenu');
+            })
+
+        }
 })();
 },{}],81:[function(require,module,exports){
 (function(){
@@ -43422,7 +43458,7 @@ exports.ViewService = ViewService;
         var vm = this;
         
         vm.$onInit = function() {
-            vm.offersDisplayLimit = 5;
+            vm.offersDisplayLimit = 7;
             offersFactory.getAllOffers()
                 .then(function(res) {
                     vm.data = [];
@@ -43476,6 +43512,15 @@ exports.ViewService = ViewService;
         }
 
        
+
+        var showFiltersBtn = document.querySelector('.showFilters'),
+            filters = document.querySelector('.categories');
+
+        showFiltersBtn.addEventListener('click', function() {
+            filters.classList.toggle('displayFilers');
+        })
+
+
 
     } // end of controller
 },{}],82:[function(require,module,exports){

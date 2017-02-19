@@ -1,97 +1,133 @@
-@media only screen and (max-width : 100em)
-    a
-        cursor: pointer
+@media only screen and (min-width : $mobile)
     .offers
-        width: 70%
-        float: right
-        display: block
-        margin-top: 75px
+        padding: 5%
         &__amount
             font:
-                family: $overpass
-                size: 2rem
-                weight: 300
+                family: $lato
+                size: 1.5rem
             span
                 font-weight: 700
         
-        .loadMoreOffer
-            display: block
-            width: 85%
-            text-align: center
-            &__btn
-                padding: 1% 2%
-                margin: 5% 0
-                font:
-                    size: 1.2rem
-                    family: $overpass
-                    weight: 300
-                
-                text-transform: uppercase
-                letter-spacing: .1rem
-                color: #FFFFFF
-                background-color: $green
-                border-radius: 3px 3px 6px 6px
-                border: 1px solid darken($green, 5%)
-                border-bottom: 3px solid darken($green, 5%)
-                transition: .2s
-                &:hover
-                    background-color: darken($green, 5%)
-                    transition: .2s
-                    cursor: pointer
-                &:focus
-                    outline: 0
-                    
-
         .offer
-            border-radius: 2px
-            -webkit-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.1)
-            -moz-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.1)
-            box-shadow: 0px 0px 3px 1px rgba(158,158,158,.1)
             background-color: #FFFFFF
-            display: block
-            width: 85%
-            float: left
-            margin: 1vh 0
-            padding: 3vh 2%
-            box-sizing: border-box
-            font-family: $overpass
+            margin: 2vh 0
+            padding: 5% 2.5%
+            @include box-shadow(0px, 0px, 3px, darken($gray, 5%))
+            text-align: center
+
             &__title
-                position: relative
-                margin-bottom: 1vh
                 font:
                     size: 2rem
-                color: rgba(#000000, .9)
-                text-decoration: none
-                transition: .3s
-                &:after
-                    content: ''
-                    display: block
-                    position: absolute
-                    bottom: -10px
-                    left: 0
-                    width: 100%
-                    height: 1px 
-                    background-color: $gray
-                    opacity: 0
-                    transition: .3s
-                &:hover
-                    color: rgba(#000000, .7)
-                    transition: .3s
-                    &:after
-                        bottom: -3px
-                        opacity: 1
-                        transition: .3s
+                    family: $lato
+                    weight: 700
+
+                color: rgba(#000000, 0.8)
+                letter-spacing: 0.1rem
             
             .offerDetails
-                display: flex
-                flex-direction: row
-                margin-top: 1.5vh
-                padding-left: 0
-                span
-                    width: 18%
-                    font-size: 1.2rem
-                    color: rgba(#000000, .45)
-                    i
-                        margin-right: 5%
-                    &:nth-child(n+2)
-                        width: 12%
+                font:
+                    family: $lato
+                    size: 1.15rem
+                color: rgba(#000000, 0.6)
+            
+        .loadMoreOffer
+            text-align: center
+            &__btn
+                padding: 1rem 2rem
+                font:
+                    size: 1rem
+                    family: $lato
+                    weight: 300
+                border: 1px solid darken($blue, 10%)
+                background-color: $blue
+                color: #FFFFFF
+                text-transform: uppercase
+                letter-spacing: .1rem
+                border-radius: 3px
+
+
+@media only screen and (min-width : $tablet)
+    .offers
+        &__amount
+            font:
+                size: 2rem
+                
+        .offer
+            &__title
+                font:
+                    size: 2.5rem
+            
+            .offerDetails
+                margin-top: 2vh
+                font:
+                    size: 1.5rem
+
+            
+        .loadMoreOffer
+            text-align: center
+            &__btn
+                padding: 1rem 2rem
+                font:
+                    size: 1rem
+                    family: $lato
+                    weight: 300
+                border: 1px solid darken($blue, 10%)
+                background-color: $blue
+                color: #FFFFFF
+                text-transform: uppercase
+                letter-spacing: .1rem
+
+
+@media only screen and (min-width : $smallPC)
+    .offers
+        display: block
+        padding: 0 5% 2.5% 5%
+        margin-top: 7vh
+        width: 65%
+        float: left
+        &__amount
+            font:
+                family: $lato
+                size: 1.5rem
+
+        
+        .offer
+            padding: 2% 3.5%
+            text-align: left
+
+            &__title
+                font:
+                    size: 2rem
+
+                color: #4e5659
+                letter-spacing: 0.1rem
+                transition: .2s
+                &:hover
+                    text-decoration: none
+                    color: rgba(#4e5659, .75)
+                    transition: .2s
+            
+            .offerDetails
+                margin-top: .5%
+                font:
+                    family: $lato
+                    size: 1.25rem
+                color: rgba(#000000, 0.6)
+                letter-spacing: .1rem
+        .loadMoreOffer
+            text-align: center
+            &__btn
+                padding: 1rem 2rem
+                font:
+                    size: 1rem
+                    family: $lato
+                    weight: 300
+                border: 1px solid darken($blue, 10%)
+                background-color: $blue
+                color: #FFFFFF
+                text-transform: uppercase
+                letter-spacing: .1rem
+                transition: .2s
+                &:hover
+                    background-color: darken($blue, 10%)
+                    transition: .2s

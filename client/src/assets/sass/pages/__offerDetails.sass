@@ -1,98 +1,127 @@
-@media only screen and (max-width : 100em)
-    .offerDetails
-        padding: 2% 10%
+@media only screen and (min-width : $mobile) 
+    .offerDetailsPage
         display: flex
-        flex-direction: row
-        &__firmname
-            color: rgba(#000000, .7)
-            margin-bottom: 6vh
-            text-align: center
-            font:
-                size: 2rem
-                family: $overpass
-                weight: 700
+        flex-direction: column
+        width: 90%
+        margin: 5vh auto
+        padding: 5%
+        background-color: #FFFFFF
+        border-radius: 3px
+        @include box-shadow(0px, 0px, 3px, darken($gray, 5%))
 
         .jobDetails
-            padding: 2.5% 0 
-            display: block
-            width: 65%
-            height: auto
-            margin-right: 5%
-            background-color: #FFFFFF
-            order: 1
-            -webkit-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.05)
-            -moz-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.05)
-            box-shadow: 0px 0px 3px 1px rgba(158,158,158,.05)
-        
-            &__jobTitle
-                position: relative
-                color: rgba(#000000, .7)
-                margin-top: 3.5vh
+            &__title
+                margin-bottom: 4vh
+                font:
+                    family: $lato
+                    size: 2.2rem
+                    weight: 700 
                 text-align: center
-                font:
-                    size: 2.75rem
-                    family: $overpass   
-                    weight: 700
-            
-            &__jobDescription
-                padding: 0 5% 25% 5% 
-                position: relative
-                top: 15vh
-                font:
-                    family: $slabo
-       
-
 
             &__detailsWrapper
-                position: relative
-                top: 2vh
                 display: flex
-                flex-direction: row
-                text-align: center
-                padding: 3% 0
-                width: 90%
-                margin: 0 auto
-                border-top: 1px solid rgba(#000000, .2)
-                border-bottom: 1px solid rgba(#000000, .2)
+                flex-direction: column
                 &__detail
-                    width: 25%
-                    opacity: .6
+                    width: 80%
+                    display: block
+                    margin: 0 auto
+                    text-align: center
+                    padding: 4vh 0
                     font:
-                        size: 1.2rem
-                        family: $overpass
+                        size: 1.5rem
+                        family: $lato
+                        weight: 700
+                    text-transform: uppercase
                     i
-                        margin-right: 5%
+                        color: #d3d9de
+                        margin-right: 3%
+                    &:first-child
+                        border: 1px solid lighten($gray, 6%)
+                    &:nth-child(n + 2)
+                        border-bottom: 1px solid lighten($gray, 6%)
+                        border-left: 1px solid lighten($gray, 6%)
+                        border-right: 1px solid lighten($gray, 6%)
+
+            &__jobDescription
+                padding: 5% 0
+                margin-top: 10vh
 
         .contactDetails
             order: 2
-            align-self: flex-start
-            padding: 2.5%
-            box-sizing: border-box
-            width: 30%
-            display: block
-            background-color: #FFFFFF
-            border-radius: 3px
-            -webkit-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.05)
-            -moz-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.05)
-            box-shadow: 0px 0px 3px 1px rgba(158,158,158,.05)
-
-            hr
-                margin: 2vh 0
-                display: block
-                height: .001rem
-                opacity: .5
-
-
-            p
+            border-top: 1px solid lighten($gray, 6%)
+            padding: 7vh 5%
+            &__firmname
+                font:
+                    family: $lato
+                    size: 1.75rem
+                    weight: 400
                 text-align: center
-                a
-                    font:
-                        size: 1.25rem
-                        family: $overpass
-                        weight: 400
+            
+            a
+
+                display: block
+                font:
+                    family: $lato
+                    size: 1rem
+                    weight: 400
+                color: rgba(#000000, .7)
+                text-transform: uppercase
+                text-align: center
+                letter-spacing: .1rem
+            hr
+                width: 70%
+                margin: 5% auto
+
+                
+                    
+@media only screen and (min-width : $tablet) 
+    .offerDetailsPage
+        display: flex
+        flex-direction: row
+        width: 90%
+        background-color: transparent
+        box-shadow: none
+        .jobDetails
+            width: 60%
+            background-color: #FFFFFF 
+            margin-right: 5%
+            @include box-shadow(0px, 0px, 3px, darken($gray, 5%))
+            &__title
+                margin: 7vh 0 4vh 0
+                font:
+                    size: 2.4rem 
+            &__detailsWrapper
+                flex-direction: row
+                flex-wrap: wrap
+                &__detail
+                    width: 50%
+                    &:first-child
+                        border: 0
+                        border-bottom: 1px solid lighten($gray, 6%)
+                    &:nth-child(n + 2)
+                        border: 0
+                    &:nth-child(2)
+                        border-bottom: 1px solid lighten($gray, 6%)
+                        border-left: 1px solid lighten($gray, 6%)
+                    &:nth-child(3)
+                        border-right: 1px solid lighten($gray, 6%)
+
+
+            &__jobDescription
+                border-top: 1px solid lighten($gray, 6%)
+                padding: 5%
+                margin-top: 5vh
+
+        .contactDetails
+            width: 35%
+            background-color: #FFFFFF
+            border-top: 0
+            height: 20%
+            a
+                transition: .2s
+                &:hover
                     text-decoration: none
-                    color: rgba(#000000, .7)
+                    color: #000000
                     transition: .2s
-                    &:hover
-                        color: #000000
-                        transition: .2s
+                
+                    

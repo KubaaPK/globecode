@@ -1,69 +1,84 @@
-@media only screen and (max-width : 100em)
-  
+@media only screen and (min-width : $mobile)
     .loginregisterForm
-        position: relative
-        top: 5vh
         display: block
-        width: 300px
-        background-color: #FFFFFF
+        width: 90%
         margin: 0 auto
-        padding-bottom: 3%
-        -webkit-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.15)
-        -moz-box-shadow: 0px 0px 3px 1px rgba(158,158,158,.15)
-        box-shadow: 0px 0px 3px 1px rgba(158,158,158,.15)
+        padding-bottom: 5vh
+        background: #FFFFFF
+        border-radius: 3px
+        @include box-shadow(0px, 0px, 3px, darken($gray, 5%))
 
         &__title
-            padding: 6vh 2.5%
             display: block
-            background-color: $green
-            color: #FFFFFF
-            text-align: center
-            border-bottom: 3px solid darken($green, 10%)
+            margin-bottom: 5vh
+            padding: 7.5% 0
+            background: $blue
             font:
+                family: $lato
                 size: 2rem
-                family: $overpass
+                weight: 300
+            text:
+                transform: uppercase
+                align: center
+            color: #FFFFFF
+            border-bottom: 1px solid darken($blue, 10%)
 
         label
-            margin-left: 5%
-            font:
-                family: $overpass
-                size: 1.2rem
-        input
-            box-sizing: border-box
-            width: 90%
-            height: 40px
-            margin: 2vh auto
+            width: 80%
+            margin: 0 auto
             display: block
-            padding: 0 2%
-            border: 0
-            border-bottom: 1px solid $gray
-            background-color: #FFFFFF
+            font: 
+                family: $lato
+                size: 1.5rem
+                weight: 300
+            color: #000000
+
+        input
+            display: block
+            width: 80%
+            margin: 0 auto
+            padding-left: 3%
+            margin-bottom: 2vh
+            height: 40px
+            border: 1px solid darken($gray, 8%)
+            border-radius: 3px
             font:
-                family: $overpass
-                size: 1.2rem
+                size: 1.25rem
+                family: $lato
+
             transition: .2s
             &:focus
                 outline: none
-                border-color: $green
+                border-color: $blue
+                transition: .2s
+        
+        button
+            display: block
+            width: 80%
+            margin: 10% auto
+            padding: 5% 0 
+            background-color: $blue
+            border: 1px solid darken($blue, 10%)
+            border-radius: 3px
+            font:
+                family: $lato
+                size: 1.3rem
+                weight: 300
+            color: #FFFFFF
+            text-transform: uppercase
+            transition: .2s
+            &:hover, &:active
+                background-color: darken($blue, 10%)
                 transition: .2s
 
-        button
-            position: relative
-            top: 4vh
-            width: 90%
-            height: 45px
-            margin: 0 auto
-            display: block
-            background-color: $green
-            border: 2px solid $green
-            border-radius: 3px 3px 6px 6px
-            border-bottom: 5px solid darken($green, 10%)
-            color: #FFFFFF
-            font:
-                size: 1.4rem
-                family: $overpass
-            transition: .3s
-            &:hover
-                background-color: darken($green, 5%)
-                cursor: pointer
-                transition: .3s
+
+@media only screen and (min-width : $tablet)
+    .loginregisterForm
+        width: 50%
+
+
+
+@media only screen and (min-width : $smallPC)
+    .loginregisterForm
+        width: 25%
+     
