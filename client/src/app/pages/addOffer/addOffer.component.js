@@ -3,14 +3,14 @@
     'use strict';
 
     angular
-        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.auth', 'factory.offers'])
+        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.auth', 'factory.offers', 'factory.user'])
         .component('addOffer', {
             controller: addOfferController,
             templateUrl: 'app/pages/addOffer/addOffer.template.html' 
         });
 
 
-        function addOfferController($http, $state, offersFactory) {
+        function addOfferController($http, $state, offersFactory, userFactory) {
             var vm = this;            
 
             vm.options = {
@@ -24,7 +24,9 @@
 
 
             vm.addNewOffer = function() {
+
                 var data = {
+                    _creator    : userFactory.loadUserDataFromLocalStorage().id,
                     title       : vm.newOffer_title,
                     city        : vm.newOffer_city,
                     state       : vm.newOffer_state,

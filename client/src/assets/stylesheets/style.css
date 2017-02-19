@@ -521,10 +521,8 @@
         color: rgba(0, 0, 0, 0.8);
         letter-spacing: 0.1rem; }
       .offers .offer__created_at {
-        position: absolute;
-        right: 0;
-        top: calc(50% - .7rem);
-        right: 2.5%;
+        margin-top: 2.5vh;
+        display: block;
         font-size: 1.15rem;
         font-family: "Lato", sans-serif;
         font-color: rgba(0, 0, 0, 0.6); }
@@ -547,25 +545,33 @@
         border-radius: 3px; } }
 
 @media only screen and (min-width: 48em) {
-  .offers__amount {
-    font-size: 2rem; }
-  .offers .offer__title {
-    font-size: 2.5rem; }
-  .offers .offer .offerDetails {
-    margin-top: 2vh;
-    font-size: 1.5rem; }
-  .offers .loadMoreOffer {
-    text-align: center; }
-    .offers .loadMoreOffer__btn {
-      padding: 1rem 2rem;
-      font-size: 1rem;
-      font-family: "Lato", sans-serif;
-      font-weight: 300;
-      border: 1px solid #1a252f;
-      background-color: #2C3E50;
-      color: #FFFFFF;
-      text-transform: uppercase;
-      letter-spacing: .1rem; } }
+  .offers {
+    position: relative; }
+    .offers__amount {
+      font-size: 2rem; }
+    .offers .offer__title {
+      font-size: 2.5rem; }
+    .offers .offer__created_at {
+      position: absolute;
+      margin-top: 0;
+      right: 0;
+      top: calc(50% - .7rem);
+      right: 2.5%; }
+    .offers .offer .offerDetails {
+      margin-top: 2vh;
+      font-size: 1.5rem; }
+    .offers .loadMoreOffer {
+      text-align: center; }
+      .offers .loadMoreOffer__btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-family: "Lato", sans-serif;
+        font-weight: 300;
+        border: 1px solid #1a252f;
+        background-color: #2C3E50;
+        color: #FFFFFF;
+        text-transform: uppercase;
+        letter-spacing: .1rem; } }
 
 @media only screen and (min-width: 64em) {
   .offers {
@@ -849,3 +855,76 @@ body {
           text-decoration: none;
           color: #000000;
           transition: .2s; } }
+
+@media only screen and (min-width: 20em) {
+  .myOffers {
+    padding: 5%; }
+    .myOffers__amount {
+      font-family: "Lato", sans-serif;
+      font-size: 1.5rem; }
+      .myOffers__amount span {
+        font-weight: 700; }
+    .myOffers .offer {
+      position: relative;
+      background-color: #FFFFFF;
+      margin: 2vh 0;
+      padding: 5% 2.5%;
+      -webkit-box-shadow: 0px 0px 3px lightgray;
+      -moz-box-shadow: 0px 0px 3px lightgray;
+      box-shadow: 0px 0px 3px lightgray;
+      text-align: center; }
+      .myOffers .offer__title {
+        font-size: 2rem;
+        font-family: "Lato", sans-serif;
+        font-weight: 700;
+        color: rgba(0, 0, 0, 0.8);
+        letter-spacing: 0.1rem; }
+      .myOffers .offer__created_at {
+        margin-top: 2.5vh;
+        display: block;
+        font-size: 1.15rem;
+        font-family: "Lato", sans-serif;
+        font-color: rgba(0, 0, 0, 0.6); }
+      .myOffers .offer .offerDetails {
+        font-family: "Lato", sans-serif;
+        font-size: 1.15rem;
+        color: rgba(0, 0, 0, 0.6); }
+      .myOffers .offer .buttons {
+        margin-top: 5vh; }
+        .myOffers .offer .buttons button {
+          width: 30%;
+          height: 30px;
+          font-size: 1.25rem;
+          font-family: "Lato", sans-serif;
+          border: 1px solid #1a252f;
+          color: #FFFFFF;
+          background-color: #2C3E50;
+          text-transform: uppercase; } }
+
+@media only screen and (min-width: 64em) {
+  .myOffers {
+    padding: 2.5% 5%; }
+    .myOffers .offer {
+      width: 48%;
+      margin: 0 1%;
+      float: left;
+      padding: 2.5%;
+      text-align: left; }
+      .myOffers .offer__title {
+        font-size: 2.5rem;
+        transition: .2s; }
+        .myOffers .offer__title:hover {
+          text-decoration: none;
+          color: rgba(78, 86, 89, 0.75);
+          transition: .2s; }
+      .myOffers .offer__created_at {
+        position: absolute;
+        right: 2.5%;
+        top: 6.5vh;
+        margin-top: 0;
+        display: block; }
+      .myOffers .offer .buttons button {
+        transition: .2s; }
+        .myOffers .offer .buttons button:hover {
+          transition: .2s;
+          background-color: #1a252f; } }

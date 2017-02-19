@@ -21,7 +21,7 @@
                     vm.data = [];
                     vm.offerId = [];
                     for(var i = 0; i<res.data.length;i++) {
-                        vm.data.push(res.data[i].fields);
+                        vm.data.push(res.data[i]);
                         vm.offerId.push(res.data[i]._id);
                     }
                     vm.allOffersAmount = res.data.length;
@@ -55,7 +55,7 @@
                     .then(function(res) {
                         vm.data = [];
                         for(var i = 0; i<res.data.length;i++) {
-                            vm.data.push(res.data[i].fields);
+                            vm.data.push(res.data[i]);
                         }   
                         vm.allOffersAmount = res.data.length;
                     })

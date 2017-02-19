@@ -17,7 +17,7 @@
            
             vm.$onInit = function() {
                 offersFactory.getOfferDetails(offerID).then(function(res) {
-                    vm.details = res.data.fields;
+                    vm.details = res.data;
                     console.log(vm.details); 
                     vm.jobDescriptionEscaped = function() {
                         return $sce.trustAsHtml(vm.details.description);

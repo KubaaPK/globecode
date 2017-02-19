@@ -25,12 +25,14 @@
     require('./pages/login/login.component');
     require('./pages/authenticated/authenticated.component');
     require('./pages/addOffer/addOffer.component');
+    require('./pages/myOffers/myOffers.component');
     require('./pages/offerDetails/offerDetails.component');
 
     //services
     require('./services/authService');
     require('./services/userService');
     require('./services/offersService');
+
 
     angular
         .module('globeCode', [
@@ -44,6 +46,7 @@
             'page.login',
             'page.authenticated',
             'page.addOffer',
+            'page.myOffers',
             'page.offerDetails'
         ])
         .run(function($trace, $transitions, $state, $http, $httpParamSerializerJQLike, authFactory, moment) {

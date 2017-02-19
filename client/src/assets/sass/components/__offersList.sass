@@ -26,10 +26,8 @@
                 letter-spacing: 0.1rem
             
             &__created_at
-                position: absolute
-                right: 0
-                top: calc(50% - .7rem)
-                right: 2.5%
+                margin-top: 2.5vh
+                display: block
                 font:
                     size: 1.15rem
                     family: $lato
@@ -58,6 +56,7 @@
 
 @media only screen and (min-width : $tablet)
     .offers
+        position: relative
         &__amount
             font:
                 size: 2rem
@@ -66,6 +65,13 @@
             &__title
                 font:
                     size: 2.5rem
+            
+            &__created_at
+                position: absolute
+                margin-top: 0
+                right: 0
+                top: calc(50% - .7rem)
+                right: 2.5%
             
             .offerDetails
                 margin-top: 2vh
@@ -105,6 +111,7 @@
             padding: 2% 3.5%
             text-align: left
 
+            
             &__title
                 font:
                     size: 2rem

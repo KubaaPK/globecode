@@ -115,9 +115,11 @@
         </div>
         <span class="offer__created_at" am-time-ago="offer.created_at"></span>
     </div>
-    <div class="loadMoreOffer">
-        <button class="loadMoreOffer__btn"  ng-click="$ctrl.offersDisplayLimit = $ctrl.offersDisplayLimit + 5">Pokaż więcej (+5)</button>
-    </div>
+    <span ng-if="$ctrl.allOffersAmount >= 6">
+        <div class="loadMoreOffer">
+            <button class="loadMoreOffer__btn"  ng-click="$ctrl.offersDisplayLimit = $ctrl.offersDisplayLimit + 5">Pokaż więcej (+5)</button>
+        </div>
+    </span>
 </div>
 
 

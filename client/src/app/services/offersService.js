@@ -15,6 +15,9 @@
                getOffersAmounts: function() {
                     return $http.get("http://localhost:8080/api/offer/amount");
                },
+               getMyOffers: function(userID) {
+                    return $http.get("http://localhost:8080/api/offer/myOffers/" + userID);
+               },
                postSearchOffers: function(data) {
                     return $http.post('http://localhost:8080/api/offer/search', data, {
                                     headers: {
@@ -24,6 +27,14 @@
                },
                postNewOffer: function(data) {
                     return $http.post('http://localhost:8080/api/offer/new', data, {
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded',
+                                        'x-access-token': authFactory.loadTokenFromLocalStorage()
+                                    } 
+                    }) 
+               },
+               deleteOffer: function(data) {
+                    return $http.post('http://localhost:8080/api/offer/delete', data, {
                                     headers: {
                                         'Content-Type': 'application/x-www-form-urlencoded',
                                         'x-access-token': authFactory.loadTokenFromLocalStorage()

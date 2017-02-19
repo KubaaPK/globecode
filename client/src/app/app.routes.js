@@ -37,6 +37,11 @@
                     url         : '/authenticated/addOffer',
                     component   : 'addOffer'
                 })
+                .state('auth.myOffers', {
+                    name        : 'myOffers',
+                    url         : '/authenticated/myOffers',
+                    component   : 'myOffers'
+                })
                 .state('offerDetail', {
                     name        : 'offerDetail',
                     url         : '/offer/:offerId',

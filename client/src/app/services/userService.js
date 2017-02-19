@@ -10,7 +10,7 @@
                     localStorage.setItem("user", JSON.stringify(user));
                 },
                 loadUserDataFromLocalStorage: function(){
-                    return localStorage.getItem("user");
+                    return JSON.parse(localStorage.getItem("user"));
                 },
                 postNewUser: function(data) {
                     return $http.post('http://localhost:8080/api/users/new', data, {

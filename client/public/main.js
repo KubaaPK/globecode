@@ -48405,12 +48405,14 @@ exports.ViewService = ViewService;
     require('./pages/login/login.component');
     require('./pages/authenticated/authenticated.component');
     require('./pages/addOffer/addOffer.component');
+    require('./pages/myOffers/myOffers.component');
     require('./pages/offerDetails/offerDetails.component');
 
     //services
     require('./services/authService');
     require('./services/userService');
     require('./services/offersService');
+
 
     angular
         .module('globeCode', [
@@ -48424,6 +48426,7 @@ exports.ViewService = ViewService;
             'page.login',
             'page.authenticated',
             'page.addOffer',
+            'page.myOffers',
             'page.offerDetails'
         ])
         .run(function($trace, $transitions, $state, $http, $httpParamSerializerJQLike, authFactory, moment) {
@@ -48464,7 +48467,7 @@ exports.ViewService = ViewService;
             });
         }]);
 })();
-},{"../../node_modules/moment/locale/pl":21,"./app.routes":80,"./components/authenticatedNav.component":81,"./components/foot.component":82,"./components/nav.component":83,"./components/offer.component":84,"./libs/angular-summernote":85,"./pages/addOffer/addOffer.component":86,"./pages/authenticated/authenticated.component":87,"./pages/index/index.component":88,"./pages/login/login.component":89,"./pages/offerDetails/offerDetails.component":90,"./pages/register/register.component":91,"./services/authService":92,"./services/offersService":93,"./services/userService":94,"angular":20,"angular-jwt":2,"angular-middleware":3,"angular-moment":4,"angular-ui-router":8,"moment":22}],80:[function(require,module,exports){
+},{"../../node_modules/moment/locale/pl":21,"./app.routes":80,"./components/authenticatedNav.component":81,"./components/foot.component":82,"./components/nav.component":83,"./components/offer.component":84,"./libs/angular-summernote":85,"./pages/addOffer/addOffer.component":86,"./pages/authenticated/authenticated.component":87,"./pages/index/index.component":88,"./pages/login/login.component":89,"./pages/myOffers/myOffers.component":90,"./pages/offerDetails/offerDetails.component":91,"./pages/register/register.component":92,"./services/authService":93,"./services/offersService":94,"./services/userService":95,"angular":20,"angular-jwt":2,"angular-middleware":3,"angular-moment":4,"angular-ui-router":8,"moment":22}],80:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -48503,6 +48506,11 @@ exports.ViewService = ViewService;
                     name        : 'addOffer',
                     url         : '/authenticated/addOffer',
                     component   : 'addOffer'
+                })
+                .state('auth.myOffers', {
+                    name        : 'myOffers',
+                    url         : '/authenticated/myOffers',
+                    component   : 'myOffers'
                 })
                 .state('offerDetail', {
                     name        : 'offerDetail',
@@ -48568,13 +48576,13 @@ exports.ViewService = ViewService;
             }
         });
 
-        $(document).on('click', 'a', function(event){
-            event.preventDefault();
+        // $(document).on('click', 'a', function(event){
+        //     event.preventDefault();
 
-            $('html, body').animate({
-                scrollTop: $( $.attr(this, 'href') ).offset().top
-            }, 500);
-        });
+        //     $('html, body').animate({
+        //         scrollTop: $( $.attr(this, 'href') ).offset().top
+        //     }, 500);
+        // });
 
 })();
 },{}],83:[function(require,module,exports){
@@ -48626,7 +48634,7 @@ exports.ViewService = ViewService;
                     vm.data = [];
                     vm.offerId = [];
                     for(var i = 0; i<res.data.length;i++) {
-                        vm.data.push(res.data[i].fields);
+                        vm.data.push(res.data[i]);
                         vm.offerId.push(res.data[i]._id);
                     }
                     vm.allOffersAmount = res.data.length;
@@ -48660,7 +48668,7 @@ exports.ViewService = ViewService;
                     .then(function(res) {
                         vm.data = [];
                         for(var i = 0; i<res.data.length;i++) {
-                            vm.data.push(res.data[i].fields);
+                            vm.data.push(res.data[i]);
                         }   
                         vm.allOffersAmount = res.data.length;
                     })
@@ -48899,14 +48907,14 @@ angular.module('summernote', [])
     'use strict';
 
     angular
-        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.auth', 'factory.offers'])
+        .module('page.addOffer', ['comp.authenticatedNav','comp.foot', 'factory.auth', 'factory.offers', 'factory.user'])
         .component('addOffer', {
             controller: addOfferController,
             templateUrl: 'app/pages/addOffer/addOffer.template.html' 
         });
 
 
-        function addOfferController($http, $state, offersFactory) {
+        function addOfferController($http, $state, offersFactory, userFactory) {
             var vm = this;            
 
             vm.options = {
@@ -48920,7 +48928,9 @@ angular.module('summernote', [])
 
 
             vm.addNewOffer = function() {
+
                 var data = {
+                    _creator    : userFactory.loadUserDataFromLocalStorage().id,
                     title       : vm.newOffer_title,
                     city        : vm.newOffer_city,
                     state       : vm.newOffer_state,
@@ -49037,6 +49047,51 @@ angular.module('summernote', [])
     'use strict';
 
     angular
+        .module('page.myOffers', ['comp.authenticatedNav','comp.foot', 'factory.auth', 'factory.offers', 'factory.user'])
+        .component('myOffers', {
+            controller: myOffersController,
+            templateUrl: 'app/pages/myOffers/myOffers.template.html' 
+        });
+
+
+        function myOffersController($http, $state, $stateParams, offersFactory, userFactory) {
+            var vm = this;            
+            
+            vm.$onInit = function() {
+                offersFactory.getMyOffers(userFactory.loadUserDataFromLocalStorage().id)
+                    .then(function(res) {
+                        vm.myOffers = res.data;
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+            } 
+
+            vm.deleteOffer = function(offerID) {
+                var data = { id: offerID };
+                var deleteConfirm = confirm("Na pewno chcesz usunąć tę ofertę?");
+                if(deleteConfirm) {
+                     offersFactory.deleteOffer(data)
+                    .then(function(res) {
+                        console.log(res);
+                        $state.go('auth.myOffers');
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    })
+                }
+               
+            }
+
+        }
+
+})();
+},{}],91:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
         .module('page.offerDetails', ['comp.authenticatedNav','comp.foot', 'factory.auth', 'factory.offers'])
         .component('offerDetails', {
             controller: offerDetailsController,
@@ -49051,7 +49106,7 @@ angular.module('summernote', [])
            
             vm.$onInit = function() {
                 offersFactory.getOfferDetails(offerID).then(function(res) {
-                    vm.details = res.data.fields;
+                    vm.details = res.data;
                     console.log(vm.details); 
                     vm.jobDescriptionEscaped = function() {
                         return $sce.trustAsHtml(vm.details.description);
@@ -49067,7 +49122,7 @@ angular.module('summernote', [])
         }
 
 })();
-},{}],91:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -49110,7 +49165,7 @@ angular.module('summernote', [])
         }
 
 })();
-},{}],92:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -49153,7 +49208,7 @@ angular.module('summernote', [])
         });
 
 })();
-},{}],93:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -49171,6 +49226,9 @@ angular.module('summernote', [])
                getOffersAmounts: function() {
                     return $http.get("http://localhost:8080/api/offer/amount");
                },
+               getMyOffers: function(userID) {
+                    return $http.get("http://localhost:8080/api/offer/myOffers/" + userID);
+               },
                postSearchOffers: function(data) {
                     return $http.post('http://localhost:8080/api/offer/search', data, {
                                     headers: {
@@ -49185,6 +49243,14 @@ angular.module('summernote', [])
                                         'x-access-token': authFactory.loadTokenFromLocalStorage()
                                     } 
                     }) 
+               },
+               deleteOffer: function(data) {
+                    return $http.post('http://localhost:8080/api/offer/delete', data, {
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded',
+                                        'x-access-token': authFactory.loadTokenFromLocalStorage()
+                                    } 
+                    }) 
                }
             }
 
@@ -49192,7 +49258,7 @@ angular.module('summernote', [])
         });
 
 })();
-},{}],94:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -49205,7 +49271,7 @@ angular.module('summernote', [])
                     localStorage.setItem("user", JSON.stringify(user));
                 },
                 loadUserDataFromLocalStorage: function(){
-                    return localStorage.getItem("user");
+                    return JSON.parse(localStorage.getItem("user"));
                 },
                 postNewUser: function(data) {
                     return $http.post('http://localhost:8080/api/users/new', data, {
