@@ -11,9 +11,9 @@
 })();
 
 
-    function offerController($http, offersFactory) {
+    function offerController($http, offersFactory, moment) {
         var vm = this;
-        
+
         vm.$onInit = function() {
             vm.offersDisplayLimit = 7;
             offersFactory.getAllOffers()
@@ -76,6 +76,7 @@
         showFiltersBtn.addEventListener('click', function() {
             filters.classList.toggle('displayFilers');
         })
+
 
 
 

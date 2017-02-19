@@ -6,6 +6,9 @@
     require('angular-jwt');
     require('angular-middleware');
     require('./libs/angular-summernote');
+    require('moment');
+    require('../../node_modules/moment/locale/pl');
+    require('angular-moment');
 
     // routes
     require('./app.routes');
@@ -34,6 +37,7 @@
             'ui.router',
             'angular-jwt',
             'summernote',
+            'angularMoment',
             'app.routes',
             'page.index',
             'page.register',
@@ -42,7 +46,7 @@
             'page.addOffer',
             'page.offerDetails'
         ])
-        .run(function($trace, $transitions, $state, authFactory) {
+        .run(function($trace, $transitions, $state, $http, $httpParamSerializerJQLike, authFactory, moment) {
             $transitions.onStart({ to: 'auth.**' }, function(trans) {
                 var auth = trans.injector().get('authFactory')
                 if (auth.isTokenExpired()) {
@@ -55,8 +59,8 @@
                 return trans.router.stateService.target('auth.index');
                 }
             });
-        })
-        .run(function($http, $httpParamSerializerJQLike) {
+
+            moment.locale('pl');
             $http.defaults.transformRequest.unshift($httpParamSerializerJQLike);
         })
         .config(['$httpProvider', function ($httpProvider) {

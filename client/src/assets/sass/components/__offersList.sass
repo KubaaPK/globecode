@@ -9,6 +9,7 @@
                 font-weight: 700
         
         .offer
+            position: relative
             background-color: #FFFFFF
             margin: 2vh 0
             padding: 5% 2.5%
@@ -24,6 +25,15 @@
                 color: rgba(#000000, 0.8)
                 letter-spacing: 0.1rem
             
+            &__created_at
+                position: absolute
+                right: 0
+                top: calc(50% - .7rem)
+                right: 2.5%
+                font:
+                    size: 1.15rem
+                    family: $lato
+                    color: rgba(#000000, 0.6)
             .offerDetails
                 font:
                     family: $lato

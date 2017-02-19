@@ -506,6 +506,7 @@
       .offers__amount span {
         font-weight: 700; }
     .offers .offer {
+      position: relative;
       background-color: #FFFFFF;
       margin: 2vh 0;
       padding: 5% 2.5%;
@@ -519,6 +520,14 @@
         font-weight: 700;
         color: rgba(0, 0, 0, 0.8);
         letter-spacing: 0.1rem; }
+      .offers .offer__created_at {
+        position: absolute;
+        right: 0;
+        top: calc(50% - .7rem);
+        right: 2.5%;
+        font-size: 1.15rem;
+        font-family: "Lato", sans-serif;
+        font-color: rgba(0, 0, 0, 0.6); }
       .offers .offer .offerDetails {
         font-family: "Lato", sans-serif;
         font-size: 1.15rem;
@@ -645,7 +654,6 @@ body {
       text-transform: uppercase;
       border-bottom: 1px solid #e0e0e0; }
     .addOffer .addOfferForm .note-editable {
-      font-size: 16px;
       font-family: "Slabo 27px", serif; }
     .addOffer .addOfferForm__inputWrapper {
       display: block;
