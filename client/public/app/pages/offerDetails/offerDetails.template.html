@@ -1,4 +1,10 @@
-    <authenticated-nav-bar></authenticated-nav-bar>
+    <span ng-if="$ctrl.isTokenExpired">
+        <nav-bar></nav-bar>
+    </span>
+    <span ng-if="!$ctrl.isTokenExpired">
+        <authenticated-nav-bar></authenticated-nav-bar>
+    </span>
+    
     <main class="offerDetailsPage">
         <div class="contactDetails">
             <p class="contactDetails__firmname">{{ $ctrl.details.companyName }}</p>

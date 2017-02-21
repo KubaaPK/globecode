@@ -13,6 +13,8 @@
         function indexController($state, authFactory) {
             var vm = this;
 
+            
+
         }
 
 })();

@@ -57,7 +57,8 @@ router.post('/new', (req, res, next) => {
           }
         } else {
           const userDataToSent = {
-            email: userData.email
+            email: userData.email,
+            id: userData._id
           }
           const TOKEN = jwt.sign(newUser, app.get('authSecretVariable'), {
               expiresIn: 60*60*4
@@ -98,7 +99,8 @@ router.post('/authenticate', (req, res, next) => {
         } else {
           if(auth) {
             const userDataToSent = {
-              email: user.email
+              email: user.email,
+              id: user._id
             }
             const TOKEN = jwt.sign(user, app.get('authSecretVariable'), {
               expiresIn: 60*60*24

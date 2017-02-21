@@ -40,6 +40,14 @@
                                         'x-access-token': authFactory.loadTokenFromLocalStorage()
                                     } 
                     }) 
+               },
+               editOffer: function(data) {
+                   return $http.put('http://localhost:8080/api/offer/edit', data, {
+                                    headers: {
+                                            'Content-Type': 'application/x-www-form-urlencoded',
+                                            'x-access-token': authFactory.loadTokenFromLocalStorage()
+                                        } 
+                   })
                }
             }
 

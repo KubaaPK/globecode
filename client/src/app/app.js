@@ -27,6 +27,7 @@
     require('./pages/addOffer/addOffer.component');
     require('./pages/myOffers/myOffers.component');
     require('./pages/offerDetails/offerDetails.component');
+    require('./pages/editOffer/editOffer.component');
 
     //services
     require('./services/authService');
@@ -47,7 +48,8 @@
             'page.authenticated',
             'page.addOffer',
             'page.myOffers',
-            'page.offerDetails'
+            'page.offerDetails',
+            'page.editOffer'
         ])
         .run(function($trace, $transitions, $state, $http, $httpParamSerializerJQLike, authFactory, moment) {
             $transitions.onStart({ to: 'auth.**' }, function(trans) {

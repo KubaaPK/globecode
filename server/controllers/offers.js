@@ -7,19 +7,12 @@ const Offer   = require('../models/Offer');
     Add new offer to database
 */
 
-
-
-
 router.post('/new', (req, res, next) => {
     let data = req.body;
-
-    let fields = {
-        fields: data
-    } 
-    console.log(fields);
-    let newOffer = new Offer(fields);
+    let newOffer = new Offer(data);
     newOffer.save((err) => {
         if(err) {
+            console.log(err);
             res.json({message: "Nie udało się dodać oferty."});
         } else {
             res.json({message: "Pomyślnie dodano ofertę."});
@@ -68,21 +61,6 @@ router.post('/search', (req, res, next) => {
         
     }
 
-    // for (let i = 0; i<3;i++) {
-    //     filters.push(req.body[i]);
-    // }
-
-    // Array.prototype.clean = function(deleteValue) {
-    // for (var i = 0; i < this.length; i++) {
-    //     if (this[i] == deleteValue) {         
-    //     this.splice(i, 1);
-    //     i--;
-    //     }
-    // }
-    // return this;
-    // };
-    // filters.clean(null);
-    // console.log(filters);
     if(filters.length === 0) {
         Offer.find({}, (err, offers) => {
             if(err) {
@@ -92,7 +70,7 @@ router.post('/search', (req, res, next) => {
             }
         })
     } else {
-        Offer.find({"fields.tags": {$all: filters}}, (err, offers) => {
+        Offer.find({"tags": {$all: filters}}, (err, offers) => {
             if(err){
                 console.log(err);
             } else {
@@ -132,52 +110,52 @@ router.get('/amount', (req, res, next) => {
             }
 
             for (let i = 0; i< offer.length; i++) {
-                if(offer[i].fields.state === states[0]) {
+                if(offer[i].state === states[0]) {
                     amounts.Frontend++;
                 }
-                if(offer[i].fields.state === states[1]) {
+                if(offer[i].state === states[1]) {
                     amounts.Backend++;
                 }
-                if(offer[i].fields.state === states[2]) {
+                if(offer[i].state === states[2]) {
                     amounts.Design++;
                 }
-                if(offer[i].fields.state === states[3]) {
+                if(offer[i].state === states[3]) {
                     amounts.Tester++;
                 }
-                if(offer[i].fields.state === states[4]) {
+                if(offer[i].state === states[4]) {
                     amounts.Management++;
                 }
 
-                if(offer[i].fields.shift === shifts[0]) {
+                if(offer[i].shift === shifts[0]) {
                     amounts.Fulltime++;
                 }
-                if(offer[i].fields.shift === shifts[1]) {
+                if(offer[i].shift === shifts[1]) {
                     amounts.Parttime++;
                 }
-                if(offer[i].fields.shift === shifts[2]) {
+                if(offer[i].shift === shifts[2]) {
                     amounts.Contract++;
                 }
-                if(offer[i].fields.shift === shifts[3]) {
+                if(offer[i].shift === shifts[3]) {
                     amounts.Freelance++;
                 }
-                if(offer[i].fields.shift === shifts[4]) {
+                if(offer[i].shift === shifts[4]) {
                     amounts.Practice++;
                 }
 
 
-                if(offer[i].fields.companySize === compSize[0]) {
+                if(offer[i].companySize === compSize[0]) {
                     amounts.cs110++;
                 }
-                if(offer[i].fields.companySize === compSize[1]) {
+                if(offer[i].companySize === compSize[1]) {
                     amounts.cs1150++;
                 }
-                if(offer[i].fields.companySize === compSize[2]) {
+                if(offer[i].companySize === compSize[2]) {
                     amounts.cs51100++;
                 }
-                if(offer[i].fields.companySize === compSize[3]) {
+                if(offer[i].companySize === compSize[3]) {
                     amounts.cs101500++;
                 }
-                if(offer[i].fields.companySize === compSize[4]) {
+                if(offer[i].companySize === compSize[4]) {
                     amounts.cs501++;
                 }
 
@@ -189,9 +167,48 @@ router.get('/amount', (req, res, next) => {
 });
 
 
+/*
+    Get all offers posted by user.
+*/
+router.get('/myOffers/:id', (req, res, next) => {
+    Offer.find({})
+         .populate({
+             path: '_creator',
+             select: '-password -email'
+         })
+         .exec((err, offers) => {
+            if(err) {
+                console.log(err);
+            } else {
+                res.json(offers);
+            }
+    })
+});
 
 
+router.post('/delete', (req, res, next) => {
+    let data = req.body;   
+    
+    Offer.remove({_id: data.id}, (err) => {
+        if(err) {
+            console.log(err);
+        } else {
+            res.json({success: true, message: "Usunięto ofertę."});
+        }
+    })
+});
 
+router.put('/edit', (req, res, next) => {
+    const data = req.body;
+    Offer.update({_id: data.id}, data, {upsert: false}, (err) => {
+        if(err) {
+            console.log(err);
+        } else {
+            console.log('Pomyślnie zaaktualizowano ofertę.');
+            res.json({success: true, message: "Pomyślnie zaaktualizowano ofertę."});
+        }
+    })
+})
 
 
 module.exports = router;

@@ -10,9 +10,11 @@
         });
 
 
-        function offerDetailsController($http, $state, $stateParams, $sce, offersFactory) {
+        function offerDetailsController($http, $state, $stateParams, $sce, offersFactory, authFactory) {
             var vm = this;            
             
+            vm.isTokenExpired = authFactory.isTokenExpired();
+
             var offerID = $stateParams.offerId;
            
             vm.$onInit = function() {

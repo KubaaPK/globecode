@@ -48407,6 +48407,7 @@ exports.ViewService = ViewService;
     require('./pages/addOffer/addOffer.component');
     require('./pages/myOffers/myOffers.component');
     require('./pages/offerDetails/offerDetails.component');
+    require('./pages/editOffer/editOffer.component');
 
     //services
     require('./services/authService');
@@ -48427,7 +48428,8 @@ exports.ViewService = ViewService;
             'page.authenticated',
             'page.addOffer',
             'page.myOffers',
-            'page.offerDetails'
+            'page.offerDetails',
+            'page.editOffer'
         ])
         .run(function($trace, $transitions, $state, $http, $httpParamSerializerJQLike, authFactory, moment) {
             $transitions.onStart({ to: 'auth.**' }, function(trans) {
@@ -48467,7 +48469,7 @@ exports.ViewService = ViewService;
             });
         }]);
 })();
-},{"../../node_modules/moment/locale/pl":21,"./app.routes":80,"./components/authenticatedNav.component":81,"./components/foot.component":82,"./components/nav.component":83,"./components/offer.component":84,"./libs/angular-summernote":85,"./pages/addOffer/addOffer.component":86,"./pages/authenticated/authenticated.component":87,"./pages/index/index.component":88,"./pages/login/login.component":89,"./pages/myOffers/myOffers.component":90,"./pages/offerDetails/offerDetails.component":91,"./pages/register/register.component":92,"./services/authService":93,"./services/offersService":94,"./services/userService":95,"angular":20,"angular-jwt":2,"angular-middleware":3,"angular-moment":4,"angular-ui-router":8,"moment":22}],80:[function(require,module,exports){
+},{"../../node_modules/moment/locale/pl":21,"./app.routes":80,"./components/authenticatedNav.component":81,"./components/foot.component":82,"./components/nav.component":83,"./components/offer.component":84,"./libs/angular-summernote":85,"./pages/addOffer/addOffer.component":86,"./pages/authenticated/authenticated.component":87,"./pages/editOffer/editOffer.component":88,"./pages/index/index.component":89,"./pages/login/login.component":90,"./pages/myOffers/myOffers.component":91,"./pages/offerDetails/offerDetails.component":92,"./pages/register/register.component":93,"./services/authService":94,"./services/offersService":95,"./services/userService":96,"angular":20,"angular-jwt":2,"angular-middleware":3,"angular-moment":4,"angular-ui-router":8,"moment":22}],80:[function(require,module,exports){
 (function () {
     'use strict';
 
@@ -48511,6 +48513,11 @@ exports.ViewService = ViewService;
                     name        : 'myOffers',
                     url         : '/authenticated/myOffers',
                     component   : 'myOffers'
+                })
+                .state('auth.editOffer', {
+                    name        : 'editOffer',
+                    url         : '/authenticated/myOffers/:id/edit',
+                    component   : 'editOffer'
                 })
                 .state('offerDetail', {
                     name        : 'offerDetail',
@@ -48989,6 +48996,91 @@ angular.module('summernote', [])
     'use strict';
 
     angular
+        .module('page.editOffer', ['comp.authenticatedNav','comp.foot', 'comp.offerList', 'factory.auth', 'factory.offers'])
+        .component('editOffer', {
+            controller: editOfferController,
+            templateUrl: 'app/pages/editOffer/editOffer.template.html' 
+        });
+
+
+        function editOfferController($http, $state, $stateParams, authFactory, offersFactory) {
+            var vm = this;            
+
+            vm.options = {
+                minHeight: 700,
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline']],
+                    ['fontsize', ['fontsize']],
+                    ['para', ['ul', 'ol']]
+                ]
+            };
+
+
+            vm.$onInit = function() {
+                offersFactory.getOfferDetails($stateParams.id)
+                    .then(function(res) {
+                        vm.offerData = res.data;
+                        vm.editedOffer_title = vm.offerData.title;
+                        vm.editedOffer_city = vm.offerData.city;
+                        vm.editedOffer_state = vm.offerData.state;
+                        vm.editedOffer_shift = vm.offerData.shift;
+                        vm.editedOffer_companySize = vm.offerData.companySize;
+                        vm.editedOffer_description = vm.offerData.description;
+                        vm.editedOffer_salaryMin = vm.offerData.salaryMin;
+                        vm.editedOffer_salaryMax = vm.offerData.salaryMax;
+                        vm.editedOffer_companyName = vm.offerData.companyName;
+                        vm.editedOffer_www = vm.offerData.www;
+                        vm.editedOffer_contact = vm.offerData.contact;
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+            }
+
+
+            vm.editOffer = function() {
+                var data = {
+                    id          : vm.offerData._id,
+                    title       : vm.editedOffer_title,
+                    city        : vm.editedOffer_city,
+                    state       : vm.editedOffer_state,
+                    shift       : vm.editedOffer_shift,
+                    companySize : vm.editedOffer_companySize,
+                    description : vm.editedOffer_description,
+                    salaryMin   : vm.editedOffer_salaryMin,
+                    salaryMax   : vm.editedOffer_salaryMax,
+                    companyName : vm.editedOffer_companyName,
+                    www         : vm.editedOffer_www,
+                    contact     : vm.editedOffer_contact,
+                    tags        : [vm.editedOffer_state, vm.editedOffer_shift, vm.editedOffer_companySize],
+                    created_at  : Date.now()               
+                }
+
+                offersFactory.editOffer(data)
+                    .then(function(res) {
+                        console.log(res);
+                        $state.go('auth.myOffers');
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    })
+
+
+            }
+
+            vm.backToMyOffers = function() {
+                $state.go('auth.myOffers');
+            }
+
+        }
+
+})();
+},{}],89:[function(require,module,exports){
+(function(){
+
+    'use strict';
+
+    angular
         .module('page.index', ['comp.nav', 'comp.foot', 'factory.auth', 'comp.offerList'])
         .component('index', {
             templateUrl: 'app/pages/index/index.template.html',
@@ -48999,10 +49091,12 @@ angular.module('summernote', [])
         function indexController($state, authFactory) {
             var vm = this;
 
+            
+
         }
 
 })();
-},{}],89:[function(require,module,exports){
+},{}],90:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -49041,7 +49135,7 @@ angular.module('summernote', [])
         }
 
 })();
-},{}],90:[function(require,module,exports){
+},{}],91:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -49086,7 +49180,7 @@ angular.module('summernote', [])
         }
 
 })();
-},{}],91:[function(require,module,exports){
+},{}],92:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -49099,9 +49193,11 @@ angular.module('summernote', [])
         });
 
 
-        function offerDetailsController($http, $state, $stateParams, $sce, offersFactory) {
+        function offerDetailsController($http, $state, $stateParams, $sce, offersFactory, authFactory) {
             var vm = this;            
             
+            vm.isTokenExpired = authFactory.isTokenExpired();
+
             var offerID = $stateParams.offerId;
            
             vm.$onInit = function() {
@@ -49122,7 +49218,7 @@ angular.module('summernote', [])
         }
 
 })();
-},{}],92:[function(require,module,exports){
+},{}],93:[function(require,module,exports){
 (function(){
 
     'use strict';
@@ -49165,7 +49261,7 @@ angular.module('summernote', [])
         }
 
 })();
-},{}],93:[function(require,module,exports){
+},{}],94:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -49208,7 +49304,7 @@ angular.module('summernote', [])
         });
 
 })();
-},{}],94:[function(require,module,exports){
+},{}],95:[function(require,module,exports){
 (function(){
     'use strict';
 
@@ -49251,6 +49347,14 @@ angular.module('summernote', [])
                                         'x-access-token': authFactory.loadTokenFromLocalStorage()
                                     } 
                     }) 
+               },
+               editOffer: function(data) {
+                   return $http.put('http://localhost:8080/api/offer/edit', data, {
+                                    headers: {
+                                            'Content-Type': 'application/x-www-form-urlencoded',
+                                            'x-access-token': authFactory.loadTokenFromLocalStorage()
+                                        } 
+                   })
                }
             }
 
@@ -49258,7 +49362,7 @@ angular.module('summernote', [])
         });
 
 })();
-},{}],95:[function(require,module,exports){
+},{}],96:[function(require,module,exports){
 (function(){
     'use strict';
 

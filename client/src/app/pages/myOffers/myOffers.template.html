@@ -9,7 +9,7 @@
         </div>
         <span class="offer__created_at" am-time-ago="offer.created_at"></span>
         <div class="buttons">
-            <button type="button">Edytuj</button>
+            <button type="button" ui-sref="auth.editOffer({id: offer._id})">Edytuj</button>
             <button type="button" ng-click="$ctrl.deleteOffer(offer._id)">Usuń</button>
         </div>
     </div>

@@ -1,0 +1,80 @@
+<main class="editOffer">
+
+    <authenticated-nav-bar></authenticated-nav-bar>
+        <form class="editOfferForm" ng-submit="$ctrl.editOffer()">
+            <p class="editOfferForm__title">Edytuj ofertę</p>
+
+            <p class="editOfferForm__subtitle">O pracy</p>
+            <div class="editOfferForm__inputWrapper">
+                <label for="editOffer_jobTitle">Tytuł oferty<span class="editOfferForm__inputWrapper__requiredStar">*</span> <span class="editOfferForm__inputWrapper__example">np. "Regular backend developer"</span></label>
+                <input type="text" id="editOffer_jobTitle" required="true" ng-model="$ctrl.editedOffer_title">  
+            </div>
+            <div class="editOfferForm__inputWrapper">
+                <label for="editOffer_jobCity">Miasto<span class="editOfferForm__inputWrapper__requiredStar">*</span> <span class="editOfferForm__inputWrapper__example">np. "Wrocław"</span></label>
+                <input type="text" id="editOffer_jobCity" required="true" ng-model="$ctrl.editedOffer_city">  
+            </div>
+            <div class="editOfferForm__inputWrapper">
+                <label for="editOffer_jobState">Stanowisko<span class="editOfferForm__inputWrapper__requiredStar">*</span></label>
+                <select id="editOffer_jobState" required="true" ng-model="$ctrl.editedOffer_state">
+                    <option value="Frontend">Frontend</option>
+                    <option value="Backend">Backend</option>
+                    <option value="Design">Design</option>
+                    <option value="Tester">Tester</option>
+                    <option value="Management">Management</option>
+                </select>
+            </div>
+            <div class="editOfferForm__inputWrapper">
+                <label for="editOffer_jobShift">Wymiar pracy<span class="editOfferForm__inputWrapper__requiredStar">*</span></label>
+                <select id="editOffer_jobShift" required="true"  ng-model="$ctrl.editedOffer_shift">
+                    <option value="Pełen etat">Pełen etat</option>
+                    <option value="Niepełny etat">Niepełny etat</option>
+                    <option value="Kontrakt">Kontrakt</option>
+                    <option value="Freelance">Freelance</option>
+                    <option value="Staż">Staż</option>
+                </select>
+            </div>
+            <div class="editOfferForm__inputWrapper">
+                <label for="editOffer_jobCompanySize">Ilośc pracowników<span class="editOfferForm__inputWrapper__requiredStar">*</span></label>
+                <select id="editOffer_jobCompanySize" required="true" ng-model="$ctrl.editedOffer_companySize">
+                    <option value="1-10">1-10</option>
+                    <option value="11-50">11-50</option>
+                    <option value="51-100">51-100</option>
+                    <option value="101-500">101-500</option>
+                    <option value="501+">501+</option>
+                </select>
+            </div>
+            <div class="editOfferForm__inputWrapper">
+                <label for="editOffer_jobDescription">Opis stanowiska<span class="editOfferForm__inputWrapper__requiredStar">*</span></label>
+                <textarea id="editOffer_jobDescription" summernote config="$ctrl.options" required="true" ng-model="$ctrl.editedOffer_description"></textarea>  
+                
+            </div>
+            <div class="editOfferForm__inputWrapper salaryInputs">
+                <div class="salaryWrapper">
+                    <label for="editOffer_salaryMin">Zarobki od<span class="editOfferForm__inputWrapper__requiredStar">*</span> <span class="editOfferForm__inputWrapper__example"> w PLN</span></label>
+                    <input type="number" id="editOffer_salaryMin" required="true" ng-model="$ctrl.editedOffer_salaryMin">
+                </div>
+                <div class="salaryWrapper">
+                    <label for="editOffer_salaryMax">Zarobki do<span class="editOfferForm__inputWrapper__requiredStar">*</span><span class="editOfferForm__inputWrapper__example"> w PLN</span></label>
+                    <input type="number" id="editOffer_salaryMax" required="true" ng-model="$ctrl.editedOffer_salaryMax">
+                </div>
+            </div>
+            <p class="editOfferForm__subtitle">O firmie</p>
+            <div class="editOfferForm__inputWrapper">
+                <label for="editOffer_companyName">Nazwa firmy<span class="editOfferForm__inputWrapper__requiredStar">*</span></label>
+                <input type="text" id="editOffer_companyName" ng-model="$ctrl.editedOffer_companyName">
+            </div>
+            <div class="editOfferForm__inputWrapper">
+                <label for="editOffer_companySite">Strona internetowa firmy</label>
+                <input type="text" id="editOffer_companySite" ng-model="$ctrl.editedOffer_www">
+            </div>
+            <div class="editOfferForm__inputWrapper">
+                <label for="editOffer_companyContact">E-mail kontaktowy<span class="editOfferForm__inputWrapper__requiredStar">*</span></label>
+                <input type="email" id="editOffer_companyContact" required="true" ng-model="$ctrl.editedOffer_contact">
+            </div>
+            <div class="buttons">
+                <button type="submit">Edytuj</button>
+                <button type="button" ng-click="$ctrl.backToMyOffers()">Anuluj</button>
+            </div>
+        </form>
+    <foot-bar></foot-bar>
+</main>

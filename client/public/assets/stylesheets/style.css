@@ -928,3 +928,121 @@ body {
         .myOffers .offer .buttons button:hover {
           transition: .2s;
           background-color: #1a252f; } }
+
+@media only screen and (min-width: 20em) {
+  .editOffer .editOfferForm {
+    width: 90%;
+    display: block;
+    margin: 0 auto;
+    margin-top: 5vh;
+    padding-bottom: 5vh;
+    background-color: #FFFFFF;
+    border-radius: 3px;
+    -webkit-box-shadow: 0px 0px 3px lightgray;
+    -moz-box-shadow: 0px 0px 3px lightgray;
+    box-shadow: 0px 0px 3px lightgray; }
+    .editOffer .editOfferForm__title {
+      display: block;
+      margin-bottom: 5vh;
+      padding: 7.5% 0;
+      background: #2C3E50;
+      font-family: "Lato", sans-serif;
+      font-size: 2rem;
+      font-weight: 300;
+      text-transform: uppercase;
+      text-align: center;
+      color: #FFFFFF;
+      border-bottom: 1px solid #1a252f; }
+    .editOffer .editOfferForm__subtitle {
+      display: block;
+      width: 90%;
+      margin: 0 auto;
+      padding-bottom: 2vh;
+      font-size: 2rem;
+      font-family: "Lato", sans-serif;
+      font-weight: 700;
+      text-transform: uppercase;
+      border-bottom: 1px solid #e0e0e0; }
+    .editOffer .editOfferForm .note-editable {
+      font-family: "Slabo 27px", serif; }
+    .editOffer .editOfferForm__inputWrapper {
+      display: block;
+      width: 90%;
+      margin: 2vh auto; }
+      .editOffer .editOfferForm__inputWrapper label {
+        display: block;
+        font-size: 1.3rem;
+        font-family: "Lato", sans-serif;
+        font-weight: 300; }
+        .editOffer .editOfferForm__inputWrapper label__requiredStar {
+          color: #d80000; }
+        .editOffer .editOfferForm__inputWrapper label__example {
+          opacity: .7; }
+      .editOffer .editOfferForm__inputWrapper input, .editOffer .editOfferForm__inputWrapper select {
+        display: block;
+        width: 100%;
+        height: 40px;
+        margin: 0 auto;
+        padding-left: 3%;
+        border: 1px solid #cccccc;
+        border-radius: 3px;
+        font-size: 1.3rem;
+        font-family: "Lato", sans-serif;
+        transition: .2s; }
+        .editOffer .editOfferForm__inputWrapper input:focus, .editOffer .editOfferForm__inputWrapper select:focus {
+          outline: none;
+          border-color: #2C3E50;
+          transition: .2s; }
+    .editOffer .editOfferForm .buttons {
+      display: block;
+      width: 90%;
+      margin: 0 auto; }
+      .editOffer .editOfferForm .buttons button {
+        border-radius: 3px;
+        height: 40px;
+        width: 30%;
+        font-size: 1.3rem;
+        font-family: "Lato", sans-serif;
+        font-weight: 300;
+        text-transform: uppercase; }
+        .editOffer .editOfferForm .buttons button:first-child {
+          background-color: #2C3E50;
+          border: 1px solid #1a252f;
+          color: #FFFFFF; }
+        .editOffer .editOfferForm .buttons button:last-child {
+          background-color: #FFFFFF;
+          border: 1px solid #1a252f;
+          color: #1a252f; } }
+
+@media only screen and (min-width: 48em) {
+  .editOffer .editOfferForm {
+    width: 70%; }
+    .editOffer .editOfferForm__subtitle {
+      font-size: 2rem; }
+    .editOffer .editOfferForm__inputWrapper label {
+      font-size: 1.75rem; } }
+
+@media only screen and (min-width: 64em) {
+  .editOffer .editOfferForm {
+    width: 40%; }
+    .editOffer .editOfferForm__subtitle {
+      font-size: 2rem; }
+    .editOffer .editOfferForm__inputWrapper label {
+      font-size: 1.75rem; }
+    .editOffer .editOfferForm .salaryInputs {
+      display: flex;
+      flex-direction: row; }
+      .editOffer .editOfferForm .salaryInputs .salaryWrapper {
+        width: 50%; }
+        .editOffer .editOfferForm .salaryInputs .salaryWrapper:first-child input {
+          border-radius: 3px 0 0 3px; }
+        .editOffer .editOfferForm .salaryInputs .salaryWrapper:last-child input {
+          border-radius: 0 3px 3px 0; }
+    .editOffer .editOfferForm .buttons button {
+      transition: .2s; }
+      .editOffer .editOfferForm .buttons button:first-child:hover {
+        background-color: #1a252f;
+        transition: .2s; }
+      .editOffer .editOfferForm .buttons button:last-child:hover {
+        background-color: #fafafa;
+        transition: .2s; } }

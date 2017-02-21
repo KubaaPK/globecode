@@ -36,32 +36,40 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(cors());
 
-
-app.use('/api/offer/new', function (req, res, next) {
-
+function authMiddlewre(req, res, next) {
   var token = req.body.token || req.query.token || req.headers['x-access-token'];
-  if (token) {
+    if (token) {
 
-    jwt.verify(token, app.get('authSecretVariable'), function(err, decoded) {      
-      if (err) {
-        return res.json({ success: false, message: 'Failed to authenticate token.' });    
-      } else {
-        // if everything is good, save to request for use in other routes
-        req.decoded = decoded;    
-        next();
-      }
-    });
+      jwt.verify(token, app.get('authSecretVariable'), function(err, decoded) {      
+        if (err) {
+          return res.json({ success: false, message: 'Failed to authenticate token.' });    
+        } else {
+          // if everything is good, save to request for use in other routes
+          req.decoded = decoded;    
+          next();
+        }
+      });
 
-  } else {
+    } else {
 
-    // if there is no token
-    // return an error
-    return res.status(403).send({ 
-        success: false, 
-        message: 'No token provided.' 
-    });
-    
-  };
+      // if there is no token
+      // return an error
+      return res.status(403).send({ 
+          success: false, 
+          message: 'No token provided.' 
+      });
+      
+    };
+}
+
+app.use('/api/offer/new', (req, res, next) => {
+  authMiddlewre(req, res, next);
+});
+app.use('/api/offer/edit', (req, res, next) => {
+  authMiddlewre(req, res, next);
+});
+app.use('/api/offer/delete', (req, res, next) => {
+  authMiddlewre(req, res, next);
 });
 
 
